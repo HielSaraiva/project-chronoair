@@ -6,7 +6,7 @@
 
 // Definindo os GPIOs usados
 #define IR_RECEIVE_PIN 13  // Pino conectado ao VS1838B
-#define LED_WHITE 16       // Pino conectado ao LED branco
+#define LED_RED 16         // Pino conectado ao LED vermelho
 
 
 void setup() {
@@ -17,7 +17,7 @@ void setup() {
   Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));  // Apenas para saber qual programa esta rodando
 
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);  // Inicializando o receptor IR
-  pinMode(LED_WHITE, OUTPUT);                             // Configura o pino do LED_WHITE como saída
+  pinMode(LED_RED, OUTPUT);                               // Configura o pino do LED_RED como saída
 
   Serial.print(F("Pronto para receber sinais IR: "));
 }
@@ -27,11 +27,17 @@ void loop() {
 
     Serial.println(F("Código RAW recebido: "));
     IrReceiver.printIRResultRawFormatted(&Serial, true);  // Printa o código raw formatado
-    IrReceiver.printIRResultShort(&Serial);               // Printa o Protocolo e o tamanho dos dados recebidos
 
-    digitalWrite(LED_WHITE, HIGH);  // Acende o LED
-    delay(200);                     // Mantém o LED aceso por 200ms
-    digitalWrite(LED_WHITE, LOW);   // Apaga o LED
+    // for (int i = 0; i < IrReceiver.decodedIRData.rawlen; i++) {            // Exibe o conteúdo do array de dados RAW
+    //   Serial.print(IrReceiver.decodedIRData.decodedRawDataArray[i], DEC);  // Imprime o valor em decimal
+    //   Serial.print(" ");                                                   // Espaço entre os valores
+    // }
+
+    IrReceiver.printIRResultShort(&Serial);  // Printa o Protocolo e o tamanho dos dados recebidos
+
+    digitalWrite(LED_RED, HIGH);  // Acende o LED
+    delay(200);                   // Mantém o LED aceso por 200ms
+    digitalWrite(LED_RED, LOW);   // Apaga o LED
 
     Serial.println();
     IrReceiver.resume();  // Prepara para o próximo sinal
