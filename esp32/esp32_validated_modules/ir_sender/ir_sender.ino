@@ -20,20 +20,42 @@ void setup() {
   Serial.print(F("Pronto para enviar sinais IR: "));
 }
 
-uint64_t sCommand = 0x5E7E4778;  // Comando RAW em HEXA (Desligar Ar-condicionado)
-uint8_t sRepeats = 0;            // Quantas vezes o sinal RAW se repetirá
+const uint16_t rawData[] = { -3173800
+ +4400,-4400
+ + 550,-1600 + 550,- 500 + 550,-1650 + 500,-1650
+ + 500,- 550 + 550,- 500 + 550,-1600 + 550,- 550
+ + 550,- 500 + 550,-1600 + 550,- 550 + 550,- 500
+ + 550,-1600 + 550,-1600 + 550,- 550 + 550,-1600
+ + 550,- 500 + 550,-1600 + 550,-1600 + 550,-1600
+ + 550,-1600 + 550,- 550 + 550,-1600 + 550,-1600
+ + 550,-1600 + 550,- 500 + 550,- 550 + 550,- 500
+ + 550,- 550 + 550,-1600 + 550,- 500 + 550,- 550
+ + 550,-1600 + 550,-1600 + 550,-1600 + 550,- 500
+ + 600,- 500 + 550,- 500 + 600,- 500 + 550,- 500
+ + 600,- 500 + 550,- 500 + 550,- 550 + 550,-1600
+ + 550,-1600 + 550,-1600 + 550,-1600 + 550,-1600
+ + 550,-5200 +4400,-4400 + 550,-1600 + 550,- 550
+ + 500,-1650 + 500,-1650 + 500,- 550 + 550,- 550
+ + 500,-1650 + 500,- 550 + 550,- 550 + 500,-1650
+ + 500,- 550 + 550,- 550 + 500,-1650 + 500,-1650
+ + 500,- 550 + 550,-1600 + 550,- 550 + 500,-1650
+ + 500,-1650 + 500,-1650 + 500,-1650 + 500,- 550
+ + 550,-1600 + 550,-1600 + 550,-1600 + 550,- 550
+ + 500,- 550 + 550,- 550 + 500,- 550 + 550,-1600
+ + 550,- 550 + 500,- 550 + 550,-1650 + 500,-1650
+ + 500,-1650 + 500,- 550 + 500,- 550 + 550,- 550
+ + 500,- 550 + 550,- 550 + 500,- 550 + 550,- 550
+ + 500,- 550 + 550,-1650 + 500,-1650 + 500,-1650
+ + 500,-1650 + 500,-1650 + 500};
 
 void loop() {
   // Printando os dados do sinal RAW a ser enviado
   Serial.println();
-  Serial.print(F("Enviando agora sinal RAW = "));
-  Serial.print(sCommand, HEX);
-  Serial.print(F(", Repeticoes = "));
-  Serial.print(sRepeats);
+  Serial.print(F("Enviando sinal RAW"));
   Serial.println();
   Serial.flush();
 
-  IrSender.sendNECRaw(sCommand, sRepeats);  // Enviando o sinal RAW
+  IrSender.sendRaw(rawData, sizeof(rawData) / sizeof(rawData[0]), NEC_KHZ);  // Enviando o sinal RAW
 
   // LED de confirmacao (Sinal foi enviado)
   digitalWrite(LED_WHITE, HIGH);  // Acende o LED

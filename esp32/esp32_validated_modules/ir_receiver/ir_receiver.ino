@@ -26,8 +26,13 @@ void loop() {
   if (IrReceiver.decode() && IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {  // Se um sinal IR foi recebido E tiver um tamanho maior do que o mínmo esperado
 
     Serial.print(F("Código RAW recebido: "));
-    // IrReceiver.printIRResultRawFormatted(&Serial, true);  // Printa os tempos do código RAW formatado
-    Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);  // Exibe o código RAW recebido em HEXA
+    IrReceiver.printIRResultRawFormatted(&Serial, true);  // Printa os tempos do código RAW formatado
+    // Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);  // Exibe o código RAW recebido em HEXA
+
+    // for (int i = 0; i < IrReceiver.decodedIRData.rawlen; i++) {            // Exibe o conteúdo do array de dados RAW
+    //   Serial.print(IrReceiver.decodedIRData.decodedRawDataArray[i], DEC);  // Imprime o valor em decimal
+    //   Serial.print(" ");                                                   // Espaço entre os valores
+    // }
 
     IrReceiver.printIRResultShort(&Serial);  // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
 
@@ -37,6 +42,6 @@ void loop() {
     digitalWrite(LED_RED, LOW);   // Apaga o LED
 
     Serial.println();
-    IrReceiver.resume();  // Prepara para o próximo sinal
   }
+  IrReceiver.resume();  // Prepara para o próximo sinal
 }
