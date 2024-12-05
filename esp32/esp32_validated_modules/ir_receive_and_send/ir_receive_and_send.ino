@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 // Constantes
-#define RAW_LENGTH_RECEIVED_MIN 100  // Tamanho mínimo do código raw a ser recebido
+#define RAW_LENGTH_RECEIVED_MIN 10  // Tamanho mínimo do código raw a ser recebido
 #define RAW_BUFFER_LENGTH 750        // For air condition remotes it requires 750. Default is 200.
 
 // Definindo os GPIOs usados
@@ -43,7 +43,7 @@ void setup() {
 }
 
 void loop() {
-  if (IrReceiver.decode() && IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {  // Se um sinal IR foi recebido E tiver um tamanho maior do que o mínmo esperado
+  if (IrReceiver.decode() && IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN && sinalRecebido != false) {  // Se um sinal IR foi recebido E tiver um tamanho maior do que o mínmo esperado
     sinalRecebido = true;
     Serial.println(F("Código RAW recebido"));
     // IrReceiver.printIRResultRawFormatted(&Serial, true);  // Printa os tempos do código RAW formatado
