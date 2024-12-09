@@ -3,7 +3,8 @@
 
 // Constantes
 #define RAW_LENGTH_RECEIVED_MIN 10  // Tamanho mínimo do código raw a ser recebido
-#define RAW_BUFFER_LENGTH 750        // For air condition remotes it requires 750. Default is 200.
+#define RAW_BUFFER_LENGTH 750       // For air condition remotes it requires 750. Default is 200.
+#define IR_FREQUENCY 38             // Frequência do sinal IR
 
 // Definindo os GPIOs usados
 #define IR_RECEIVE 13  // Pino (D13) conectado ao LED IR Receptor VS1838B
@@ -12,7 +13,7 @@
 #define LED_WHITE 17   // Pino (TX2) conectado ao LED branco
 
 // Variáveis Globais
-int DELAY_BETWEEN_REPEAT = 50;
+int DELAY_BETWEEN_REPEAT = 1000;
 bool sinalRecebido = false;
 
 // Storage for the recorded code
@@ -43,7 +44,7 @@ void setup() {
 }
 
 void loop() {
-  if (IrReceiver.decode() && IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN && sinalRecebido != false) {  // Se um sinal IR foi recebido E tiver um tamanho maior do que o mínmo esperado
+  if (IrReceiver.decode() && IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN && sinalRecebido != true) {  // Se um sinal IR foi recebido E tiver um tamanho maior do que o mínmo esperado
     sinalRecebido = true;
     Serial.println(F("Código RAW recebido"));
     // IrReceiver.printIRResultRawFormatted(&Serial, true);  // Printa os tempos do código RAW formatado
@@ -66,9 +67,9 @@ void loop() {
     delay(DELAY_BETWEEN_REPEAT);
 
     // LED de confirmacao (Sinal foi enviado)
-    digitalWrite(LED_WHITE, HIGH);    // Acende o LED
-    delay(100);                       // Mantém o LED aceso por 100ms
-    digitalWrite(LED_WHITE, LOW);     // Apaga o LED
+    digitalWrite(LED_WHITE, HIGH);  // Acende o LED
+    delay(100);                     // Mantém o LED aceso por 100ms
+    digitalWrite(LED_WHITE, LOW);   // Apaga o LED
   }
 
   delay(100);
@@ -89,6 +90,6 @@ void storeCode() {
 
 void sendCode(storedIRDataStruct *aIRDataToSend) {
   // Assume 38 KHz
-  IrSender.sendRaw(aIRDataToSend->rawCode, aIRDataToSend->rawCodeLength, 38);
+  IrSender.sendRaw(aIRDataToSend->rawCode, aIRDataToSend->rawCodeLength, IR_FREQUENCY);
   Serial.println(F("Código enviado"));
 }
