@@ -1,5 +1,5 @@
 # Sistema de Gestão de Ar-Condicionado
 
-- Aplicação Web (Django + Bootstrap)
+- Aplicação Web (Django)
 
 - Aplicação ESP32
