@@ -81,14 +81,21 @@ WSGI_APPLICATION = 'django_web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'django_web',
+#         'USER': 'developer',
+#         'PASSWORD': '1234567',
+#         'HOST': 'localhost',  # Ou o IP do servidor MySQL
+#         'PORT': '3306',  # Porta padrão do MySQL
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_web',
-        'USER': 'developer',
-        'PASSWORD': '1234567',
-        'HOST': 'localhost',  # Ou o IP do servidor MySQL
-        'PORT': '3306',  # Porta padrão do MySQL
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
