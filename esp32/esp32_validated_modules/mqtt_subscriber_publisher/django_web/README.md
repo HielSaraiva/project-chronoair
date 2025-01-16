@@ -12,6 +12,12 @@ python.exe -m pip install --upgrade pip
 pip install django mysqlclient gunicorn django-bootstrap5 paho-mqtt
 ````````
 
+## Criando arquivo requirement.txt
+
+````````
+pip freeze > requirement.txt
+````````
+
 ## Configurar o banco de dados MySQL
 
 ````````
@@ -83,4 +89,10 @@ urlpatterns = [
     # Página inicial
     path("", views.index, name="index"),
 ]
+````````
+
+## Inicializando aplicação mqtt
+
+````````
+python manage.py startapp <nome_da_aplicacao>
 ````````

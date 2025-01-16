@@ -1,0 +1,54 @@
+{% load django_bootstrap5 %}  <!-- Carrega o pacote django-bootstrap5 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle MQTT</title>
+    <!-- Inclui a biblioteca CSS do Bootstrap via django-bootstrap5 -->
+    {% bootstrap_css %}
+</head>
+<body class="bg-light">
+    <div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+        <!-- Cabeçalho da página -->
+        <h1 class="mb-4 text-center">Controle de Comandos via MQTT</h1>
+
+        <!-- Cartão centralizado com o formulário -->
+        <div class="card shadow p-4 bg-white rounded" style="max-width: 400px; width: 100%;">
+            <form method="post">
+                {% csrf_token %}  <!-- Token para garantir segurança no envio do POST -->
+                <div class="d-grid gap-3">
+                    <!-- Botão para "Gravar Sinal" -->
+                    <button type="submit" class="btn btn-danger btn-lg" name="acao" value="gravar">
+                        Gravar Sinal
+                    </button>
+
+                    <!-- Botão para "Emitir Sinal" -->
+                    <button type="submit" class="btn btn-success btn-lg" name="acao" value="emitir">
+                        Emitir Sinal
+                    </button>
+                </div>
+            </form>
+
+            <!-- Exibe mensagens de feedback -->
+            <div class="mt-4">
+                {% if mensagem %}
+                <div class="alert alert-success" role="alert">
+                    {{ mensagem }}
+                </div>
+                {% endif %}
+
+                {% if erro %}
+                <div class="alert alert-danger" role="alert">
+                    {{ erro }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclui o JavaScript do Bootstrap via django-bootstrap5 (necessário para funcionalidades avançadas do Bootstrap, opcional aqui) -->
+    {% bootstrap_javascript %}
+</body>
+</html>

@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os.path
 from pathlib import Path
+
+from paho.mqtt.client import MQTT_CLIENT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,3 +130,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# MQTT Broker
+# Configurações do broker MQTT (HiveMQ com autenticação)
+MQTT_BROKER = '70c7294fcccf4b729c7c25b7ce3006fb.s1.eu.hivemq.cloud'
+MQTT_PORT = 8883
+MQTT_CLIENT_ID = 'django_mqtt_client'
+# Caminho para o certificado CA
+MQTT_TLS_CERT = os.path.join(BASE_DIR, 'certificates', 'hivemq-ca.pem')
+MQTT_USERNAME = 'esp32_ir'
+MQTT_PASSWORD = 'Hiel1234'
+MQTT_KEEPALIVE = 60
