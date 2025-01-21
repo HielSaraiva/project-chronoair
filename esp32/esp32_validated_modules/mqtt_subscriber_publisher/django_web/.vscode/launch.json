@@ -1,0 +1,29 @@
+{
+   // Use o IntelliSense para saber mais sobre os atributos possíveis.
+   // Focalizar para exibir as descrições dos atributos existentes.
+   // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+   "version": "0.2.0",
+   "configurations": [
+      {
+         "name": "Depurador do Python: Django",
+         "type": "debugpy",
+         "request": "launch",
+         "args": [
+            "runserver"
+         ],
+         "django": true,
+         "autoStartBrowser": false,
+         "program": "${workspaceFolder}\\manage.py"
+      },
+      {
+         "name": "Python Debugger: Django",
+         "type": "debugpy",
+         "request": "launch",
+         "program": "${workspaceFolder}\\manage.py",
+         "args": [
+            "runserver"
+         ],
+         "django": true
+      }
+   ]
+}

@@ -2,11 +2,11 @@
 #include <Arduino.h>
 
 // Variáveis Globais
-#define RAW_LENGTH_RECEIVED_MIN 100  // Tamanho mínmo do código raw a ser recebido
+#define RAW_LENGTH_RECEIVED_MIN 75  // Tamanho mínmo do código raw a ser recebido
 
 // Definindo os GPIOs usados
 #define IR_RECEIVE 13  // Pino (D13) conectado ao LED IR Receptor VS1838B
-#define LED_RED 16     // Pino (RX2) conectado ao LED vermelho
+// #define LED_RED 16     // Pino (RX2) conectado ao LED vermelho
 
 void setup() {
   Serial.begin(115200);  // Inicializando o monitor serial
@@ -17,7 +17,7 @@ void setup() {
 
   IrReceiver.begin(IR_RECEIVE, ENABLE_LED_FEEDBACK);  // Inicializando o receptor IR com o pino padrao
 
-  pinMode(LED_RED, OUTPUT);  // Configura o pino do LED_RED como saída
+  // pinMode(LED_RED, OUTPUT);  // Configura o pino do LED_RED como saída
 
   Serial.print(F("Pronto para receber sinais IR: "));
 }
@@ -37,9 +37,9 @@ void loop() {
     IrReceiver.printIRResultShort(&Serial);  // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
 
     // LED de confirmacao (Sinal foi recebido)
-    digitalWrite(LED_RED, HIGH);  // Acende o LED
+    // digitalWrite(LED_RED, HIGH);  // Acende o LED
     delay(200);                   // Mantém o LED aceso por 200ms
-    digitalWrite(LED_RED, LOW);   // Apaga o LED
+    // digitalWrite(LED_RED, LOW);   // Apaga o LED
 
     Serial.println();
   }
