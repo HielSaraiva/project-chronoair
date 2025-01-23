@@ -1,0 +1,68 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Gestão de Ar-condicionado</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/login_vars.css' %}">
+  <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+
+
+  <style>
+   a,
+   button,
+   input,
+   select,
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   * {
+       box-sizing: border-box;
+       margin: 0;
+       padding: 0;
+       border: none;
+       text-decoration: none;
+       background: none;
+
+       -webkit-font-smoothing: antialiased;
+   }
+
+   menu, ol, ul {
+       list-style-type: none;
+       margin: 0;
+       padding: 0;
+   }
+   </style>
+  <title>Document</title>
+</head>
+<body>
+  <div class="log-in">
+    <div class="frame-login">
+      <img class="icone-login" src="{% static 'icons/icone-login0.svg' %}" />
+      <div class="entrar">
+        <button class="botao-entrar" onclick="window.location.href='{% url 'paginainicial' %}'">Entrar</button>
+      </div>
+      <div class="linha-separacao"></div>
+      <div class="senha">
+        <div class="text-senha">Senha</div>
+        <div class="rectangle-senha">
+           <input type="text" name="user">
+        </div>
+        <!-- <img class="icone-senha" src="{% static 'icone-senha0.svg' %}" /> --->
+      </div>
+      <div class="usuario">
+        <div class="text-usuario">Usuário</div>
+        <div class="rectangle-usuario"></div>
+        <img class="icone-usuario" src="{% static 'icons/icone-usuario0.svg' %}" />
+      </div>
+    </div>
+  </div>
+{% bootstrap_javascript %}
+</body>
+</html>

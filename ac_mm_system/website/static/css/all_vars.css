@@ -1,0 +1,13 @@
+/* Figma Styles of your File */
+:root {
+  /* Colors */
+  --plano-de-fundo: linear-gradient(
+    0deg,
+    rgba(181, 233, 179, 1) 0%,
+    rgba(136, 201, 133, 1) 57.899993658065796%,
+    rgba(17, 107, 22, 1) 100%
+  );
+
+  /* Fonts */
+  /* Effects */
+}
