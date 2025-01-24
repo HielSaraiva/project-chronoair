@@ -6,7 +6,7 @@
 #include <ArduinoJson.h>
 
 // Constantes
-#define RAW_LENGTH_RECEIVED_MIN 75  // Tamanho mínimo do código raw a ser recebido
+#define RAW_LENGTH_RECEIVED_MIN 74  // Tamanho mínimo do código raw a ser recebido
 #define RAW_BUFFER_LENGTH 750       // For air condition remotes it requires 750. Default is 200.
 #define IR_FREQUENCY 38             // Frequência do sinal IR
 #define MSG_BUFFER_SIZE (500)       // Define o tamanho do buffer
@@ -19,6 +19,8 @@
 #define LED_RGB_BLUE 17    // Pino (TX2) conectado ao pino AZUL do led RGB
 #define RECEIVE_BUTTON 23  // Pino (D23) conectado ao botão de receber IR
 #define EMITTER_BUTTON 22  // Pino (D22) conectado ao botão de emitir IR
+#define BUTTON1 21         // Pino (D21) conectado ao botão de receber IR
+#define BUTTON2 19         // Pino (D19) conectado ao botão de emitir IR
 
 
 // Variáveis Globais
@@ -33,10 +35,10 @@ int currentStateReceiver;      // O estado atual do receiver
 int currentStateEmitter;       // O estado atual do emitter
 
 // Configuração Wi-Fi
-// const char* ssid = "brisa-4160473";
-// const char* password = "nsexdx3q";
-const char* ssid = "IFCE";
-const char* password = "ifcewifi";
+const char* ssid = "brisa-4160473";
+const char* password = "nsexdx3q";
+// const char* ssid = "IFCE";
+// const char* password = "ifcewifi";
 
 // Configurações do broker MQTT
 const char* mqtt_server = "70c7294fcccf4b729c7c25b7ce3006fb.s1.eu.hivemq.cloud";
