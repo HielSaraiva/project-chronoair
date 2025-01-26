@@ -335,10 +335,10 @@
 .lista-pavilhao2 {
   width: 867.3px; /* 70% de 1239px */
   height: 470px; /* 70% de 437px */
+  top: 150px;
+  left: 350px;
   position: absolute;
-  left: 50%;
-  translate: -50%;
-  bottom: 100px; /* 70% de 338px */
+  bottom: 150px; /* 70% de 338px */
   overflow: hidden;
 }
 
