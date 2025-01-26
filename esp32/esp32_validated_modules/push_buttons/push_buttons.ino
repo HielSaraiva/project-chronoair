@@ -1,10 +1,13 @@
-#define BUTTON1 22  // Botão 1 no pino 32
-#define BUTTON2 23  // Botão 2 no pino 33
+// #define BUTTON1 22  // Botão 1 no pino 22
+// #define BUTTON2 23  // Botão 2 no pino 23
+#define BUTTON1 19  // Botão 1 no pino 19
+#define BUTTON2 21  // Botão 2 no pino 18
 #define LED_RED 4   // LED Vermelho no pino 4
 #define LED_GREEN 16 // LED Verde no pino 16
 #define LED_BLUE 17  // LED Azul no pino 17
 
 void setup() {
+  Serial.begin(115200);
   // Configuração dos botões como entrada com pull-up interno
   pinMode(BUTTON1, INPUT_PULLUP);
   pinMode(BUTTON2, INPUT_PULLUP);
