@@ -334,11 +334,15 @@
 
 .lista-pavilhao2 {
   width: 867.3px; /* 70% de 1239px */
-  height: 470px; /* 70% de 437px */
-  top: 150px;
+  max-height: 470px; /* 70% de 437px */
+  top: 200px;
   left: 350px;
   position: absolute;
   bottom: 150px; /* 70% de 338px */
   overflow: hidden;
 }
 
+.botao-editar{
+  left: 1130px;
+  top: 90px;
+}

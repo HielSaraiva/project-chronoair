@@ -88,7 +88,6 @@
                 Sistema de Gestão de Ar-Condicionado
               </div>
             </div>
-          </div>
 
    <div class="lista-pavilhao2 overflow-auto"> <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
       <div class="container">
@@ -110,9 +109,11 @@
             {% endfor %}
            </tbody>
          </table>
-      <div class="btn-group"> <!-- div do botão de editar/criar novo -->
-        <button type="button" class="btn btn-success btn-lg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Action
+      </div>
+   </div>
+       <div class="btn-group botao-editar"> <!-- div do botão de editar/criar novo -->
+        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Editar
         </button>
         <ul class="dropdown-menu">
         <li>
@@ -123,7 +124,6 @@
             <a class="dropdown-item" href="{% url 'criarsalas' %}">Criar novo</a>
         </li>
         </ul>
-      </div>
       </div>
    </div>
   {% bootstrap_javascript %}
