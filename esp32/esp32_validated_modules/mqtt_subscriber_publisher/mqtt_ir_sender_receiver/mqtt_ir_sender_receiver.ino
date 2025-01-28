@@ -28,7 +28,7 @@
 // Sinal IR
 bool sinalRecebido = false;
 
-// Variáveis do botão:
+// Variáveis dos botões:
 int lastStateReceiverOff = HIGH;  // O último estado do pino de input receiver (Desligar)
 int lastStateEmitterOff = HIGH;   // O último estado do pino de input emitter (Desligar)
 int currentStateReceiverOff;      // O estado atual do receiver (Desligar)
@@ -101,8 +101,7 @@ struct storedIRDataStruct {
 } aStoredIRDataOff, aStoredIRDataOn;
 
 // Protótipos de Funcoes
-void storeCodeOff();
-void storeCodeOn();
+void storeCode(storedIRDataStruct* aStoredIRData);
 void sendCode(storedIRDataStruct* aIRDataToSend);
 void setup_wifi();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -162,7 +161,6 @@ void loop() {
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
     Serial.println("Pronto para receber sinal IR de DESLIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
@@ -173,6 +171,7 @@ void loop() {
         Serial.println("Sinal IR detectado!");
         if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
           sinalDetectado = true;
+          memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
 
           // Indicação luminosa (Sinal Recebido)
           analogWrite(LED_RGB_BLUE, 0);
@@ -200,7 +199,7 @@ void loop() {
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCodeOff();
+      storeCode(&aStoredIRDataOff);
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
@@ -238,7 +237,6 @@ void loop() {
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
     Serial.println("Pronto para receber sinal IR de LIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
@@ -249,6 +247,7 @@ void loop() {
         Serial.println("Sinal IR detectado!");
         if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
           sinalDetectado = true;
+          memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
 
           // Indicação luminosa (Sinal Recebido)
           analogWrite(LED_RGB_BLUE, 0);
@@ -276,7 +275,7 @@ void loop() {
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCodeOn();
+      storeCode(&aStoredIRDataOn);
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
@@ -307,30 +306,17 @@ void loop() {
   lastStateEmitterOn = currentStateEmitterOn;
 }
 
-void storeCodeOff() {
-  aStoredIRDataOff.receivedIRData = IrReceiver.decodedIRData;
+void storeCode(storedIRDataStruct* aStoredIRData) {
+  aStoredIRData->receivedIRData = IrReceiver.decodedIRData;
 
   Serial.print(F("Sinal recebido e armazenado"));
   IrReceiver.printIRResultRawFormatted(&Serial, true);  // Output the results in RAW format
   IrReceiver.printIRResultShort(&Serial);               // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
-  aStoredIRDataOff.rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
+  aStoredIRData->rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
   /*
          * Store the current raw data in a dedicated array for later usage
          */
-  IrReceiver.compensateAndStoreIRResultInArray(aStoredIRDataOff.rawCode);
-}
-
-void storeCodeOn() {
-  aStoredIRDataOn.receivedIRData = IrReceiver.decodedIRData;
-
-  Serial.print(F("Sinal recebido e armazenado"));
-  IrReceiver.printIRResultRawFormatted(&Serial, true);  // Output the results in RAW format
-  IrReceiver.printIRResultShort(&Serial);               // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
-  aStoredIRDataOn.rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
-  /*
-         * Store the current raw data in a dedicated array for later usage
-         */
-  IrReceiver.compensateAndStoreIRResultInArray(aStoredIRDataOn.rawCode);
+  IrReceiver.compensateAndStoreIRResultInArray(aStoredIRData->rawCode);
 }
 
 void sendCode(storedIRDataStruct* aIRDataToSend) {
@@ -397,7 +383,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
     Serial.println("Pronto para receber sinal IR de DESLIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
@@ -408,6 +393,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         Serial.println("Sinal IR detectado!");
         if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
           sinalDetectado = true;
+          memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
 
           // Indicação luminosa (Sinal Recebido)
           analogWrite(LED_RGB_BLUE, 0);
@@ -435,7 +421,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCodeOff();
+      storeCode(&aStoredIRDataOff);
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
@@ -461,7 +447,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
     Serial.println("Pronto para receber sinal IR de LIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
@@ -472,6 +457,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         Serial.println("Sinal IR detectado!");
         if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
           sinalDetectado = true;
+          memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
 
           // Indicação luminosa (Sinal Recebido)
           analogWrite(LED_RGB_BLUE, 0);
@@ -499,7 +485,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCodeOn();
+      storeCode(&aStoredIRDataOn);
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
