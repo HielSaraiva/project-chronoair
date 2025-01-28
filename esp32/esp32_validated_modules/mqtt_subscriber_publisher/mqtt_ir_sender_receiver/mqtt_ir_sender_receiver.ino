@@ -238,8 +238,13 @@ void storeCode() {
 
 void sendCode(storedIRDataStruct* aIRDataToSend) {
   // Assume 38 KHz
+  IrReceiver.stop(); // Desabilita o receptor IR
+
   IrSender.sendRaw(aIRDataToSend->rawCode, aIRDataToSend->rawCodeLength, IR_FREQUENCY);
   Serial.println(F("Código enviado"));
+
+  delay(100); // Delay para garantir que o sinal emitido não será capturado
+  IrReceiver.start(); // Reativa o receptor IR
 }
 
 void setup_wifi() {
@@ -325,7 +330,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         } else {
           Serial.println("Sinal IR muito curto, ignorando...");
         }
-        IrReceiver.resume();
+        // IrReceiver.resume();
       }
     }
 
