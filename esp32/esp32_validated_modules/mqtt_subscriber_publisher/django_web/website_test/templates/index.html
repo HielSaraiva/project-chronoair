@@ -18,16 +18,36 @@
         <div class="card shadow p-4 bg-white rounded" style="max-width: 400px; width: 100%;">
             <form method="post">
                 {% csrf_token %}  <!-- Token para garantir segurança no envio do POST -->
-                <div class="d-grid gap-3">
-                    <!-- Botão para "Gravar Sinal" -->
-                    <button type="submit" class="btn btn-danger btn-lg" name="acao" value="gravar">
-                        Gravar Sinal
-                    </button>
+                <div class="row mb-3">
+                    <!-- Botão para "Gravar Sinal Desligar" -->
+                    <div class="col">
+                        <button type="submit" class="btn btn-danger btn-lg w-100" name="acao" value="gravarOff">
+                            Gravar Sinal Desligar
+                        </button>
+                    </div>
 
-                    <!-- Botão para "Emitir Sinal" -->
-                    <button type="submit" class="btn btn-success btn-lg" name="acao" value="emitir">
-                        Emitir Sinal
-                    </button>
+                    <!-- Botão para "Gravar Sinal Ligar" -->
+                    <div class="col">
+                        <button type="submit" class="btn btn-danger btn-lg w-100" name="acao" value="gravarOn">
+                            Gravar Sinal Ligar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Botão para "Emitir Sinal Desligar" -->
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn-lg w-100" name="acao" value="emitirOff">
+                            Emitir Sinal Desligar
+                        </button>
+                    </div>
+
+                    <!-- Botão para "Emitir Sinal Ligar" -->
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn-lg w-100" name="acao" value="emitirOn">
+                            Emitir Sinal Ligar
+                        </button>
+                    </div>
                 </div>
             </form>
 
@@ -48,7 +68,7 @@
         </div>
     </div>
 
-    <!-- Inclui o JavaScript do Bootstrap via django-bootstrap5 (necessário para funcionalidades avançadas do Bootstrap, opcional aqui) -->
+    <!-- Inclui o JavaScript do Bootstrap via django-bootstrap5 -->
     {% bootstrap_javascript %}
 </body>
 </html>

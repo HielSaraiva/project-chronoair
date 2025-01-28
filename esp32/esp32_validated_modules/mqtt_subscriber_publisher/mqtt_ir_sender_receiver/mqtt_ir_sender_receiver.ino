@@ -6,21 +6,21 @@
 #include <ArduinoJson.h>
 
 // Constantes
-#define RAW_LENGTH_RECEIVED_MIN 74  // Tamanho mínimo do código raw a ser recebido
+#define RAW_LENGTH_RECEIVED_MIN 50  // Tamanho mínimo do código raw a ser recebido
 #define RAW_BUFFER_LENGTH 750       // For air condition remotes it requires 750. Default is 200.
 #define IR_FREQUENCY 38             // Frequência do sinal IR
 #define MSG_BUFFER_SIZE (500)       // Define o tamanho do buffer
 
 // Definindo os GPIOs usados
-#define IR_RECEIVE 13      // Pino (D13) conectado ao LED IR Receptor VS1838B
-#define IR_SENDER 18       // Pino (D18) conectado ao LED IR Emissor
-#define LED_RGB_RED 4      // Pino (D4) conectado ao pino VERMELHO do led RGB
-#define LED_RGB_GREEN 16   // Pino (RX2) conectado ao pino VERDE do led RGB
-#define LED_RGB_BLUE 17    // Pino (TX2) conectado ao pino AZUL do led RGB
-#define RECEIVE_BUTTON 23  // Pino (D23) conectado ao botão de receber IR
-#define EMITTER_BUTTON 22  // Pino (D22) conectado ao botão de emitir IR
-#define BUTTON1 21         // Pino (D21) conectado ao botão de receber IR
-#define BUTTON2 19         // Pino (D19) conectado ao botão de emitir IR
+#define IR_RECEIVE 13          // Pino (D13) conectado ao LED IR Receptor VS1838B
+#define IR_SENDER 18           // Pino (D18) conectado ao LED IR Emissor
+#define LED_RGB_RED 4          // Pino (D4) conectado ao pino VERMELHO do led RGB
+#define LED_RGB_GREEN 16       // Pino (RX2) conectado ao pino VERDE do led RGB
+#define LED_RGB_BLUE 17        // Pino (TX2) conectado ao pino AZUL do led RGB
+#define RECEIVE_BUTTON_OFF 19  // Pino (D23) conectado ao botão de receber IR (Desligar)
+#define EMITTER_BUTTON_OFF 22  // Pino (D22) conectado ao botão de emitir IR (Desligar)
+#define RECEIVE_BUTTON_ON 21   // Pino (D21) conectado ao botão de receber IR (Ligar)
+#define EMITTER_BUTTON_ON 23   // Pino (D19) conectado ao botão de emitir IR (Ligar)
 
 
 // Variáveis Globais
@@ -29,10 +29,14 @@
 bool sinalRecebido = false;
 
 // Variáveis do botão:
-int lastStateReceiver = HIGH;  // O último estado do pino de input receiver
-int lastStateEmitter = HIGH;   // O último estado do pino de input emitter
-int currentStateReceiver;      // O estado atual do receiver
-int currentStateEmitter;       // O estado atual do emitter
+int lastStateReceiverOff = HIGH;  // O último estado do pino de input receiver (Desligar)
+int lastStateEmitterOff = HIGH;   // O último estado do pino de input emitter (Desligar)
+int currentStateReceiverOff;      // O estado atual do receiver (Desligar)
+int currentStateEmitterOff;       // O estado atual do emitter (Desligar)
+int lastStateReceiverOn = HIGH;   // O último estado do pino de input receiver (Ligar)
+int lastStateEmitterOn = HIGH;    // O último estado do pino de input emitter (Ligar)
+int currentStateReceiverOn;       // O estado atual do receiver (Ligar)
+int currentStateEmitterOn;        // O estado atual do emitter (Ligar)
 
 // Configuração Wi-Fi
 const char* ssid = "brisa-4160473";
@@ -94,10 +98,11 @@ struct storedIRDataStruct {
   // extensions for sendRaw
   uint8_t rawCode[RAW_BUFFER_LENGTH];  // The durations if raw
   uint8_t rawCodeLength;               // The length of the code
-} sStoredIRData;
+} aStoredIRDataOff, aStoredIRDataOn;
 
 // Protótipos de Funcoes
-void storeCode();
+void storeCodeOff();
+void storeCodeOn();
 void sendCode(storedIRDataStruct* aIRDataToSend);
 void setup_wifi();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -121,8 +126,10 @@ void setup() {
   pinMode(LED_RGB_RED, OUTPUT);
 
   // Configurando BUTTONS
-  pinMode(RECEIVE_BUTTON, INPUT_PULLUP);  // ativa o resistor pull-up interno
-  pinMode(EMITTER_BUTTON, INPUT_PULLUP);  // ativa o resistor pull-up interno
+  pinMode(RECEIVE_BUTTON_OFF, INPUT_PULLUP);  // ativa o resistor pull-up interno
+  pinMode(EMITTER_BUTTON_OFF, INPUT_PULLUP);  // ativa o resistor pull-up interno
+  pinMode(RECEIVE_BUTTON_ON, INPUT_PULLUP);   // ativa o resistor pull-up interno
+  pinMode(EMITTER_BUTTON_ON, INPUT_PULLUP);   // ativa o resistor pull-up interno
 
   setup_wifi();  // Conecta à rede WiFi
 
@@ -143,18 +150,20 @@ void loop() {
 
   client.loop();
 
-  currentStateReceiver = digitalRead(RECEIVE_BUTTON);
-  currentStateEmitter = digitalRead(EMITTER_BUTTON);
+  currentStateReceiverOff = digitalRead(RECEIVE_BUTTON_OFF);
+  currentStateEmitterOff = digitalRead(EMITTER_BUTTON_OFF);
+  currentStateReceiverOn = digitalRead(RECEIVE_BUTTON_ON);
+  currentStateEmitterOn = digitalRead(EMITTER_BUTTON_ON);
 
-  // Verificar botão de RECEBER IR
-  if (lastStateReceiver == LOW && currentStateReceiver == HIGH) {  // Botão pressionado (pino em LOW)
+  // Verificar botão de RECEBER IR Off
+  if (lastStateReceiverOff == LOW && currentStateReceiverOff == HIGH) {  // Botão pressionado (pino em LOW)
     Serial.println("Botão RECEBER IR pressionado!");
     unsigned long startRecording = millis();
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&sStoredIRData, 0, sizeof(sStoredIRData));  // Limpa o buffer de dados armazenados
-    Serial.println("Pronto para receber sinal IR...");
+    memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
+    Serial.println("Pronto para receber sinal IR de DESLIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 255);
@@ -191,7 +200,7 @@ void loop() {
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCode();
+      storeCodeOff();
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
@@ -200,13 +209,13 @@ void loop() {
     IrReceiver.resume();  // Prepara o receptor para novos sinais
     delay(500);           // Evita detecção contínua devido ao debounce
   }
-  lastStateReceiver = currentStateReceiver;
+  lastStateReceiverOff = currentStateReceiverOff;
 
 
-  // Verificar botão de EMITIR IR
-  if (lastStateEmitter == LOW && currentStateEmitter == HIGH) {  // Botão pressionado (pino em LOW)
-    Serial.println("Botão EMITIR IR pressionado!");
-    sendCode(&sStoredIRData);
+  // Verificar botão de EMITIR IR Off
+  if (lastStateEmitterOff == LOW && currentStateEmitterOff == HIGH) {  // Botão pressionado (pino em LOW)
+    Serial.println("Botão EMITIR IR pressionado (DESLIGAR)!");
+    sendCode(&aStoredIRDataOff);
 
     // Indicação luminosa (Sinal Enviado)
     analogWrite(LED_RGB_BLUE, 255);
@@ -217,34 +226,122 @@ void loop() {
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 0);
 
-    Serial.println("Sinal IR emitido com sucesso.");
+    Serial.println("Sinal IR emitido com sucesso (DESLIGAR).");
     delay(500);  // Evita detecção contínua devido ao debounce
   }
-  lastStateEmitter = currentStateEmitter;
+  lastStateEmitterOff = currentStateEmitterOff;
+
+  // Verificar botão de RECEBER IR On
+  if (lastStateReceiverOn == LOW && currentStateReceiverOn == HIGH) {  // Botão pressionado (pino em LOW)
+    Serial.println("Botão RECEBER IR pressionado!");
+    unsigned long startRecording = millis();
+    unsigned long timeout = 10000;
+    bool sinalDetectado = false;
+
+    memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
+    Serial.println("Pronto para receber sinal IR de LIGAR...");
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 255);
+
+    while (millis() - startRecording < timeout) {
+      if (IrReceiver.decode()) {
+        Serial.println("Sinal IR detectado!");
+        if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
+          sinalDetectado = true;
+
+          // Indicação luminosa (Sinal Recebido)
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 0);
+          analogWrite(LED_RGB_RED, 0);
+          delay(200);
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 255);
+          analogWrite(LED_RGB_RED, 0);
+          delay(200);
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 0);
+          analogWrite(LED_RGB_RED, 0);
+
+          break;
+        } else {
+          Serial.println("Sinal IR muito curto, ignorando...");
+        }
+        IrReceiver.resume();
+      }
+    }
+
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+
+    if (sinalDetectado) {
+      storeCodeOn();
+      Serial.println("Sinal IR armazenado com sucesso!");
+    } else {
+      Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
+    }
+
+    IrReceiver.resume();  // Prepara o receptor para novos sinais
+    delay(500);           // Evita detecção contínua devido ao debounce
+  }
+  lastStateReceiverOn = currentStateReceiverOn;
+
+  // Verificar botão de EMITIR IR On
+  if (lastStateEmitterOn == LOW && currentStateEmitterOn == HIGH) {  // Botão pressionado (pino em LOW)
+    Serial.println("Botão EMITIR IR pressionado (LIGAR)!");
+    sendCode(&aStoredIRDataOn);
+
+    // Indicação luminosa (Sinal Enviado)
+    analogWrite(LED_RGB_BLUE, 255);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+    delay(200);
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+
+    Serial.println("Sinal IR emitido com sucesso (LIGAR).");
+    delay(500);  // Evita detecção contínua devido ao debounce
+  }
+  lastStateEmitterOn = currentStateEmitterOn;
 }
 
-void storeCode() {
-  sStoredIRData.receivedIRData = IrReceiver.decodedIRData;
+void storeCodeOff() {
+  aStoredIRDataOff.receivedIRData = IrReceiver.decodedIRData;
 
   Serial.print(F("Sinal recebido e armazenado"));
   IrReceiver.printIRResultRawFormatted(&Serial, true);  // Output the results in RAW format
   IrReceiver.printIRResultShort(&Serial);               // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
-  sStoredIRData.rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
+  aStoredIRDataOff.rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
   /*
          * Store the current raw data in a dedicated array for later usage
          */
-  IrReceiver.compensateAndStoreIRResultInArray(sStoredIRData.rawCode);
+  IrReceiver.compensateAndStoreIRResultInArray(aStoredIRDataOff.rawCode);
+}
+
+void storeCodeOn() {
+  aStoredIRDataOn.receivedIRData = IrReceiver.decodedIRData;
+
+  Serial.print(F("Sinal recebido e armazenado"));
+  IrReceiver.printIRResultRawFormatted(&Serial, true);  // Output the results in RAW format
+  IrReceiver.printIRResultShort(&Serial);               // Exibe o Protocolo, o código RAW em HEXA e o tamanho dos dados recebidos
+  aStoredIRDataOn.rawCodeLength = IrReceiver.decodedIRData.rawDataPtr->rawlen - 1;
+  /*
+         * Store the current raw data in a dedicated array for later usage
+         */
+  IrReceiver.compensateAndStoreIRResultInArray(aStoredIRDataOn.rawCode);
 }
 
 void sendCode(storedIRDataStruct* aIRDataToSend) {
   // Assume 38 KHz
-  IrReceiver.stop(); // Desabilita o receptor IR
+  IrReceiver.stop();  // Desabilita o receptor IR
 
   IrSender.sendRaw(aIRDataToSend->rawCode, aIRDataToSend->rawCodeLength, IR_FREQUENCY);
   Serial.println(F("Código enviado"));
 
-  delay(100); // Delay para garantir que o sinal emitido não será capturado
-  IrReceiver.start(); // Reativa o receptor IR
+  delay(100);          // Delay para garantir que o sinal emitido não será capturado
+  IrReceiver.start();  // Reativa o receptor IR
 }
 
 void setup_wifi() {
@@ -295,14 +392,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   // Verifica o valor da chave "acao" no JSON
   const char* acao = doc["acao"];
 
-  if (String(topic) == "comando" && String(acao) == "gravar") {
+  if (String(topic) == "comando" && String(acao) == "gravarOff") {
     unsigned long startRecording = millis();
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
 
-    memset(&sStoredIRData, 0, sizeof(sStoredIRData));  // Limpa o buffer de dados armazenados
-    Serial.println("Pronto para receber sinal IR...");
-    // digitalWrite(LED_RED, HIGH);
+    memset(&aStoredIRDataOff, 0, sizeof(aStoredIRDataOff));  // Limpa o buffer de dados armazenados
+    Serial.println("Pronto para receber sinal IR de DESLIGAR...");
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 255);
@@ -334,27 +430,23 @@ void callback(char* topic, byte* payload, unsigned int length) {
       }
     }
 
-    // digitalWrite(LED_RED, LOW);
     analogWrite(LED_RGB_BLUE, 0);
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 0);
 
     if (sinalDetectado) {
-      storeCode();
+      storeCodeOff();
       Serial.println("Sinal IR armazenado com sucesso!");
     } else {
       Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
     }
 
     IrReceiver.resume();  // Prepara o receptor para receber novos sinais
-  } else if (String(topic) == "comando" && String(acao) == "emitir") {
-    Serial.println("Emitindo sinal IR armazenado...");
-    sendCode(&sStoredIRData);
+  } else if (String(topic) == "comando" && String(acao) == "emitirOff") {
+    Serial.println("Emitindo sinal IR armazenado (DESLIGAR)...");
+    sendCode(&aStoredIRDataOff);
 
     // Indicação luminosa (Sinal Enviado)
-    // digitalWrite(LED_WHITE, HIGH);
-    // delay(200);
-    // digitalWrite(LED_WHITE, LOW);
     analogWrite(LED_RGB_BLUE, 255);
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 0);
@@ -363,7 +455,71 @@ void callback(char* topic, byte* payload, unsigned int length) {
     analogWrite(LED_RGB_GREEN, 0);
     analogWrite(LED_RGB_RED, 0);
 
-    Serial.println("Sinal IR emitido com sucesso.");
+    Serial.println("Sinal IR emitido com sucesso (DESLIGAR).");
+  } else if (String(topic) == "comando" && String(acao) == "gravarOn") {
+    unsigned long startRecording = millis();
+    unsigned long timeout = 10000;
+    bool sinalDetectado = false;
+
+    memset(&aStoredIRDataOn, 0, sizeof(aStoredIRDataOn));  // Limpa o buffer de dados armazenados
+    Serial.println("Pronto para receber sinal IR de LIGAR...");
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 255);
+
+    while (millis() - startRecording < timeout) {
+      if (IrReceiver.decode()) {
+        Serial.println("Sinal IR detectado!");
+        if (IrReceiver.decodedIRData.rawlen >= RAW_LENGTH_RECEIVED_MIN) {
+          sinalDetectado = true;
+
+          // Indicação luminosa (Sinal Recebido)
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 0);
+          analogWrite(LED_RGB_RED, 0);
+          delay(200);
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 255);
+          analogWrite(LED_RGB_RED, 0);
+          delay(200);
+          analogWrite(LED_RGB_BLUE, 0);
+          analogWrite(LED_RGB_GREEN, 0);
+          analogWrite(LED_RGB_RED, 0);
+
+          break;
+        } else {
+          Serial.println("Sinal IR muito curto, ignorando...");
+        }
+        // IrReceiver.resume();
+      }
+    }
+
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+
+    if (sinalDetectado) {
+      storeCodeOn();
+      Serial.println("Sinal IR armazenado com sucesso!");
+    } else {
+      Serial.println("Nenhum sinal IR válido recebido dentro do tempo limite.");
+    }
+
+    IrReceiver.resume();  // Prepara o receptor para receber novos sinais
+  } else if (String(topic) == "comando" && String(acao) == "emitirOn") {
+    Serial.println("Emitindo sinal IR armazenado (LIGAR)...");
+    sendCode(&aStoredIRDataOn);
+
+    // Indicação luminosa (Sinal Enviado)
+    analogWrite(LED_RGB_BLUE, 255);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+    delay(200);
+    analogWrite(LED_RGB_BLUE, 0);
+    analogWrite(LED_RGB_GREEN, 0);
+    analogWrite(LED_RGB_RED, 0);
+
+    Serial.println("Sinal IR emitido com sucesso (LIGAR).");
   } else {
     Serial.println("Comando não reconhecido.");
   }
