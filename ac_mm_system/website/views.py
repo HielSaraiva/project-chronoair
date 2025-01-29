@@ -64,7 +64,8 @@ def criar_pavilhao(request):
             form.save()  # Se os dados forem válidos ele irá salvar
             messages.success(request,
                              'Pavilhão criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o pavilhão seja criado
-            form = PavilhaoModelForm()  # Cria um novo formulário vazio após salvar os dados
+            # form = PavilhaoModelForm()  # Cria um novo formulário vazio após salvar os dados
+            return redirect('website:listar_pavilhoes')
         else:
             messages.error(request,
                            'Erro ao criar pavilhão')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
@@ -83,8 +84,9 @@ def criar_horario(request):
         if form.is_valid():  # Verifica se os dados inseridos são válidos
             form.save()  # Se os dados forem válidos ele irá salvar
             messages.success(request,
-                             'Horario criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o horário seja criado
-            form = HorarioModelForm()  # Cria um novo formulário vazio após salvar os dados
+                             'Horário criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o horário seja criado
+            # form = HorarioModelForm()  # Cria um novo formulário vazio após salvar os dados
+            return redirect('website:listar_horarios')
         else:
             messages.error(request,
                            'Erro ao criar horário')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
@@ -104,7 +106,8 @@ def criar_sala(request):
             form.save()  # Se os dados forem válidos ele irá salvar
             messages.success(request,
                              'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
-            form = SalaModelForm()  # Cria um novo formulário vazio após salvar os dados
+            # form = SalaModelForm()  # Cria um novo formulário vazio após salvar os dados
+            return redirect('website:listar_salas')
         else:
             messages.error(request, 'Erro ao criar sala')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
     else:
@@ -122,6 +125,8 @@ def editar_salas(request, pk):
         form = SalaModelForm(request.POST, instance=sala)
         if form.is_valid():
             form.save()
+            messages.success(request,
+                             'Sala editada com sucesso!')
             return redirect('website:listar_salas')
     else:
         form = SalaModelForm(instance=sala)
@@ -133,6 +138,8 @@ def deletar_salas(request, pk):
     sala = Sala.objects.get(id=pk)
     if request.method == 'POST':
         sala.delete()
+        messages.success(request,
+                         'Sala deletada com sucesso!')
         return redirect('website:listar_salas')
     context = {
         'sala': sala
@@ -144,6 +151,8 @@ def deletar_horarios(request, pk):
     horario = Horario.objects.get(id=pk)
     if request.method == 'POST':
         horario.delete()
+        messages.success(request,
+                         'Horário deletado com sucesso!')
         return redirect('website:listar_horarios')
     context = {
         'horario': horario
@@ -158,6 +167,8 @@ def editar_horarios(request, pk):
         form = HorarioModelForm(request.POST, instance=horario)
         if form.is_valid():
             form.save()
+            messages.success(request,
+                             'Horário editado com sucesso!')
             return redirect('website:listar_horarios')
     else:
         form = HorarioModelForm(instance=horario)
@@ -169,6 +180,8 @@ def deletar_pavilhoes(request, pk):
     pavilhao = Pavilhao.objects.get(id=pk)
     if request.method == 'POST':
         pavilhao.delete()
+        messages.success(request,
+                         'Pavilhão deletado com sucesso!')
         return redirect('website:listar_pavilhoes')
     context = {
         'pavilhao': pavilhao
@@ -183,6 +196,8 @@ def editar_pavilhoes(request, pk):
         form = PavilhaoModelForm(request.POST, instance=pavilhao)
         if form.is_valid():
             form.save()
+            messages.success(request,
+                             'Pavilhão editado com sucesso!')
             return redirect('website:listar_pavilhoes')
     else:
         form = PavilhaoModelForm(instance=pavilhao)

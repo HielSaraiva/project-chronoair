@@ -22,6 +22,14 @@ class PavilhaoModelForm(forms.ModelForm):
             'nome',
             'numero_salas',
         ]
+        labels = {
+            'nome': 'Pavilhão',
+            'numero_salas': 'Número de Salas',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
+            'numero_salas': forms.NumberInput(attrs={'placeholder': 'Número', 'min': 1}),
+        }
 
 
 # Formulário para o modelo Horario
@@ -40,7 +48,15 @@ class HorarioModelForm(forms.ModelForm):
             'horario_inicio',
             'horario_fim',
         ]
-
+        labels = {
+            'pavilhao': 'Pavilhão',
+            'horario_inicio': 'Horário de Início',
+            'horario_fim': 'Horário de Término',
+        }
+        widgets = {
+            'horario_inicio': forms.TextInput(attrs={'type':'time', 'placeholder': 'HH:mm'}),
+            'horario_fim': forms.TextInput(attrs={'type':'time', 'placeholder': 'HH:mm'}),
+        }
 
 # Formulário para o modelo Sala
 class SalaModelForm(forms.ModelForm):
@@ -51,3 +67,11 @@ class SalaModelForm(forms.ModelForm):
             'pavilhao',
             'horario',
         ]
+        labels = {
+            'nome': 'Sala',
+            'pavilhao': 'Pavilhão',
+            'horario': 'Horário',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
+        }

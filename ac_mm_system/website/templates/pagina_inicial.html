@@ -1,89 +1,19 @@
+{% extends "base.html" %}
+
 {% load django_bootstrap5 %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-    {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
-
-
-    <style>
-        a,
-        button,
-        input,
-        select,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            border: none;
-            text-decoration: none;
-            background: none;
-
-            -webkit-font-smoothing: antialiased;
-        }
-
-        menu, ol, ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-    <title>Document</title>
-</head>
-<body>
-<div class="lista-pavilh-es"> <!-- div principal, ultima a ser fechada -->
-    <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
-    <div class="menu-buttons"> <!--div dos botões -->
-        <div class="button-horarios"> <!-- div do botão de horários -->
-            <div class="rectangle-7"></div>
-            <img class="calendar-02" src="{% static 'buttons/calendar-020white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-            <div class="hor-rios">Horários</div>
-        </div>
-        <div class="button-arcondicionados">  <!-- div do botão de ar -->
-            <div class="rectangle-6"></div>
-            <img class="snowflake" src="{% static 'buttons/snowflake0white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_ar' %}'"></button>
-            <div class="ar-condicionado">Ar-condicionado</div>
-        </div>
-        <div class="button-salas">  <!-- div do botão de salass -->
-            <div class="rectangle-5"></div>
-            <img class="book-04" src="{% static 'buttons/book-040white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-            <div class="salas">Salas</div>
-        </div>
-        <div class="button-pavilhao">  <!-- div do botão de pavilhões -->
-            <div class="rectangle-6"></div>
-            <img class="buildings-2" src="{% static 'buttons/buildings-20white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-            <div class="pavilh-o">Pavilhão</div>
-        </div>
-        <div class="button-home">  <!-- div do botão de pagina inicial -->
-            <div class="rectangle-3"></div>
-            <img class="home-05" src="{% static 'buttons/home-050green.svg' %}"/>
-            <button class="buildings-2" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
-            <div class="in-cio">Início</div>
-        </div>
-    </div>
-    <div class="menu-bar"> <!-- barra superior do site-->
-        <div class="rectangle-1"></div>
-        <img class="hotel-air-conditioner" src="{% static 'buttons/hotel-air-conditioner0.svg' %}"/>
-        <div class="sistema-de-gest-o-de-ar-condicionado">
-            Sistema de Gestão de Ar-Condicionado
-        </div>
-    </div>
-</div>
+{% bootstrap_css %}
 {% bootstrap_javascript %}
-</body>
-</html>
+
+{% block title %}Página Inicial{% endblock title %}
+
+{% block inicio %}
+<div class="button-home">  <!-- div do botão de pagina inicial -->
+    <div class="rectangle-3"></div>
+    <img class="home-05" src="{% static 'buttons/home-050green.svg' %}"/>
+    <button class="buildings-2" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
+    <div class="in-cio">Início</div>
+</div>
+{% endblock inicio %}
+
+{% block content %}{% endblock content %}
