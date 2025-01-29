@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
   {% bootstrap_css %}
   <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
   <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
@@ -44,12 +45,6 @@
   <div class="lista-pavilh-es"> <!-- div principal, ultima a ser fechada -->
         <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
         <div class="menu-buttons"> <!--div dos botões -->
-          <div class="button-usuarios"> <!-- div do botão de usuários -->
-                <div class="rectangle-4"></div>
-                <img class="user-profile-01" src="{% static 'buttons/user-profile-010white.svg' %}" />
-                <button class="home-05" onclick="window.location.href='{% url 'listausuarios' %}'"></button>
-                <div class="usu-rios">Usuários</div>
-          </div>
             <div class="button-horarios"><!-- div do botão de horários -->
                 <div class="rectangle-7"></div>
                 <img class="calendar-02" src="{% static 'buttons/calendar-020white.svg' %}" />
@@ -95,9 +90,10 @@
          <table class="table table-bordered border-success">  <!-- div da tabela representando a lista de pavilhões -->
            <thead>
               <tr class="table-light">
-                <th scope="col">Id</th>
-                <th scope="col">Pavilhão</th>
-                <th scope="col">Número de salas</th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Pavilhão</th>
+                  <th scope="col">Número de salas</th>
+                  <th scope="col">Ações</th>
               </tr>
            </thead>
            <tbody>
@@ -106,6 +102,10 @@
                   <td scope="row">{{ pavilhao.id }}</td>
                   <td scope="row">{{ pavilhao.nome }}</td>
                   <td scope="row">{{ pavilhao.numero_salas }}</td>
+                   <td>
+                     <a class="btn btn-primary btn-sm" href="{% url 'editarpavilhoes' pavilhao.id %}">Editar</a>
+                     <a class="btn btn-danger btn-sm" href="{% url 'deletarpavilhoes' pavilhao.id %}">Deletar</a>
+                  </td>
               </tr>
             {% endfor %}
            </tbody>
@@ -113,19 +113,10 @@
 
       </div>
   </div>
-      <div class="btn-group botao-editar"><!-- div do botão de editar/criar novo -->
-        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Editar
-        </button>
-        <ul class="dropdown-menu">
-        <li>
-            <a class="dropdown-item" href="{% url 'criarpavilhoes' %}">Editar</a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a class="dropdown-item" href="{% url 'criarpavilhoes' %}">Criar novo</a>
-        </li>
-        </ul>
+      <div class="botao-criarnovo"> <!-- div do botão de editar/criar novo -->
+          <button onclick="window.location.href='{% url 'criarpavilhoes' %}'" class="btn btn-success btn-sm" aria-expanded="false" >
+            Criar Novo
+          </button>
       </div>
   </div>
   {% bootstrap_javascript %}

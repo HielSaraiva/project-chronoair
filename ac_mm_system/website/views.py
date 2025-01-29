@@ -26,8 +26,16 @@ def listaPavilhoes_View(request):
 
 
 def listaSalas_View(request):
+    pavilhoes = Pavilhao.objects.all()
+    if request.method == 'POST':
+        filtrarpavilhao = request.POST.get('pavilhao')
+        salas = Sala.objects.filter(pavilhao__id=filtrarpavilhao)
+    else:
+        salas = Sala.objects.all()
+
     context = {
-        'salas': Sala.objects.all() #permite exibir todos os objetos 'sala' que foram criados
+        'salas': salas,
+        'pavilhoes': pavilhoes,
     }
     return render(request, 'listasalas.html', context)
 
@@ -37,14 +45,18 @@ def listaAr_View(request):
 
 
 def listaHorarios_View(request):
+    pavilhoes = Pavilhao.objects.all()
+    if request.method == 'POST':
+        filtrarpavilhao = request.POST.get('pavilhao')
+        horarios = Horario.objects.filter(pavilhao__id=filtrarpavilhao)
+    else:
+        horarios = Horario.objects.all()
+
     context = {
-        'horarios': Horario.objects.all() #permite exibir todos os objetos 'horario' que foram criados
+        'horarios': horarios,
+        'pavilhoes': pavilhoes,
     }
     return render(request, 'listahorarios.html', context)
-
-
-def listaUsuarios_View(request):
-    return render(request, 'listausuarios.html')
 
 
 def criarPavilhao_View(request):
@@ -99,3 +111,72 @@ def criarSala_View(request):
         'form': form # Passa o formulário para o contexto do template
     }
     return render(request, 'criarsalas.html', context)
+
+def editarSalas_View(request, pk):
+    sala = Sala.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = SalaModelForm(request.POST, instance=sala)
+        if form.is_valid():
+            form.save()
+            return redirect('listasalas')
+    else:
+        form = SalaModelForm(instance=sala)
+    context = {'form': form, 'sala': sala}
+    return render(request, 'criarsalas.html', context)
+
+def deletarSalas_View(request, pk):
+    sala = Sala.objects.get(id=pk)
+    if request.method == 'POST':
+        sala.delete()
+        return redirect('listasalas')
+    context = {
+        'sala': sala
+    }
+    return render(request, 'deletarsalas.html', context)
+
+def deletarHorarios_View(request, pk):
+    horario = Horario.objects.get(id=pk)
+    if request.method == 'POST':
+        horario.delete()
+        return redirect('listahorarios')
+    context = {
+        'horario': horario
+    }
+    return render(request, 'deletarhorarios.html', context)
+
+def editarHorarios_View(request, pk):
+    horario = Horario.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = HorarioModelForm(request.POST, instance=horario)
+        if form.is_valid():
+            form.save()
+            return redirect('listahorarios')
+    else:
+        form = HorarioModelForm(instance=horario)
+    context = {'form': form, 'horario': horario}
+    return render(request, 'criarhorarios.html', context)
+
+def deletarPavilhoes_View(request, pk):
+    pavilhao = Pavilhao.objects.get(id=pk)
+    if request.method == 'POST':
+        pavilhao.delete()
+        return redirect('listapavilhoes')
+    context = {
+        'pavilhao': pavilhao
+    }
+    return render(request, 'deletarpavilhoes.html', context)
+
+def editarPavilhoes_View(request, pk):
+    pavilhao = Pavilhao.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = PavilhaoModelForm(request.POST, instance=pavilhao)
+        if form.is_valid():
+            form.save()
+            return redirect('listapavilhoes')
+    else:
+        form = PavilhaoModelForm(instance=pavilhao)
+    context = {'form': form, 'pavilhao':pavilhao}
+    return render(request, 'criarpavilhoes.html', context)

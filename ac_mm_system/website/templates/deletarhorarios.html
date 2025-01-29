@@ -46,8 +46,8 @@
         <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
             <div class="menu-buttons"> <!--div dos botões -->
             <div class="button-horarios"><!-- div do botão de horários -->
-              <div class="rectangle-7"></div>
-              <img class="calendar-02" src="{% static 'buttons/calendar-020white.svg' %}" />
+              <div class="rectangle-3"></div>
+              <img class="calendar-02" src="{% static 'buttons/calendar-020green.svg' %}" />
               <button class="home-05" onclick="window.location.href='{% url 'listahorarios' %}'"></button>
               <div class="hor-rios">Horários</div>
             </div>
@@ -58,8 +58,8 @@
               <div class="ar-condicionado">Ar-condicionado</div>
             </div>
             <div class="button-salas"><!-- div do botão de salas -->
-              <div class="rectangle-3"></div>
-              <img class="book-04" src="{% static 'buttons/book-040green.svg' %}" />
+              <div class="rectangle-7"></div>
+              <img class="book-04" src="{% static 'buttons/book-040white.svg' %}" />
               <button class="home-05" onclick="window.location.href='{% url 'listasalas' %}'"></button>
               <div class="salas">Salas</div>
             </div>
@@ -87,15 +87,16 @@
 
      <div class="lista-pavilhao2 overflow-auto"> <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
        <div class="container"> <!-- div com a configuração da visualização dos horários -->
-           {% bootstrap_messages %}
-           <form action="{% if sala %}{% url 'editarsalas' sala.id %}{% else %}{% url 'criarsalas' %}{% endif %}"  method="post" class="form" autocomplete="off">
-               {% csrf_token %}
-               {% bootstrap_form form %}
-                   <a class="btn btn-danger" href="{% url 'listasalas' %}">Cancelar</a>
-                  <button type="submit" class="btn btn-primary">
-                       {% if sala %}Atualizar{% else %}Cadastrar{% endif %}
-                  </button>
-              </form>
+           <center>
+           <div class="alert alert-danger" role="alert">
+               Deletar a horário "{{horario}}"?
+            </div>
+            <form action="{% url 'deletarhorarios' horario.id %}" method="POST">
+                {% csrf_token %}
+                <a class="btn btn-primary" href="{% url 'listahorarios' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+           </center>
        </div>
       </div>
   </div>

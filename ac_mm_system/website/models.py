@@ -8,7 +8,7 @@ from django.db.models import ForeignKey
 
 class Pavilhao(models.Model):
     # Atributos
-    nome = models.CharField('Nome', max_length=100)
+    nome = models.CharField('Nome', max_length=100, unique=True)
     numero_salas = models.IntegerField('Numero de salas')
 
     def __str__(self): # Define a representação em texto do objeto
@@ -28,7 +28,7 @@ class Horario(models.Model):
 
 class Sala(models.Model):
     # Atributos
-    nome = models.CharField('Nome', max_length=100)
+    nome = models.CharField('Nome', max_length=100, unique=True)
     pavilhao = ForeignKey(Pavilhao, on_delete=models.CASCADE)
     horario = ForeignKey(Horario, on_delete=models.CASCADE, related_name='sala_horario', default=1)
 

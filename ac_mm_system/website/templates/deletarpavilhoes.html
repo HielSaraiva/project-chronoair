@@ -58,14 +58,14 @@
               <div class="ar-condicionado">Ar-condicionado</div>
             </div>
             <div class="button-salas"><!-- div do botão de salas -->
-              <div class="rectangle-3"></div>
-              <img class="book-04" src="{% static 'buttons/book-040green.svg' %}" />
+              <div class="rectangle-5"></div>
+              <img class="book-04" src="{% static 'buttons/book-040white.svg' %}" />
               <button class="home-05" onclick="window.location.href='{% url 'listasalas' %}'"></button>
               <div class="salas">Salas</div>
             </div>
             <div class="button-pavilhao"><!-- div do botão de pavilhões -->
-              <div class="rectangle-5"></div>
-              <img class="buildings-2" src="{% static 'buttons/buildings-20white.svg' %}" />
+              <div class="rectangle-3"></div>
+              <img class="buildings-2" src="{% static 'buttons/buildings-20green.svg' %}" />
               <button class="home-05" onclick="window.location.href='{% url 'listapavilhoes' %}'"></button>
               <div class="pavilh-o">Pavilhão</div>
             </div>
@@ -87,15 +87,16 @@
 
      <div class="lista-pavilhao2 overflow-auto"> <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
        <div class="container"> <!-- div com a configuração da visualização dos horários -->
-           {% bootstrap_messages %}
-           <form action="{% if sala %}{% url 'editarsalas' sala.id %}{% else %}{% url 'criarsalas' %}{% endif %}"  method="post" class="form" autocomplete="off">
-               {% csrf_token %}
-               {% bootstrap_form form %}
-                   <a class="btn btn-danger" href="{% url 'listasalas' %}">Cancelar</a>
-                  <button type="submit" class="btn btn-primary">
-                       {% if sala %}Atualizar{% else %}Cadastrar{% endif %}
-                  </button>
-              </form>
+           <center>
+           <div class="alert alert-danger" role="alert">
+               Deletar a pavilhão "{{pavilhao}}"?
+            </div>
+            <form action="{% url 'deletarpavilhoes' pavilhao.id %}" method="POST">
+                {% csrf_token %}
+                <a class="btn btn-primary" href="{% url 'listapavilhoes' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+           </center>
        </div>
       </div>
   </div>

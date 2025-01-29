@@ -24,7 +24,7 @@
   height: 559.3px;
   position: absolute;
   left: 9.1px;
-  top: 118.3px;
+  top: 130px;
 }
 .button-usuarios {
   width: 56px;
@@ -73,7 +73,7 @@
   height: 56px;
   position: absolute;
   left: 0px;
-  top: 392px;
+  top: 460px;
 }
 .rectangle-7 {
   background: #4dbc53;
@@ -115,7 +115,7 @@
   height: 56px;
   position: absolute;
   left: 0px;
-  top: 294px;
+  top: 345px;
 }
 .rectangle-6 {
   background: #4dbc53;
@@ -157,7 +157,7 @@
   height: 56px;
   position: absolute;
   left: 0px;
-  top: 196px;
+  top: 230px;
 }
 .rectangle-5 {
   background: #4dbc53;
@@ -199,7 +199,7 @@
   height: 56px;
   position: absolute;
   left: 0px;
-  top: 98px;
+  top: 115px;
 }
 .rectangle-3 {
   background: #ffffff;
@@ -274,6 +274,9 @@
   top: -23.8px;
   width: 76.3px;
   height: 30.8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-bar,
@@ -333,7 +336,7 @@
 }
 
 .lista-pavilhao2 {
-  width: 867.3px; /* 70% de 1239px */
+  width: 900px; /* 70% de 1239px */
   max-height: 470px; /* 70% de 437px */
   top: 200px;
   left: 350px;
@@ -342,7 +345,28 @@
   overflow: hidden;
 }
 
-.botao-editar{
-  left: 1130px;
-  top: 90px;
+.botao-criarnovo{
+  left: 1153px;
+  top: 165px;
+  position: absolute;
+}
+
+.botao-cancelar-cadastrar{
+  top: 600px;
+  left: 350px;
+  width: 500px;
+  position: absolute;
+}
+
+.filtro-search {
+  top:165px;
+  width:300px;
+  left:365px;
+  position: absolute;
+}
+
+.filtro-search .form-inline {
+    display: flex;
+    gap: 0.3rem; /* Espaço entre os elementos */
+    align-items: center; /* Alinhar verticalmente ao centro */
 }

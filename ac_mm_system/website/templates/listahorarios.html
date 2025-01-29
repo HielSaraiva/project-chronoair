@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
   {% bootstrap_css %}
   <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
   <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
@@ -44,12 +45,6 @@
   <div class="lista-pavilh-es"> <!-- div principal, ultima a ser fechada -->
         <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
         <div class="menu-buttons"> <!--div dos botões -->
-          <div class="button-usuarios"> <!-- div do botão de usuários -->
-                <div class="rectangle-4"></div>
-                <img class="user-profile-01" src="{% static 'buttons/user-profile-010white.svg' %}" />
-                <button class="home-05" onclick="window.location.href='{% url 'listausuarios' %}'"></button>
-                <div class="usu-rios">Usuários</div>
-          </div>
             <div class="button-horarios">  <!-- div do botão de horarios -->
                 <div class="rectangle-3"></div>
                 <img class="calendar-02" src="{% static 'buttons/calendar-020green.svg' %}" />
@@ -91,14 +86,15 @@
 
 
    <div class="lista-pavilhao2 overflow-auto"> <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-      <div class="container">
-         <table class="table table-bordered border-success"> <!-- div da tabela representando a lista de horario -->
+       <div class="container">
+              <table class="table table-bordered border-success"> <!-- div da tabela representando a lista de horario -->
            <thead>
               <tr class="table-light">
                 <th scope="col">Pavilhão</th>
                 <th scope="col">Dias da semana</th>
                 <th scope="col">Horário início</th>
                 <th scope="col">Horário fim</th>
+                <th scope="col">Ações</th>
               </tr>
            </thead>
            <tbody>
@@ -112,27 +108,41 @@
                   </td>
                   <td scope="row">{{ horario.horario_inicio }}</td>
                   <td scope="row">{{ horario.horario_fim }}</td>
+                  <td>
+                     <a class="btn btn-primary btn-sm"  href="{% url 'editarhorarios' horario.id %}">Editar</a>
+                     <a class="btn btn-danger btn-sm" href="{% url 'deletarhorarios' horario.id %}">Deletar</a>
+                  </td>
               </tr>
             {% endfor %}
            </tbody>
          </table>
-
       </div> <!-- fechamento da div da lista-->
+
    </div><!-- fechamento da div que determina o tamanho do bloco central-->
-      <div class="btn-group botao-editar"> <!-- div do botão de editar/criar novo -->
-        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Editar
+
+      <div class="botao-criarnovo"> <!-- div do botão de editar/criar novo -->
+        <button onclick="window.location.href='{% url 'criarhorarios' %}'" class="btn btn-success btn-sm" aria-expanded="false" >
+            Criar Novo
         </button>
-        <ul class="dropdown-menu">
-        <li>
-            <a class="dropdown-item" href="{% url 'criarhorarios' %}">Editar</a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a class="dropdown-item" href="{% url 'criarhorarios' %}">Criar novo</a>
-        </li>
-        </ul>
-      </div> <!-- fechamento da div do botão-->
+      </div>
+
+
+      <div class="filtro-search">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-inline">
+                    <select class="form-select btn btn-success btn-sm" name="pavilhao">
+                        <option class="list-group" selected disabled="true">Pavilhão</option>
+                        {% for pavilhao in pavilhoes %}
+                        <option value="{{ pavilhao.id }}">{{ pavilhao.nome }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="form-control btn btn-success btn-sm" type="submit" value="Search">
+                </div>
+            </form>
+        </div>
+
+
   </div>
   {% bootstrap_javascript %}
 </body>

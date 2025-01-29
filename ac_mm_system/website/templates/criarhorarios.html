@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
   {% bootstrap_css %}
   <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
   <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
@@ -44,12 +45,6 @@
     <div class="lista-pavilh-es"> <!-- div principal, ultima a ser fechada -->
         <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
         <div class="menu-buttons"> <!--div dos botões -->
-          <div class="button-usuarios"> <!-- div do botão de usuários -->
-            <div class="rectangle-4"></div>
-            <img class="user-profile-01" src="{% static 'buttons/user-profile-010white.svg' %}" />
-            <button class="home-05" onclick="window.location.href='{% url 'listausuarios' %}'"></button>
-            <div class="usu-rios">Usuários</div>
-          </div>
           <div class="button-horarios">  <!-- div do botão de horários -->
             <div class="rectangle-3"></div>
             <img class="calendar-02" src="{% static 'buttons/calendar-020green.svg' %}" />
@@ -94,14 +89,18 @@
      <div class="lista-pavilhao2 overflow-auto"> <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
          <div class="container"> <!-- div com a configuração da visualização dos horários -->
              {% bootstrap_messages %}
-             <form action="{% url 'criarhorarios' %}" method="post" class="form" autocomplete="off">
+             <form action="{% if horario %}{% url 'editarhorarios' horario.id %}{% else %}{% url 'criarhorarios' %}{% endif %}"  method="post" class="form" autocomplete="off">
                  {% csrf_token %}
                  {% bootstrap_form form %}
-                    <button class="btn btn-danger">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </form>
          </div>
     </div>
+        <div class="botao-cancelar-cadastrar">
+             <a class="btn btn-danger" href="{% url 'listahorarios' %}">Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+                {% if horario %}Atualizar{% else %}Cadastrar{% endif %}
+            </button>
+        </div>
+        </form>
     </div>
 {% bootstrap_javascript %}
 </body>
