@@ -2,13 +2,7 @@ from django import forms
 
 from .models import Pavilhao, Horario, Sala
 
-
-class PavilhaoModelForm(forms.ModelForm):
-    class Meta:
-        model = Pavilhao
-        fields = ['nome', 'numero_salas']
-
-
+# Constante para os dias da semana
 DIAS_DA_SEMANA = [
     ('Segunda', 'Segunda-feira'),
     ('Terça', 'Terça-feira'),
@@ -19,13 +13,41 @@ DIAS_DA_SEMANA = [
     ('Domingo', 'Domingo'),
 ]
 
+
+# Formulário para o modelo Pavilhao
+class PavilhaoModelForm(forms.ModelForm):
+    class Meta:
+        model = Pavilhao
+        fields = [
+            'nome',
+            'numero_salas',
+        ]
+
+
+# Formulário para o modelo Horario
 class HorarioModelForm(forms.ModelForm):
-    dias_da_semana = forms.MultipleChoiceField(choices=DIAS_DA_SEMANA, widget= forms.CheckboxSelectMultiple) # permite escolher mais de um dia da semana
+    dias_da_semana = forms.MultipleChoiceField(
+        choices=DIAS_DA_SEMANA,
+        widget=forms.CheckboxSelectMultiple,
+        label="Dias da Semana"
+    )  # Permite escolher mais de um dia da semana
+
     class Meta:
         model = Horario
-        fields = ['pavilhao','dias_da_semana','horario_inicio','horario_fim']
+        fields = [
+            'pavilhao',
+            'dias_da_semana',
+            'horario_inicio',
+            'horario_fim',
+        ]
 
+
+# Formulário para o modelo Sala
 class SalaModelForm(forms.ModelForm):
     class Meta:
         model = Sala
-        fields = ['nome','pavilhao','horario']
+        fields = [
+            'nome',
+            'pavilhao',
+            'horario',
+        ]

@@ -1,22 +1,22 @@
-from django.urls import path, include
-from .views import logIn_View, paginaInicial_View, listaPavilhoes_View, listaSalas_View, listaAr_View, \
-    listaHorarios_View, criarPavilhao_View, criarHorario_View, criarSala_View, editarSalas_View, deletarSalas_View, \
-    deletarHorarios_View, editarHorarios_View, deletarPavilhoes_View, editarPavilhoes_View
+from django.urls import path
 
+from . import views
+
+app_name = 'website'
 urlpatterns = [
-    path('', logIn_View, name='login'),
-    path('paginaInicial/', paginaInicial_View, name='paginainicial'), # pagina inicial
-    path('listaPavilhoes/', listaPavilhoes_View, name='listapavilhoes'), # visualização da lista com os pavilhões criados
-    path('listaSalas/', listaSalas_View, name='listasalas'), # visualização da lista com as salas criados
-    path('listaAr/', listaAr_View, name='listaar'), # visualização da lista com os ares criados
-    path('listaHorarios/', listaHorarios_View, name='listahorarios'), # visualização da lista com os horarios criados
-    path('criarPavilhoes/', criarPavilhao_View, name='criarpavilhoes'), # cadastro dos pavilhões
-    path('criarHorarios/', criarHorario_View, name='criarhorarios'), # cadastro dos horários
-    path('criarSalas/', criarSala_View, name='criarsalas'), # cadastro das salas
-    path('editarSalas/<str:pk>/', editarSalas_View, name='editarsalas'),
-    path('deletarSalas/<str:pk>/', deletarSalas_View, name='deletarsalas'),
-    path('editarHorarios/<str:pk>/', editarHorarios_View, name='editarhorarios'),
-    path('deletarHorarios/<str:pk>/', deletarHorarios_View, name='deletarhorarios'),
-    path('deletarPavilhoes/<str:pk>/', deletarPavilhoes_View, name='deletarpavilhoes'),
-    path('editarPavilhoes/<str:pk>/', editarPavilhoes_View, name='editarpavilhoes'),
+    path('', views.login, name='login'),
+    path('paginaInicial/', views.pagina_inicial, name='pagina_inicial'), # pagina inicial
+    path('listaPavilhoes/', views.listar_pavilhoes, name='listar_pavilhoes'), # visualização da lista com os pavilhões criados
+    path('listaSalas/', views.listar_salas, name='listar_salas'), # visualização da lista com as salas criados
+    path('listaAr/', views.listar_ar, name='listar_ar'), # visualização da lista com os ares criados
+    path('listaHorarios/', views.listar_horarios, name='listar_horarios'), # visualização da lista com os horarios criados
+    path('criarPavilhoes/', views.criar_pavilhao, name='criar_pavilhoes'), # cadastro dos pavilhões
+    path('criarHorarios/', views.criar_horario, name='criar_horarios'), # cadastro dos horários
+    path('criarSalas/', views.criar_sala, name='criar_salas'), # cadastro das salas
+    path('editarSalas/<str:pk>/', views.editar_salas, name='editar_salas'),
+    path('deletarSalas/<str:pk>/', views.deletar_salas, name='deletar_salas'),
+    path('editarHorarios/<str:pk>/', views.editar_horarios, name='editar_horarios'),
+    path('deletarHorarios/<str:pk>/', views.deletar_horarios, name='deletar_horarios'),
+    path('deletarPavilhoes/<str:pk>/', views.deletar_pavilhoes, name='deletar_pavilhoes'),
+    path('editarPavilhoes/<str:pk>/', views.editar_pavilhoes, name='editar_pavilhoes'),
 ]
