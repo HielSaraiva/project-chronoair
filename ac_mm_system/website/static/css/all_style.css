@@ -329,8 +329,45 @@
 }
 
 .menu-bar {
-    height: 73.5px; /* 70% de 105px */
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Cria espaçamento adequado entre os elementos (como logo e texto) */
+    height: 73.5px; /* Altura da barra */
+    padding: 0 1rem; /* Espaçamento interno */
+}
+
+.menu-bar .sistema-de-gest-o-de-ar-condicionado {
+    font-size: 22px; /* Tamanho do texto principal para desktops */
+    font-weight: 700;
+    color: white; /* Torna o texto visível */
+    white-space: nowrap; /* Impede a quebra de linha, mantendo o texto em uma única linha */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." caso o texto seja muito longo */
+    flex: 1; /* Permite que o texto ocupe o espaço restante */
+    text-align: center; /* Centraliza o texto */
+}
+
+/* Para telas menores que 992px (tablets) */
+@media (max-width: 992px) {
+    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+        font-size: 18px; /* Texto menor em tablets */
+        padding: 0 0.5rem; /* Reduz o espaçamento interno */
+    }
+}
+
+/* Para telas menores que 768px (celulares) */
+@media (max-width: 768px) {
+    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+        font-size: 14px; /* Diminui o texto ainda mais para celulares */
+    }
+}
+
+/* Para telas muito pequenas menores que 576px */
+@media (max-width: 576px) {
+    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+        font-size: 12px; /* Último ajuste para smartphones compactos */
+        text-align: center; /* Centraliza ainda mais */
+    }
 }
 
 .rectangle-1 {

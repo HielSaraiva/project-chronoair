@@ -17,23 +17,14 @@
     <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
 
     <style>
-        a,
-        button,
-        input,
-        select,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        * {
+        /* Estilização base */
+        a, button, input, select, h1, h2, h3, h4, h5, * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             border: none;
             text-decoration: none;
             background: none;
-
             -webkit-font-smoothing: antialiased;
         }
 
@@ -43,16 +34,14 @@
             padding: 0;
         }
     </style>
-
 </head>
 <body>
+<div class="lista-pavilh-es"> <!-- div principal, última a ser fechada -->
 
-<div class="lista-pavilh-es"> <!-- div principal, ultima a ser fechada -->
-    <div class="rectangle-9"></div> <!--div que define o fundo verde dos botões -->
-    <div class="menu-buttons"> <!--div dos botões -->
-
+    <div class="rectangle-9"></div>
+    <div class="menu-buttons">
         {% block horarios %}
-        <div class="button-horarios"> <!-- div do botão de horários -->
+        <div class="button-horarios">
             <div class="rectangle-7"></div>
             <img class="calendar-02" src="{% static 'buttons/calendar-020white.svg' %}"/>
             <button class="home-05" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
@@ -61,7 +50,7 @@
         {% endblock horarios %}
 
         {% block ar-condicionados %}
-        <div class="button-arcondicionados">  <!-- div do botão de ar -->
+        <div class="button-arcondicionados">
             <div class="rectangle-6"></div>
             <img class="snowflake" src="{% static 'buttons/snowflake0white.svg' %}"/>
             <button class="home-05" onclick="window.location.href='{% url 'website:listar_ar' %}'"></button>
@@ -70,7 +59,7 @@
         {% endblock ar-condicionados %}
 
         {% block salas %}
-        <div class="button-salas">  <!-- div do botão de salass -->
+        <div class="button-salas">
             <div class="rectangle-5"></div>
             <img class="book-04" src="{% static 'buttons/book-040white.svg' %}"/>
             <button class="home-05" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
@@ -79,7 +68,7 @@
         {% endblock salas %}
 
         {% block pavilhoes %}
-        <div class="button-pavilhao">  <!-- div do botão de pavilhões -->
+        <div class="button-pavilhao">
             <div class="rectangle-6"></div>
             <img class="buildings-2" src="{% static 'buttons/buildings-20white.svg' %}"/>
             <button class="home-05" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
@@ -88,27 +77,28 @@
         {% endblock pavilhoes %}
 
         {% block inicio %}
-        <div class="button-home">  <!-- div do botão de pagina inicial -->
+        <div class="button-home">
             <div class="rectangle-home"></div>
             <img class="home-05" src="{% static 'buttons/home-050white.svg' %}"/>
             <button class="buildings-2" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
             <div class="in-cio">Início</div>
         </div>
         {% endblock inicio %}
-
     </div>
 
-    <div class="menu-bar"> <!-- barra superior do site-->
+    <!-- Barra Superior -->
+    <div class="menu-bar d-flex align-items-center">
         <div class="rectangle-1"></div>
-        <img class="hotel-air-conditioner" src="{% static 'buttons/hotel-air-conditioner0.svg' %}"/>
+        <img class="hotel-air-conditioner" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
         <div class="sistema-de-gest-o-de-ar-condicionado">
             Sistema de Gestão de Ar-Condicionado
         </div>
     </div>
 
-    {% block content %}{% endblock content %}
+
+    {% block content %} {% endblock content %}
+
 
 </div>
-
 </body>
 </html>
