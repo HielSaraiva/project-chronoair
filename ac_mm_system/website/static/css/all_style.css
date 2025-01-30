@@ -24,6 +24,21 @@
     top: 50px;
 }
 
+/* A imagem padrão: tamanho normal */
+.menu-buttons div img {
+    transition: transform 0.3s ease-in-out; /* Suavidade na alteração do tamanho */
+}
+
+/* Aumentar a escala da imagem ao passar o mouse (hover) */
+.menu-buttons div:hover img {
+    transform: scale(1.2); /* Aumenta 20% do tamanho original */
+}
+
+/* Diminuir a escala ao clicar no botão (active) */
+.menu-buttons div:active img {
+    transform: scale(0.9); /* Reduz para 90% do tamanho original */
+}
+
 .menu-buttons {
     width: 56px;
     height: 559.3px;
