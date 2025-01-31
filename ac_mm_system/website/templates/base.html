@@ -36,61 +36,61 @@
     </style>
 </head>
 <body>
-<div class="lista-pavilh-es"> <!-- div principal, última a ser fechada -->
+<div class="lista-pavilhoes"> <!-- div principal, última a ser fechada -->
 
-    <div class="rectangle-9"></div>
+    <div class="rectangle-menu"></div>
     <div class="menu-buttons">
         {% block horarios %}
         <div class="button-horarios">
-            <div class="rectangle-7"></div>
-            <img class="calendar-02" src="{% static 'buttons/calendar-020white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-            <div class="hor-rios">Horários</div>
+            <div class="rectangle-green"></div>
+            <img class="img-botoes-menu" src="{% static 'buttons/calendar-020white.svg' %}"/>
+            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
+            <div class="nome-botoes-menu">Horários</div>
         </div>
         {% endblock horarios %}
 
         {% block ar-condicionados %}
         <div class="button-arcondicionados">
-            <div class="rectangle-6"></div>
-            <img class="snowflake" src="{% static 'buttons/snowflake0white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_ar' %}'"></button>
-            <div class="ar-condicionado">Ar-condicionados</div>
+            <div class="rectangle-green"></div>
+            <img class="img-botoes-menu" src="{% static 'buttons/snowflake0white.svg' %}"/>
+            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ar' %}'"></button>
+            <div class="nome-botoes-menu-ar">Ar-condicionados</div>
         </div>
         {% endblock ar-condicionados %}
 
         {% block salas %}
         <div class="button-salas">
-            <div class="rectangle-5"></div>
-            <img class="book-04" src="{% static 'buttons/book-040white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-            <div class="salas">Salas</div>
+            <div class="rectangle-green"></div>
+            <img class="img-botoes-menu" src="{% static 'buttons/book-040white.svg' %}"/>
+            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
+            <div class="nome-botoes-menu">Salas</div>
         </div>
         {% endblock salas %}
 
         {% block pavilhoes %}
         <div class="button-pavilhao">
-            <div class="rectangle-6"></div>
-            <img class="buildings-2" src="{% static 'buttons/buildings-20white.svg' %}"/>
-            <button class="home-05" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-            <div class="pavilh-o">Pavilhões</div>
+            <div class="rectangle-green"></div>
+            <img class="img-botoes-menu" src="{% static 'buttons/buildings-20white.svg' %}"/>
+            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
+            <div class="nome-botoes-menu">Pavilhões</div>
         </div>
         {% endblock pavilhoes %}
 
         {% block inicio %}
         <div class="button-home">
-            <div class="rectangle-home"></div>
-            <img class="home-05" src="{% static 'buttons/home-050white.svg' %}"/>
-            <button class="buildings-2" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
-            <div class="in-cio">Início</div>
+            <div class="rectangle-green"></div>
+            <img class="img-botoes-menu" src="{% static 'buttons/home-050white.svg' %}"/>
+            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
+            <div class="nome-botoes-menu">Início</div>
         </div>
         {% endblock inicio %}
     </div>
 
     <!-- Barra Superior -->
     <div class="menu-bar d-flex align-items-center">
-        <div class="rectangle-1"></div>
-        <img class="hotel-air-conditioner" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-        <div class="sistema-de-gest-o-de-ar-condicionado">
+        <div class="rectangle-barra-superior"></div>
+        <img class="img-barra-superior" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+        <div class="sistema-de-gestao-de-ar-condicionado">
             Sistema de Gestão de Ar-Condicionado
         </div>
     </div>

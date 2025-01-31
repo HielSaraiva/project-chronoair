@@ -1,17 +1,17 @@
 /* CSS de todas as classes utilizadas nas páginas */
-.lista-pavilh-es,
-.lista-pavilh-es * {
+.lista-pavilhoes,
+.lista-pavilhoes * {
     box-sizing: border-box;
 }
 
-.lista-pavilh-es {
+.lista-pavilhoes {
     background: var(--var-sds-color-background-default-secondary-hover, #e6e6e6);
     height: 100vh;
     position: relative;
     overflow: hidden;
 }
 
-.rectangle-9 {
+.rectangle-menu {
     background: #116b16;
     border-style: solid;
     border-color: #ffffff;
@@ -22,6 +22,44 @@
     left: 0px;
     bottom: 0px;
     top: 50px;
+}
+
+.rectangle-barra-superior {
+    background: #116b16;
+    border-style: inset;
+    border-color: #ffffff;
+    border-width: 1.4px; /* 70% de 2px */
+    height: 70px; /* 70% de 100px */
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+}
+
+.rectangle-green {
+    background: #4dbc53;
+    border-style: solid;
+    border-color: #ffffff;
+    border-width: 0.7px;
+    width: 56px;
+    height: 56px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
+}
+
+.rectangle-white {
+    background: #ffffff;
+    border-style: solid;
+    border-color: #ffffff;
+    border-width: 0.7px;
+    width: 56px;
+    height: 56px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
 }
 
 /* A imagem padrão: tamanho normal */
@@ -47,96 +85,12 @@
     top: 130px;
 }
 
-.button-usuarios {
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 490px;
-}
-
-.rectangle-4 {
-    background: #4dbc53;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
-}
-
-.user-profile-01 {
-    width: 42px;
-    height: 42px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    overflow: visible;
-}
-
-.usu-rios {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter-Bold", sans-serif;
-    font-size: 9.8px;
-    font-weight: 700;
-    position: absolute;
-    left: -10.5px;
-    top: -23.8px;
-    width: 76.3px;
-    height: 30.8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .button-horarios {
     width: 56px;
     height: 56px;
     position: absolute;
     left: 0px;
     top: 460px;
-}
-
-.rectangle-7 {
-    background: #4dbc53;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
-}
-
-.calendar-02 {
-    width: 42px;
-    height: 42px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    overflow: visible;
-}
-
-.hor-rios {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter-Bold", sans-serif;
-    font-size: 9.8px;
-    font-weight: 700;
-    position: absolute;
-    left: -10.5px;
-    top: -23.8px;
-    width: 76.3px;
-    height: 30.8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .button-arcondicionados {
@@ -147,88 +101,12 @@
     top: 345px;
 }
 
-.rectangle-6 {
-    background: #4dbc53;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
-}
-
-.snowflake {
-    width: 42px;
-    height: 42px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    overflow: visible;
-}
-
-.ar-condicionado {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter-Bold", sans-serif;
-    font-size: 9.8px;
-    font-weight: 700;
-    position: absolute;
-    left: -10.5px;
-    top: -30.8px;
-    width: 76.3px;
-    height: 30.8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .button-salas {
     width: 56px;
     height: 56px;
     position: absolute;
     left: 0px;
     top: 230px;
-}
-
-.rectangle-5 {
-    background: #4dbc53;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
-}
-
-.book-04 {
-    width: 42px;
-    height: 42px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    overflow: visible;
-}
-
-.salas {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter-Bold", sans-serif;
-    font-size: 9.8px;
-    font-weight: 700;
-    position: absolute;
-    left: -10.5px;
-    top: -23.8px;
-    width: 76.3px;
-    height: 30.8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .button-pavilhao {
@@ -239,20 +117,15 @@
     top: 115px;
 }
 
-.rectangle-3 {
-    background: #ffffff;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
+.button-home {
     width: 56px;
     height: 56px;
     position: absolute;
     left: 0px;
     top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
 }
 
-.buildings-2 {
+.img-botoes-menu {
     width: 42px;
     height: 42px;
     position: absolute;
@@ -261,7 +134,7 @@
     overflow: visible;
 }
 
-.pavilh-o {
+.nome-botoes-menu {
     color: #ffffff;
     text-align: center;
     font-family: "Inter-Bold", sans-serif;
@@ -277,37 +150,7 @@
     justify-content: center;
 }
 
-.button-home {
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-}
-
-.rectangle-home {
-    background: #4dbc53;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px;
-    width: 56px;
-    height: 56px;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 2.8px 2.8px 0px rgba(0, 0, 0, 0.25);
-}
-
-.home-05 {
-    width: 42px;
-    height: 42px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    overflow: visible;
-}
-
-.in-cio {
+.nome-botoes-menu-ar {
     color: #ffffff;
     text-align: center;
     font-family: "Inter-Bold", sans-serif;
@@ -315,7 +158,7 @@
     font-weight: 700;
     position: absolute;
     left: -10.5px;
-    top: -23.8px;
+    top: -30.8px;
     width: 76.3px;
     height: 30.8px;
     display: flex;
@@ -336,7 +179,7 @@
     padding: 0 1rem; /* Espaçamento interno */
 }
 
-.menu-bar .sistema-de-gest-o-de-ar-condicionado {
+.menu-bar .sistema-de-gestao-de-ar-condicionado {
     font-size: 22px; /* Tamanho do texto principal para desktops */
     font-weight: 700;
     color: white; /* Torna o texto visível */
@@ -349,7 +192,7 @@
 
 /* Para telas menores que 992px (tablets) */
 @media (max-width: 992px) {
-    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+    .menu-bar .sistema-de-gestao-de-ar-condicionado {
         font-size: 18px; /* Texto menor em tablets */
         padding: 0 0.5rem; /* Reduz o espaçamento interno */
     }
@@ -357,77 +200,61 @@
 
 /* Para telas menores que 768px (celulares) */
 @media (max-width: 768px) {
-    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+    .menu-bar .sistema-de-gestao-de-ar-condicionado {
         font-size: 14px; /* Diminui o texto ainda mais para celulares */
     }
 }
 
 /* Para telas muito pequenas menores que 576px */
 @media (max-width: 576px) {
-    .menu-bar .sistema-de-gest-o-de-ar-condicionado {
+    .menu-bar .sistema-de-gestao-de-ar-condicionado {
         font-size: 12px; /* Último ajuste para smartphones compactos */
         text-align: center; /* Centraliza ainda mais */
     }
 }
 
-.rectangle-1 {
-    background: #116b16;
-    border-style: inset;
-    border-color: #ffffff;
-    border-width: 1.4px; /* 70% de 2px */
-    height: 70px; /* 70% de 100px */
+.img-botoes-menu {
+    width: 42px;
+    height: 42px;
     position: absolute;
-    right: 0;
-    left: 0;
-    top: 0;
-}
-
-.hotel-air-conditioner {
-    width: 42px; /* 70% de 60px */
-    height: 42px; /* 70% de 60px */
-    position: absolute;
-    left: 14.7px; /* 70% de 21px */
-    top: 14px; /* 70% de 20px */
+    left: 7px;
+    top: 7px;
     overflow: visible;
 }
 
-.line-1 {
-    margin-top: -0.7px; /* 70% de -1px */
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 0.7px 0 0 0; /* 70% de 1px */
-    width: 70.014px; /* 70% de 100.02px */
-    height: 0;
+.img-barra-superior {
+    width: 42px;
+    height: 42px;
     position: absolute;
-    left: 73.5px; /* 70% de 105px */
-    top: 0;
-    transform-origin: 0 0;
-    transform: rotate(90deg) scale(0.7, 0.7); /* 70% de scale(1, 1) */
+    left: 14.7px;
+    top: 14px;
+    overflow: visible;
 }
 
-.sistema-de-gest-o-de-ar-condicionado {
+
+.sistema-de-gestao-de-ar-condicionado {
     color: #ffffff;
     text-align: center;
     font-family: "Inter-Bold", sans-serif;
-    font-size: 22.4px; /* 70% de 32px */
+    font-size: 22.4px;
     font-weight: 700;
     position: absolute;
-    left: 90.3px; /* 70% de 129px */
-    top: 10.5px; /* 70% de 15px */
-    width: 444.5px; /* 70% de 635px */
-    height: 49px; /* 70% de 70px */
+    left: 90.3px;
+    top: 10.5px;
+    width: 444.5px;
+    height: 49px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.lista-pavilhao2 {
-    width: 900px; /* 70% de 1239px */
-    max-height: 470px; /* 70% de 437px */
+.lista-pavilhao {
+    width: 900px;
+    max-height: 470px;
     top: 200px;
     left: 350px;
     position: absolute;
-    bottom: 150px; /* 70% de 338px */
+    bottom: 150px;
     overflow: hidden;
 }
 

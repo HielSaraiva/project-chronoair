@@ -9,15 +9,15 @@
 
 {% block horarios %}
 <div class="button-horarios">  <!-- div do botão de horarios -->
-    <div class="rectangle-3"></div>
-    <img class="calendar-02" src="{% static 'buttons/calendar-020green.svg' %}"/>
-    <button class="home-05" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-    <div class="hor-rios">Horários</div>
+    <div class="rectangle-white"></div>
+    <img class="img-botoes-menu" src="{% static 'buttons/calendar-020green.svg' %}"/>
+    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
+    <div class="nome-botoes-menu">Horários</div>
 </div>
 {% endblock horarios %}
 
 {% block content %}
-<div class="lista-pavilhao2 overflow-auto">
+<div class="lista-pavilhao overflow-auto">
     <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
     <div class="container"> <!-- div com a configuração da visualização dos horários -->
         <center>
