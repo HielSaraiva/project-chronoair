@@ -69,13 +69,16 @@
         {% csrf_token %}
         <div class="form-inline">
             <select class="form-select btn btn-success btn-sm" name="pavilhao">
-                <option class="list-group" selected disabled="true">Pavilhão</option>
+                <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
                 {% for pavilhao in pavilhoes %}
-                <option value="{{ pavilhao.id }}">{{ pavilhao.nome }}</option>
+                <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                    {{ pavilhao.nome }}
+                </option>
                 {% endfor %}
             </select>
             <input class="form-control btn btn-success btn-sm" type="submit" value="Buscar">
         </div>
     </form>
 </div>
+
 {% endblock content %}

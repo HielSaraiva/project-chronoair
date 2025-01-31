@@ -24,15 +24,21 @@ def listar_pavilhoes(request):
 
 def listar_salas(request):
     pavilhoes = Pavilhao.objects.all()
+    filtrarpavilhao = None
+
     if request.method == 'POST':
         filtrarpavilhao = request.POST.get('pavilhao')
-        salas = Sala.objects.filter(pavilhao__id=filtrarpavilhao)
+        if filtrarpavilhao:
+            salas = Sala.objects.filter(pavilhao__id=filtrarpavilhao)
+        else:
+            salas = Sala.objects.all()
     else:
         salas = Sala.objects.all()
 
     context = {
         'salas': salas,
         'pavilhoes': pavilhoes,
+        'filtrarpavilhao': filtrarpavilhao
     }
     return render(request, 'listar_salas.html', context)
 
@@ -43,17 +49,24 @@ def listar_ar(request):
 
 def listar_horarios(request):
     pavilhoes = Pavilhao.objects.all()
+    filtrarpavilhao = None
+
     if request.method == 'POST':
         filtrarpavilhao = request.POST.get('pavilhao')
-        horarios = Horario.objects.filter(pavilhao__id=filtrarpavilhao)
+        if filtrarpavilhao:
+            horarios = Horario.objects.filter(pavilhao__id=filtrarpavilhao)
+        else:
+            horarios = Horario.objects.all()
     else:
         horarios = Horario.objects.all()
 
     context = {
         'horarios': horarios,
         'pavilhoes': pavilhoes,
+        'filtrarpavilhao': filtrarpavilhao,
     }
     return render(request, 'listar_horarios.html', context)
+
 
 
 def criar_pavilhao(request):
