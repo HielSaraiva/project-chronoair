@@ -49,21 +49,45 @@ def listar_ar(request):
 
 def listar_horarios(request):
     pavilhoes = Pavilhao.objects.all()
+    salas = Sala.objects.all()
     filtrarpavilhao = None
+    filtrarturno = None
+    filtrarsala = None
+    turnos = [
+        ('Matutino', 'Matutino'),
+        ('Vespertino', 'Vespertino'),
+        ('Noturno', 'Noturno'),
+    ]
 
     if request.method == 'POST':
         filtrarpavilhao = request.POST.get('pavilhao')
+        filtrarturno = request.POST.get('turno')
+        filtrarsala = request.POST.get('sala')
+
+        # Criando um dicionário de filtros
+        filtros = {}
+
         if filtrarpavilhao:
-            horarios = Horario.objects.filter(pavilhao__id=filtrarpavilhao)
-        else:
-            horarios = Horario.objects.all()
+            filtros['pavilhao__id'] = filtrarpavilhao
+        if filtrarturno:
+            filtros['turno'] = filtrarturno
+        if filtrarsala:
+            filtros['sala'] = filtrarsala
+
+        # Filtrando os horários com base nos filtros fornecidos
+        horarios = Horario.objects.filter(**filtros)
+
     else:
         horarios = Horario.objects.all()
 
     context = {
         'horarios': horarios,
         'pavilhoes': pavilhoes,
+        'salas': salas,
+        'turnos': turnos,
+        'filtrarsala': filtrarsala,
         'filtrarpavilhao': filtrarpavilhao,
+        'filtrarturno': filtrarturno,
     }
     return render(request, 'listar_horarios.html', context)
 

@@ -27,7 +27,6 @@
             <tr class="table-light">
                 <th scope="col">Sala</th>
                 <th scope="col">Pavilhão</th>
-                <th scope="col">Horários</th>
                 <th scope="col">Ações</th>
             </tr>
             </thead>
@@ -36,7 +35,6 @@
             <tr class="table-light">
                 <td scope="row">{{ sala.nome }}</td>
                 <td scope="row">{{ sala.pavilhao }}</td>
-                <td scope="row">{{ sala.horario }}</td>
                 <td>
                     <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
                     <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
@@ -58,7 +56,7 @@
     <form method="POST">
         {% csrf_token %}
         <div class="form-inline">
-            <select class="form-select btn btn-success btn-sm" name="pavilhao">
+            <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
                 <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
                 {% for pavilhao in pavilhoes %}
                 <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
@@ -66,7 +64,7 @@
                 </option>
                 {% endfor %}
             </select>
-            <input class="form-control btn btn-success btn-sm" type="submit" value="Buscar">
+            <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
         </div>
     </form>
 </div>

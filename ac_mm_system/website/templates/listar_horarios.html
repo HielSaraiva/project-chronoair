@@ -68,7 +68,7 @@
     <form method="POST">
         {% csrf_token %}
         <div class="form-inline">
-            <select class="form-select btn btn-success btn-sm" name="pavilhao">
+            <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
                 <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
                 {% for pavilhao in pavilhoes %}
                 <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
@@ -76,7 +76,23 @@
                 </option>
                 {% endfor %}
             </select>
-            <input class="form-control btn btn-success btn-sm" type="submit" value="Buscar">
+            <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
+                <option value="" class="list-group"{% if not filtrarsala %}selected{% endif %}>Salas</option>
+                {% for sala in salas %}
+                <option value="{{ sala.id }}" {% if filtrarsala == sala.id|stringformat:"s" %}selected{% endif %}>
+                    {{ sala.nome }}
+                </option>
+                {% endfor %}
+            </select>
+            <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno">
+                <option value="" class="list-group"{% if not filtrarturno %}selected{% endif %}>Turnos</option>
+                {% for turno in turnos %}
+                <option value="{{ turno.0 }}" {% if filtrarturno == turno.0 %}selected{% endif %}>
+                    {{ turno.1 }}
+                </option>
+                {% endfor %}
+            </select>
+            <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
         </div>
     </form>
 </div>

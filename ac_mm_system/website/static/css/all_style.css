@@ -273,9 +273,13 @@
 
 .filtro-search {
     top: 165px;
-    width: 300px;
+    width: 750px;
     left: 365px;
     position: absolute;
+}
+
+.filtro-search-botoes {
+    width: 120px;
 }
 
 .filtro-search .form-inline {

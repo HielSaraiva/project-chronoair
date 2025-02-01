@@ -13,6 +13,11 @@ DIAS_DA_SEMANA = [
     ('Domingo', 'Domingo'),
 ]
 
+TURNOS = [
+    ('Matutino', 'Matutino'),
+    ('Vespertino', 'Vespertino'),
+    ('Noturno', 'Noturno'),
+]
 
 # Formulário para o modelo Pavilhao
 class PavilhaoModelForm(forms.ModelForm):
@@ -40,16 +45,25 @@ class HorarioModelForm(forms.ModelForm):
         label="Dias da Semana"
     )  # Permite escolher mais de um dia da semana
 
+    turno = forms.ChoiceField(
+        choices = TURNOS,
+        widget=forms.RadioSelect,
+        label="Turno"
+    )
     class Meta:
         model = Horario
         fields = [
             'pavilhao',
+            'sala',
+            'turno',
             'dias_da_semana',
             'horario_inicio',
             'horario_fim',
         ]
         labels = {
             'pavilhao': 'Pavilhão',
+            'sala': 'Sala',
+            'turno': 'Turno',
             'horario_inicio': 'Horário de Início',
             'horario_fim': 'Horário de Término',
         }
@@ -65,12 +79,10 @@ class SalaModelForm(forms.ModelForm):
         fields = [
             'nome',
             'pavilhao',
-            'horario',
         ]
         labels = {
             'nome': 'Sala',
             'pavilhao': 'Pavilhão',
-            'horario': 'Horário',
         }
         widgets = {
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
