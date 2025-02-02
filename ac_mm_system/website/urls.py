@@ -1,10 +1,11 @@
 from django.urls import path
+from django.views.generic import RedirectView
 
 from . import views
 
 app_name = 'website'
 urlpatterns = [
-    path('', views.login, name='login'),
+    path('', RedirectView.as_view(url='/paginaInicial/'), name='raiz'), # url raiz
     path('paginaInicial/', views.pagina_inicial, name='pagina_inicial'), # pagina inicial
     path('listaPavilhoes/', views.listar_pavilhoes, name='listar_pavilhoes'), # visualização da lista com os pavilhões criados
     path('listaSalas/', views.listar_salas, name='listar_salas'), # visualização da lista com as salas criados

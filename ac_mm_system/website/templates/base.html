@@ -44,7 +44,8 @@
         <div class="button-horarios">
             <div class="rectangle-green"></div>
             <img class="img-botoes-menu" src="{% static 'buttons/calendar-020white.svg' %}"/>
-            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
+            <button class="img-botoes-menu"
+                    onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
             <div class="nome-botoes-menu">Horários</div>
         </div>
         {% endblock horarios %}
@@ -71,7 +72,8 @@
         <div class="button-pavilhao">
             <div class="rectangle-green"></div>
             <img class="img-botoes-menu" src="{% static 'buttons/buildings-20white.svg' %}"/>
-            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
+            <button class="img-botoes-menu"
+                    onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
             <div class="nome-botoes-menu">Pavilhões</div>
         </div>
         {% endblock pavilhoes %}
@@ -80,7 +82,8 @@
         <div class="button-home">
             <div class="rectangle-green"></div>
             <img class="img-botoes-menu" src="{% static 'buttons/home-050white.svg' %}"/>
-            <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
+            <button class="img-botoes-menu"
+                    onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
             <div class="nome-botoes-menu">Início</div>
         </div>
         {% endblock inicio %}
@@ -95,9 +98,24 @@
         </div>
     </div>
 
+    {% if user.is_authenticated %}
+    <div class="d-flex align-items-center justify-content-between p-3" style="width: 400px; margin-left: 80px;">
+        <div class="mensagem-usuario-logado text-truncate" style="white-space: nowrap; overflow: visible;">
+            <h5>Bem-vindo, {{ user.username }}.</h5>
+        </div>
+        <div class="mensagem-logout ms-2">
+            <form action="{% url 'accounts:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sair</button>
+            </form>
+        </div>
+        <div class="mensagem-alterar-senha ms-2 text-truncate" style="white-space: nowrap; overflow: visible;">
+               <a href="{% url 'accounts:password_change' %}" class="btn btn-success">Alterar senha</a>
+        </div>
+    </div>
+    {% endif %}
 
     {% block content %} {% endblock content %}
-
 
 </div>
 </body>

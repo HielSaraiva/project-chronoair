@@ -287,3 +287,27 @@
     gap: 0.3rem; /* Espaço entre os elementos */
     align-items: center; /* Alinhar verticalmente ao centro */
 }
+
+.mensagem-usuario-logado {
+    background: #ffffff; /* Cor de fundo para contraste */
+    padding: 10px 10px; /* Espaçamento interno para legibilidade */
+    border-radius: 5px; /* Bordas arredondadas para estilo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    z-index: 10; /* Garante que o elemento fique acima do menu lateral */
+}
+
+.mensagem-logout {
+    background: #ffffff; /* Cor de fundo para contraste */
+    padding: 3px 3px; /* Espaçamento interno para legibilidade */
+    border-radius: 5px; /* Bordas arredondadas para estilo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    z-index: 10; /* Garante que o elemento fique acima do menu lateral */
+}
+
+.mensagem-alterar-senha {
+    background: #ffffff; /* Cor de fundo para contraste */
+    padding: 3px 3px; /* Espaçamento interno para legibilidade */
+    border-radius: 5px; /* Bordas arredondadas para estilo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    z-index: 10; /* Garante que o elemento fique acima do menu lateral */
+}

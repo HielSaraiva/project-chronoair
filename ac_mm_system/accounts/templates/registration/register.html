@@ -1,0 +1,9 @@
+<h2>Crie sua conta</h2>
+<h3>Preencha seus dados</h3>
+
+<form action="{% url 'accounts:register' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button name="submit">Registrar</button>
+</form>

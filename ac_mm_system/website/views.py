@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from django.contrib import messages
@@ -7,21 +8,18 @@ from .forms import PavilhaoModelForm, HorarioModelForm, SalaModelForm
 from .models import Pavilhao, Horario, Sala
 
 
-def login(request):
-    return render(request, 'login.html')
-
-
+@login_required
 def pagina_inicial(request):
     return render(request, 'pagina_inicial.html')
 
-
+@login_required
 def listar_pavilhoes(request):
     context = {
         'pavilhoes': Pavilhao.objects.all()  # permite exibir todos os objetos 'pavilhão' que foram criados
     }
     return render(request, 'listar_pavilhoes.html', context)
 
-
+@login_required
 def listar_salas(request):
     pavilhoes = Pavilhao.objects.all()
     filtrarpavilhao = None
@@ -42,11 +40,11 @@ def listar_salas(request):
     }
     return render(request, 'listar_salas.html', context)
 
-
+@login_required
 def listar_ar(request):
     return render(request, 'listar_ar.html')
 
-
+@login_required
 def listar_horarios(request):
     pavilhoes = Pavilhao.objects.all()
     salas = Sala.objects.all()
@@ -91,8 +89,7 @@ def listar_horarios(request):
     }
     return render(request, 'listar_horarios.html', context)
 
-
-
+@login_required
 def criar_pavilhao(request):
     # Validação e envio do formulário da sala
     if str(request.method) == 'POST':
@@ -113,7 +110,7 @@ def criar_pavilhao(request):
     }
     return render(request, 'criar_pavilhoes.html', context)
 
-
+@login_required
 def criar_horario(request):
     # Validação e envio do formulário da sala
     if str(request.method) == 'POST':
@@ -134,7 +131,7 @@ def criar_horario(request):
     }
     return render(request, 'criar_horarios.html', context)
 
-
+@login_required
 def criar_sala(request):
     # Validação e envio do formulário da sala
     if str(request.method) == 'POST':
@@ -154,7 +151,7 @@ def criar_sala(request):
     }
     return render(request, 'criar_salas.html', context)
 
-
+@login_required
 def editar_salas(request, pk):
     sala = Sala.objects.get(id=pk)
 
@@ -170,7 +167,7 @@ def editar_salas(request, pk):
     context = {'form': form, 'sala': sala}
     return render(request, 'criar_salas.html', context)
 
-
+@login_required
 def deletar_salas(request, pk):
     sala = Sala.objects.get(id=pk)
     if request.method == 'POST':
@@ -183,7 +180,7 @@ def deletar_salas(request, pk):
     }
     return render(request, 'deletar_salas.html', context)
 
-
+@login_required
 def deletar_horarios(request, pk):
     horario = Horario.objects.get(id=pk)
     if request.method == 'POST':
@@ -196,7 +193,7 @@ def deletar_horarios(request, pk):
     }
     return render(request, 'deletar_horarios.html', context)
 
-
+@login_required
 def editar_horarios(request, pk):
     horario = Horario.objects.get(id=pk)
 
@@ -212,7 +209,7 @@ def editar_horarios(request, pk):
     context = {'form': form, 'horario': horario}
     return render(request, 'criar_horarios.html', context)
 
-
+@login_required
 def deletar_pavilhoes(request, pk):
     pavilhao = Pavilhao.objects.get(id=pk)
     if request.method == 'POST':
@@ -225,7 +222,7 @@ def deletar_pavilhoes(request, pk):
     }
     return render(request, 'deletar_pavilhoes.html', context)
 
-
+@login_required
 def editar_pavilhoes(request, pk):
     pavilhao = Pavilhao.objects.get(id=pk)
 

@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     # Minhas aplicações
     'website',
+    'accounts',
 
     # Aplicações default do django
     'django.contrib.admin',
@@ -131,3 +132,29 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Minhas configurações
+
+## Login/Logout
+LOGIN_REDIRECT_URL = 'website:pagina_inicial'
+LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGIN_URL = 'accounts:login'
+
+## Recuperação de senha via email
+
+### Email via Web
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sistema.arcondicionado.mm@gmail.com'
+EMAIL_HOST_PASSWORD = 'cggu rjuk xjlq chmh'
+
+### Email via Terminal
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = ''  # Não necessário
+# EMAIL_HOST_PASSWORD = ''  # Não necessário
