@@ -41,8 +41,8 @@ def listar_salas(request):
     return render(request, 'listar_salas.html', context)
 
 @login_required
-def listar_ar(request):
-    return render(request, 'listar_ar.html')
+def listar_ares(request):
+    return render(request, 'listar_ares.html')
 
 @login_required
 def listar_horarios(request):
@@ -108,7 +108,7 @@ def criar_pavilhao(request):
     context = {
         'form': form  # Passa o formulário para o contexto do template
     }
-    return render(request, 'criar_pavilhoes.html', context)
+    return render(request, 'criar_pavilhao.html', context)
 
 @login_required
 def criar_horario(request):
@@ -129,7 +129,7 @@ def criar_horario(request):
     context = {
         'form': form
     }
-    return render(request, 'criar_horarios.html', context)
+    return render(request, 'criar_horario.html', context)
 
 @login_required
 def criar_sala(request):
@@ -149,7 +149,7 @@ def criar_sala(request):
     context = {
         'form': form  # Passa o formulário para o contexto do template
     }
-    return render(request, 'criar_salas.html', context)
+    return render(request, 'criar_sala.html', context)
 
 @login_required
 def editar_salas(request, pk):
@@ -165,7 +165,7 @@ def editar_salas(request, pk):
     else:
         form = SalaModelForm(instance=sala)
     context = {'form': form, 'sala': sala}
-    return render(request, 'criar_salas.html', context)
+    return render(request, 'criar_sala.html', context)
 
 @login_required
 def deletar_salas(request, pk):
@@ -207,7 +207,7 @@ def editar_horarios(request, pk):
     else:
         form = HorarioModelForm(instance=horario)
     context = {'form': form, 'horario': horario}
-    return render(request, 'criar_horarios.html', context)
+    return render(request, 'criar_horario.html', context)
 
 @login_required
 def deletar_pavilhoes(request, pk):
@@ -236,4 +236,4 @@ def editar_pavilhoes(request, pk):
     else:
         form = PavilhaoModelForm(instance=pavilhao)
     context = {'form': form, 'pavilhao': pavilhao}
-    return render(request, 'criar_pavilhoes.html', context)
+    return render(request, 'criar_pavilhao.html', context)

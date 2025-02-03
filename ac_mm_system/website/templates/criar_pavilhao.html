@@ -21,7 +21,7 @@
     <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
     <div class="container"> <!-- div com a configuração da visualização dos horários -->
         {% bootstrap_messages %}
-        <form action="{% if pavilhao %}{% url 'website:editar_pavilhoes' pavilhao.id %}{% else %}{% url 'website:criar_pavilhoes' %}{% endif %}"
+        <form action="{% if pavilhao %}{% url 'website:editar_pavilhoes' pavilhao.id %}{% else %}{% url 'website:criar_pavilhao' %}{% endif %}"
               method="post" class="form" autocomplete="off">
             {% csrf_token %}
             {% bootstrap_form form %}
