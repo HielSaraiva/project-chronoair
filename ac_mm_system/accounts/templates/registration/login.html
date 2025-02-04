@@ -1,16 +1,37 @@
-<h2>Já tem cadastro?</h2>
-<h3>Faça seu login</h3>
+{% extends 'registration/base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
-{% if form.erros %}
-<p>Nome de usuário e senha não estão corretos. Por favor, tente novamente!</p>
-{% endif %}
+{% block title %}Login{% endblock %}
+{% block content %}
+        <img class="imglogin" src="{% static 'icons/icone-login.svg' %}"/>
+        <h3>Login</h3>
 
-<form action="{% url 'accounts:login' %}" method='post'>
-    {% csrf_token %}
-    {{ form.as_div }}
+        <form action="{% url 'accounts:login' %}" method='post'>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger p-2" >
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-    <button name="submit">Entrar</button>
-</form>
+            <div class="form-floating mb-3">
+                <input type="text" name="{{ form.username.name }}" class="form-control" id="floatingUsername" placeholder="Usuário" required>
+                <label for="floatingUsername">Usuário</label>
+            </div>
 
-<a href="{% url 'accounts:register' %}">Criar conta</a>
-<a href="{% url 'accounts:password_reset' %}">Esqueci a senha</a>
+            <div class="form-floating mb-3">
+                <input type="password" name="{{ form.password.name }}" class="form-control" id="floatingPassword" placeholder="Senha" required>
+                <label for="floatingPassword">Senha</label>
+            </div>
+            <button name="submit" class="btn btn-success">Entrar</button>
+        </form>
+
+        <a href="{% url 'accounts:register' %}">Criar conta</a>
+        <a href="{% url 'accounts:password_reset' %}">Esqueci a senha</a>
+
+{% endblock content %}

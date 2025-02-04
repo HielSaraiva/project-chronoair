@@ -1,0 +1,23 @@
+{% load django_bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+  <div class="divteste overflow-auto">
+      {% block content %}
+      {% endblock %}
+
+  </div>
+</div>
+</body>
+</html>

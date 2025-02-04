@@ -1,0 +1,22 @@
+body{
+     background-color: var(--var-sds-color-background-default-secondary-hover, #e6e6e6);
+}
+
+.divteste{
+    position: absolute;
+    width: 400px;
+    height: 550px;
+    max-height: 700px;
+    overflow: hidden;
+    border: 3px solid #116b16;
+    border-radius: 10px;
+    padding:10px;
+    text-align: center;
+    background: rgba(181, 233, 179, 1);
+    align-content: center;
+}
+
+.imglogin{
+    width:150px;
+    height:150px;
+}
