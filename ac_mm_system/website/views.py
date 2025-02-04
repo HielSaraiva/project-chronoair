@@ -142,8 +142,6 @@ def criar_sala(request):
                              'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
             # form = SalaModelForm()  # Cria um novo formulário vazio após salvar os dados
             return redirect('website:listar_salas')
-        else:
-            messages.error(request, 'Erro ao criar sala')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
     else:
         form = SalaModelForm()
     context = {

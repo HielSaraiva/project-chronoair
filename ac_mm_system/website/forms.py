@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import Pavilhao, Horario, Sala
 
@@ -35,6 +36,21 @@ class PavilhaoModelForm(forms.ModelForm):
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
             'numero_salas': forms.NumberInput(attrs={'placeholder': 'Número', 'min': 1}),
         }
+
+    def clean_numero_salas(self):
+        numero_salas = self.cleaned_data.get('numero_salas')
+
+        if self.instance and self.instance.pk:  # Certifica-se de que estamos na edição de um objeto existente no banco de dados
+            numero_salas_existente = self.instance.sala_set.count()
+
+            if numero_salas < numero_salas_existente:
+                raise ValidationError(
+                    f"O número de salas não pode ser reduzido para abaixo de {numero_salas_existente}, pois já existem salas cadastradas no pavilhão."
+                )
+
+        return numero_salas
+
+
 
 
 # Formulário para o modelo Horario
@@ -87,3 +103,19 @@ class SalaModelForm(forms.ModelForm):
         widgets = {
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
         }
+
+    def clean_pavilhao(self):
+        pavilhao = self.cleaned_data.get('pavilhao')
+
+        if pavilhao:
+            # Contar o número de salas existentes no pavilhão
+            numero_salas_existentes = pavilhao.sala_set.count()
+            numero_salas_maximo = pavilhao.numero_salas
+
+            # Verificar se o número máximo foi atingido
+            if numero_salas_existentes >= numero_salas_maximo:
+                raise ValidationError(
+                    f"O pavilhão '{pavilhao.nome}' já atingiu o número máximo de salas permitido ({numero_salas_maximo})."
+                )
+
+        return pavilhao
