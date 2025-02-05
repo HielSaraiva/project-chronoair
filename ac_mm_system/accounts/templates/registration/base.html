@@ -6,18 +6,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}">
     <title>Title</title>
 </head>
 <body>
 
 
 <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
-  <div class="divteste overflow-auto">
-      {% block content %}
-      {% endblock %}
+    <div class="divteste overflow-auto">
+        {% block content %}
+        {% endblock %}
 
-  </div>
+    </div>
 </div>
 </body>
 </html>
