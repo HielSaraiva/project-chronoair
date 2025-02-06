@@ -48,35 +48,39 @@ def listar_ares(request):
 def listar_horarios(request):
     pavilhoes = Pavilhao.objects.all()
     salas = Sala.objects.all()
-    filtrarpavilhao = None
-    filtrarturno = None
-    filtrarsala = None
     turnos = [
         ('Matutino', 'Matutino'),
         ('Vespertino', 'Vespertino'),
         ('Noturno', 'Noturno'),
     ]
 
-    if request.method == 'POST':
-        filtrarpavilhao = request.POST.get('pavilhao')
-        filtrarturno = request.POST.get('turno')
-        filtrarsala = request.POST.get('sala')
+    dias_da_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    horas = range(0, 24)
 
-        # Criando um dicionário de filtros
-        filtros = {}
+    filtrarpavilhao = request.POST.get('pavilhao')
+    filtrarturno = request.POST.get('turno')
+    filtrarsala = request.POST.get('sala')
 
-        if filtrarpavilhao:
-            filtros['pavilhao__id'] = filtrarpavilhao
-        if filtrarturno:
-            filtros['turno'] = filtrarturno
-        if filtrarsala:
-            filtros['sala'] = filtrarsala
+    filtros = {}
 
-        # Filtrando os horários com base nos filtros fornecidos
-        horarios = Horario.objects.filter(**filtros)
+    if filtrarpavilhao:
+        filtros['pavilhao__id'] = filtrarpavilhao
 
-    else:
-        horarios = Horario.objects.all()
+    if filtrarturno:
+        filtros['turno'] = filtrarturno
+
+    if filtrarsala:
+        filtros['sala'] = filtrarsala
+
+    horarios = Horario.objects.filter(**filtros) if request.method == 'POST' else Horario.objects.all()
+
+    # Ordenar os horários pela hora de início
+    horarios = horarios.order_by("horario_inicio")
+
+    # Adicionar duração a cada horário antes de enviar ao template
+    for horario in horarios:
+        horario.duracao = (horario.horario_fim.hour - horario.horario_inicio.hour) * 60 + (
+                    horario.horario_fim.minute - horario.horario_inicio.minute)
 
     context = {
         'horarios': horarios,
@@ -86,6 +90,8 @@ def listar_horarios(request):
         'filtrarsala': filtrarsala,
         'filtrarpavilhao': filtrarpavilhao,
         'filtrarturno': filtrarturno,
+        'dias_da_semana': dias_da_semana,
+        'horas': horas,
     }
     return render(request, 'listar_horarios.html', context)
 

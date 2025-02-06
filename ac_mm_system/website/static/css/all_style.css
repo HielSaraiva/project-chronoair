@@ -249,7 +249,7 @@
 }
 
 .lista-pavilhao {
-    width: 900px;
+    width: 1000px;
     max-height: 470px;
     top: 200px;
     left: 350px;
@@ -259,7 +259,7 @@
 }
 
 .botao-criarnovo {
-    left: 1153px;
+    left: 1253px;
     top: 165px;
     position: absolute;
 }
@@ -310,4 +310,13 @@
     border-radius: 5px; /* Bordas arredondadas para estilo */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
     z-index: 10; /* Garante que o elemento fique acima do menu lateral */
+}
+
+.horario-bloco {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 5px;
+    margin: 2px 0;
+    display: inline-block;
+    width: 100%;
 }
