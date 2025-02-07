@@ -17,55 +17,53 @@
 {% endblock salas %}
 
 {% block content %}
-<div class="lista-pavilhao overflow-auto">
-    <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-    <div class="container">
-        {% bootstrap_messages %}
-        <table class="table table-bordered border-success">
-            <!-- div da tabela representando a lista de pavilhões -->
-            <thead>
-            <tr class="table-light">
-                <th scope="col">Sala</th>
-                <th scope="col">Pavilhão</th>
-                <th scope="col">Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sala in salas %}
-            <tr class="table-light">
-                <td scope="row">{{ sala.nome }}</td>
-                <td scope="row">{{ sala.pavilhao }}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="botao-criarnovo"> <!-- div do botão de editar/criar novo -->
-    <button onclick="window.location.href='{% url 'website:criar_sala' %}'" class="btn btn-success btn-sm"
-            aria-expanded="false">
-        Criar Novo
-    </button>
-</div>
-
-<div class="filtro-search">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-inline">
-            <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
-                <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
-                {% for pavilhao in pavilhoes %}
-                <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
-                    {{ pavilhao.nome }}
-                </option>
-                {% endfor %}
-            </select>
-            <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+    <div class="bloco-central">
+        <div class="lista-pavilhao overflow-auto">
+        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+            {% bootstrap_messages %}
+            <table class="table table-bordered border-success">
+                <!-- div da tabela representando a lista de pavilhões -->
+                <thead>
+                <tr class="table-light">
+                    <th scope="col">Sala</th>
+                    <th scope="col">Pavilhão</th>
+                    <th scope="col">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for sala in salas %}
+                        <tr class="table-light">
+                            <td scope="row">{{ sala.nome }}</td>
+                            <td scope="row">{{ sala.pavilhao }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </form>
-</div>
+        <div class="botao-criarnovo"> <!-- div do botão de editar/criar novo -->
+            <button onclick="window.location.href='{% url 'website:criar_sala' %}'" class="btn btn-success btn-sm"
+                    aria-expanded="false">
+                Criar Novo
+            </button>
+        </div>
+        <div class="filtro-search">
+            <form method="POST">
+                {% csrf_token %}
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
+                        <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
+                        {% for pavilhao in pavilhoes %}
+                        <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                            {{ pavilhao.nome }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+            </form>
+        </div>
+    </div>
+
 {% endblock content %}

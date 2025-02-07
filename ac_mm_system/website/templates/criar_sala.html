@@ -17,19 +17,19 @@
 {% endblock salas %}
 
 {% block content %}
-<div class="lista-pavilhao overflow-auto">
-    <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-    <div class="container"> <!-- div com a configuração da visualização dos horários -->
-        {% bootstrap_messages %}
-        <form action="{% if sala %}{% url 'website:editar_salas' sala.id %}{% else %}{% url 'website:criar_sala' %}{% endif %}"
-              method="post" class="form" autocomplete="off">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <a class="btn btn-danger" href="{% url 'website:listar_salas' %}">Cancelar</a>
-            <button type="submit" class="btn btn-primary">
-                {% if sala %}Atualizar{% else %}Cadastrar{% endif %}
-            </button>
-        </form>
+ <div class="bloco-central">
+    <div class="lista-pavilhao overflow-auto">
+        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+            {% bootstrap_messages %}
+            <form action="{% if sala %}{% url 'website:editar_salas' sala.id %}{% else %}{% url 'website:criar_sala' %}{% endif %}"
+                  method="post" class="form" autocomplete="off">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <a class="btn btn-danger" href="{% url 'website:listar_salas' %}">Cancelar</a>
+                <button type="submit" class="btn btn-primary">
+                    {% if sala %}Atualizar{% else %}Cadastrar{% endif %}
+                </button>
+            </form>
     </div>
-</div>
+ </div>
 {% endblock content %}

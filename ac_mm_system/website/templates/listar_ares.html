@@ -8,12 +8,12 @@
 {% block title %}Ar-Condicionados{% endblock title %}
 
 {% block ar-condicionados %}
-<div class="button-arcondicionados">
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/snowflake0green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
-    <div class="nome-botoes-menu-ar">Ar-condicionados</div>
-</div>
+    <div class="button-arcondicionados">
+        <div class="rectangle-white"></div>
+        <img class="img-botoes-menu" src="{% static 'buttons/snowflake0green.svg' %}"/>
+        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
+        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+    </div>
 {% endblock ar-condicionados %}
 
 {% block content %}{% endblock content %}

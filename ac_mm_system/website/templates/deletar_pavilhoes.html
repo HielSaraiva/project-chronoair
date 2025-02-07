@@ -17,19 +17,19 @@
 {% endblock pavilhoes %}
 
 {% block content %}
-<div class="lista-pavilhao overflow-auto">
-    <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-    <div class="container"> <!-- div com a configuração da visualização dos horários -->
-        <center>
-            <div class="alert alert-danger" role="alert">
-                Deletar pavilhão "{{pavilhao}}"?
-            </div>
-            <form action="{% url 'website:deletar_pavilhoes' pavilhao.id %}" method="POST">
-                {% csrf_token %}
-                <a class="btn btn-primary" href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
-                <button type="submit" class="btn btn-danger">Deletar</button>
-            </form>
-        </center>
+  <div class="bloco-central">
+    <div class="lista-pavilhao overflow-auto">
+        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+            <center>
+                <div class="alert alert-danger" role="alert">
+                    Deletar pavilhão "{{pavilhao}}"?
+                </div>
+                <form action="{% url 'website:deletar_pavilhoes' pavilhao.id %}" method="POST">
+                    {% csrf_token %}
+                    <a class="btn btn-primary" href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">Deletar</button>
+                </form>
+            </center>
     </div>
-</div>
+  </div>
 {% endblock content %}

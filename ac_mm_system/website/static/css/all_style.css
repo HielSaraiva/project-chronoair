@@ -1,14 +1,6 @@
 /* CSS de todas as classes utilizadas nas páginas */
-.lista-pavilhoes,
-.lista-pavilhoes * {
-    box-sizing: border-box;
-}
-
-.lista-pavilhoes {
+body{
     background: var(--var-sds-color-background-default-secondary-hover, #e6e6e6);
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
 }
 
 .rectangle-menu {
@@ -250,17 +242,21 @@
 
 .lista-pavilhao {
     width: 1000px;
+    top:100px;
     max-height: 470px;
-    top: 200px;
-    left: 350px;
     position: absolute;
-    bottom: 150px;
     overflow: hidden;
 }
 
+.bloco-central{
+    width: 1000px;
+    position: absolute;
+    top:100px;
+}
+
 .botao-criarnovo {
-    left: 1253px;
-    top: 165px;
+    right:0px;
+    top:65px;
     position: absolute;
 }
 
@@ -272,10 +268,10 @@
 }
 
 .filtro-search {
-    top: 165px;
+    top: 65px;
     width: 750px;
-    left: 365px;
     position: absolute;
+    left: 0px;
 }
 
 .filtro-search-botoes {
