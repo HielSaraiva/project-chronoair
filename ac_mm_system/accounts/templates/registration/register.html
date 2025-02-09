@@ -5,8 +5,8 @@
 
 {% block content %}
 
-<h3>Crie sua conta</h3>
-<h4>Preencha seus dados</h4>
+<h3 class="texto-mensagem">Crie sua conta</h3>
+<h5 class="texto-mensagem">Preencha seus dados</h5>
 
 <form action="{% url 'accounts:register' %}" method="post">
     {% csrf_token %}
