@@ -399,3 +399,4 @@ pyrightconfig.json
 
 # Secret Keys
 /secrets.json
+/certificates/

@@ -16,4 +16,123 @@
     </div>
 {% endblock ar-condicionados %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+    <div class="bloco-central">
+        <div class="lista-pavilhao overflow-auto">
+            {% bootstrap_messages %}
+            <table class="table table-bordered border-success">
+                <thead>
+                <tr class="table-light">
+                    <th scope="col">Ar-Condicionado</th>
+                    <th scope="col">Sala</th>
+                    <th scope="col">Pavilhão</th>
+                    <th scope="col">Tópico MQTT</th>
+                    <th scope="col">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ar in ares %}
+                    <tr class="table-light">
+                        <td>{{ ar.nome }}</td>
+                        <td>{{ ar.sala.nome }}</td>
+                        <td>{{ ar.sala.pavilhao.nome }}</td>
+                        <td>{{ ar.topico_mqtt }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.id %}">Editar</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.id %}">Deletar</a>
+
+                            <!-- Botão Ajustes -->
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#ajustesModal{{ ar.id }}">
+                                Ajustes
+                            </button>
+
+                            <!-- Modal Ajustes -->
+                            <div class="modal fade" id="ajustesModal{{ ar.id }}" tabindex="-1"
+                                 aria-labelledby="ajustesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="justesModalLabel">Configuração do
+                                                Ar-Condicionado {{ ar.nome }} </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{% url 'website:enviar_comando' ar.pk %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="topico" value="{{ ar.topico_mqtt }}">
+
+                                                <button type="submit" class="btn btn-primary btn-sm" name="comando"
+                                                        value="ligar">Ligar
+                                                </button>
+                                                <button type="submit" class="btn btn-danger btn-sm" name="comando"
+                                                        value="desligar">Desligar
+                                                </button>
+                                                <button type="submit" class="btn btn-success btn-sm" name="comando"
+                                                        value="gravar_ligar">Gravar Ligar
+                                                </button>
+                                                <button type="submit" class="btn btn-success btn-sm" name="comando"
+                                                        value="gravar_desligar">Gravar Desligar
+                                                </button>
+
+                                                {% if mensagem %}
+                                                    <div class="alert alert-success mt-3">{{ mensagem }}</div>
+                                                {% endif %}
+                                                {% if erro %}
+                                                    <div class="alert alert-danger mt-3">{{ erro }}</div>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botão Criar Novo -->
+        <div class="botao-criarnovo">
+            <button onclick="window.location.href='{% url 'website:criar_ar' %}'" class="btn btn-success btn-sm">
+                Criar Novo
+            </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filtro-search">
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Filtro por Pavilhão -->
+                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" id="pavilhao">
+                    <option value="" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
+                    {% for pavilhao in pavilhoes %}
+                        <option value="{{ pavilhao.id }}"
+                                {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                            {{ pavilhao.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Filtro por Sala -->
+                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala" id="sala">
+                    <option value="" {% if not filtrarsala %}selected{% endif %}>Salas</option>
+                    {% for sala in salas %}
+                        <option value="{{ sala.id }}"
+                                {% if filtrarsala == sala.id|stringformat:"s" %}selected{% endif %}>
+                            {{ sala.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Botão Buscar -->
+                <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+
+                <!-- Botão Default (Remove o Filtro) -->
+                <a href="{% url 'website:listar_ares' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

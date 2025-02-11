@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Salas{% endblock title %}
+
+{% block ar-condicionados %}
+    <div class="button-arcondicionados">
+        <div class="rectangle-white"></div>
+        <img class="img-botoes-menu" src="{% static 'buttons/snowflake0green.svg' %}"/>
+        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
+        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+    </div>
+{% endblock ar-condicionados %}
+
+{% block content %}
+ <div class="bloco-central">
+    <div class="lista-pavilhao overflow-auto">
+        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+            {% bootstrap_messages %}
+            <form action="{% if ar %}{% url 'website:editar_ares' ar.id %}{% else %}{% url 'website:criar_ar' %}{% endif %}"
+                  method="post" class="form" autocomplete="off">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <a class="btn btn-danger" href="{% url 'website:listar_ares' %}">Cancelar</a>
+                <button type="submit" class="btn btn-primary">
+                    {% if ar %}Atualizar{% else %}Cadastrar{% endif %}
+                </button>
+            </form>
+    </div>
+ </div>
+{% endblock content %}

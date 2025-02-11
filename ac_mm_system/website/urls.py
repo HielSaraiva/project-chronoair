@@ -32,6 +32,9 @@ urlpatterns = [
     # Cadastro de sala
     path('criar_sala/', views.criar_sala, name='criar_sala'),
 
+    # Cadastro de ar
+    path('criar_ar/', views.criar_ar, name='criar_ar'),
+
     # Editar sala
     path('editar_salas/<str:pk>/', views.editar_salas, name='editar_salas'),
 
@@ -41,6 +44,12 @@ urlpatterns = [
     # Editar horário
     path('editar_horarios/<str:pk>/', views.editar_horarios, name='editar_horarios'),
 
+    # Editar ares
+    path('editar_ares/<str:pk>/', views.editar_ares, name='editar_ares'),
+
+    # Deletar ar
+    path('deletar_ares/<str:pk>/', views.deletar_ares, name='deletar_ares'),
+
     # Deletar sala
     path('deletar_salas/<str:pk>/', views.deletar_salas, name='deletar_salas'),
 
@@ -49,4 +58,7 @@ urlpatterns = [
 
     # Deletar pavilhão
     path('deletar_pavilhoes/<str:pk>/', views.deletar_pavilhoes, name='deletar_pavilhoes'),
+
+    # Enviar comando mqtt
+    path('enviar_comando/<str:pk>', views.enviar_comando, name='enviar_comando'),
 ]

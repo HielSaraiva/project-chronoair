@@ -35,12 +35,14 @@
         }
     </style>
 </head>
+l
 <body>
-    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;"> <!-- div principal, última a ser fechada -->
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <!-- div principal, última a ser fechada -->
 
-        <div class="rectangle-menu"></div>
-        <div class="menu-buttons">
-            {% block horarios %}
+    <div class="rectangle-menu"></div>
+    <div class="menu-buttons">
+        {% block horarios %}
             <div class="button-horarios">
                 <div class="rectangle-green"></div>
                 <img class="img-botoes-menu" src="{% static 'buttons/calendar-020white.svg' %}"/>
@@ -48,27 +50,29 @@
                         onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
                 <div class="nome-botoes-menu">Horários</div>
             </div>
-            {% endblock horarios %}
+        {% endblock horarios %}
 
-            {% block ar-condicionados %}
+        {% block ar-condicionados %}
             <div class="button-arcondicionados">
                 <div class="rectangle-green"></div>
                 <img class="img-botoes-menu" src="{% static 'buttons/snowflake0white.svg' %}"/>
-                <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
+                <button class="img-botoes-menu"
+                        onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
                 <div class="nome-botoes-menu-ar">Ar-condicionados</div>
             </div>
-            {% endblock ar-condicionados %}
+        {% endblock ar-condicionados %}
 
-            {% block salas %}
+        {% block salas %}
             <div class="button-salas">
                 <div class="rectangle-green"></div>
                 <img class="img-botoes-menu" src="{% static 'buttons/book-040white.svg' %}"/>
-                <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
+                <button class="img-botoes-menu"
+                        onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
                 <div class="nome-botoes-menu">Salas</div>
             </div>
-            {% endblock salas %}
+        {% endblock salas %}
 
-            {% block pavilhoes %}
+        {% block pavilhoes %}
             <div class="button-pavilhao">
                 <div class="rectangle-green"></div>
                 <img class="img-botoes-menu" src="{% static 'buttons/buildings-20white.svg' %}"/>
@@ -76,9 +80,9 @@
                         onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
                 <div class="nome-botoes-menu">Pavilhões</div>
             </div>
-            {% endblock pavilhoes %}
+        {% endblock pavilhoes %}
 
-            {% block inicio %}
+        {% block inicio %}
             <div class="button-home">
                 <div class="rectangle-green"></div>
                 <img class="img-botoes-menu" src="{% static 'buttons/home-050white.svg' %}"/>
@@ -86,20 +90,21 @@
                         onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
                 <div class="nome-botoes-menu">Início</div>
             </div>
-            {% endblock inicio %}
-        </div>
+        {% endblock inicio %}
+    </div>
 
-        <!-- Barra Superior -->
-        <div class="menu-bar d-flex align-items-center">
-            <div class="rectangle-barra-superior"></div>
-            <img class="img-barra-superior" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-            <div class="sistema-de-gestao-de-ar-condicionado">
-                Sistema de Gestão de Ar-Condicionado
-            </div>
+    <!-- Barra Superior -->
+    <div class="menu-bar d-flex align-items-center">
+        <div class="rectangle-barra-superior"></div>
+        <img class="img-barra-superior" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+        <div class="sistema-de-gestao-de-ar-condicionado">
+            Sistema de Gestão de Ar-Condicionado
         </div>
+    </div>
 
-        {% if user.is_authenticated %}
-        <div class="d-flex align-items-center justify-content-between p-3" style="width: 400px; margin-left: 80px; position: absolute; top: 80px; left:10px;">
+    {% if user.is_authenticated %}
+        <div class="d-flex align-items-center justify-content-between p-3"
+             style="width: 400px; margin-left: 80px; position: absolute; top: 80px; left:10px;">
             <div class="mensagem-usuario-logado text-truncate" style="white-space: nowrap; overflow: visible;">
                 <h5>Bem-vindo, {{ user.username }}.</h5>
             </div>
@@ -110,13 +115,30 @@
                 </form>
             </div>
             <div class="mensagem-alterar-senha ms-2 text-truncate" style="white-space: nowrap; overflow: visible;">
-                   <a href="{% url 'accounts:password_change' %}" class="btn btn-success">Alterar senha</a>
+                <a href="{% url 'accounts:password_change' %}" class="btn btn-success">Alterar senha</a>
             </div>
         </div>
-        {% endif %}
+    {% endif %}
 
-        {% block content %} {% endblock content %}
+    {% block content %} {% endblock content %}
 
-    </div>
+</div>
+
+<!-- Script para esconder mensagens Bootstrap automaticamente -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let alertList = document.querySelectorAll(".alert");
+        alertList.forEach(function (alert) {
+            setTimeout(function () {
+                alert.classList.add("fade");
+                alert.classList.remove("show");
+                setTimeout(function () {
+                    alert.remove(); // Remove a mensagem da tela
+                }, 500);
+            }, 3000); // Tempo de exibição: 3 segundos
+        });
+    });
+</script>
+
 </body>
 </html>

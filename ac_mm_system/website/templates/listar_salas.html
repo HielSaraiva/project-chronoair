@@ -8,18 +8,18 @@
 {% block title %}Salas{% endblock title %}
 
 {% block salas %}
-<div class="button-salas"> <!-- div do botão de salas -->
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/book-040green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-    <div class="nome-botoes-menu">Salas</div>
-</div>
+    <div class="button-salas"> <!-- div do botão de salas -->
+        <div class="rectangle-white"></div>
+        <img class="img-botoes-menu" src="{% static 'buttons/book-040green.svg' %}"/>
+        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
+        <div class="nome-botoes-menu">Salas</div>
+    </div>
 {% endblock salas %}
 
 {% block content %}
     <div class="bloco-central">
         <div class="lista-pavilhao overflow-auto">
-        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+            <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
             {% bootstrap_messages %}
             <table class="table table-bordered border-success">
                 <!-- div da tabela representando a lista de pavilhões -->
@@ -31,16 +31,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% for sala in salas %}
-                        <tr class="table-light">
-                            <td scope="row">{{ sala.nome }}</td>
-                            <td scope="row">{{ sala.pavilhao }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                {% for sala in salas %}
+                    <tr class="table-light">
+                        <td scope="row">{{ sala.nome }}</td>
+                        <td scope="row">{{ sala.pavilhao }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
+                            <a class="btn btn-danger btn-sm"
+                               href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -53,15 +54,20 @@
         <div class="filtro-search">
             <form method="POST">
                 {% csrf_token %}
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
-                        <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
-                        {% for pavilhao in pavilhoes %}
-                        <option value="{{ pavilhao.id }}" {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
+                    <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões
+                    </option>
+                    {% for pavilhao in pavilhoes %}
+                        <option value="{{ pavilhao.id }}"
+                                {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
                             {{ pavilhao.nome }}
                         </option>
-                        {% endfor %}
-                    </select>
-                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+                    {% endfor %}
+                </select>
+                <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+
+                <!-- Botão Default (Remove o Filtro) -->
+                <a href="{% url 'website:listar_salas' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
             </form>
         </div>
     </div>
