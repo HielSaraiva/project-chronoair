@@ -109,15 +109,17 @@ class ArCondicionadoModelForm(forms.ModelForm):
         fields = [
             'nome',
             'sala',
-            'potencia'
+            'consumo',
+            'consumo_unidade'
         ]
         labels = {
             'nome': 'Ar-condicionado',
-            'potencia': 'Potência'
+            'consumo': 'Consumo'
         }
         widgets = {
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
-            'potencia': forms.NumberInput(attrs={'placeholder': '(kWh/mês ou kWh/ano)', 'min': 1}),
+            'consumo': forms.NumberInput(attrs={'placeholder': '(kWh/mês ou kWh/ano)', 'min': 0.1}),
+            'consumo_unidade': forms.Select(attrs={'placeholder': 'Unidade'}),
         }
 
     def clean_sala(self):

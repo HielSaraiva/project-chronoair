@@ -39,7 +39,22 @@ class ArCondicionado(models.Model):
     # Atributos
     nome = models.CharField('Nome', max_length=50, unique=False)
     sala = ForeignKey(Sala, on_delete=models.CASCADE)
-    potencia = models.IntegerField('Potência')
+    potencia_kw = models.FloatField('Potência', max_length=20)
+    consumo = models.FloatField('Consumo', max_length=20)
+
+    CONSUMO_UNIDADES = [
+        ('kWh/mês', 'kWh/mês'),
+        ('kWh/ano', 'kWh/ano'),
+    ]
+    consumo_unidade = models.CharField(max_length=10, choices=CONSUMO_UNIDADES, default='kWh/ano')
+
+    def save(self, *args, **kwargs):
+        if self.consumo_unidade == 'kWh/mês': # Mensal
+            self.potencia_kw = self.consumo / 30  # Calculando a potencia (obedecendo à antiga norma = 30h/mes)
+        elif self.consumo_unidade == 'kWh/ano': # Anual
+            self.potencia_kw = self.consumo / 2080  # Calculando a potencia (obedecendo à nova norma = 2080h/ano)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):  # Define a representação em texto do objeto
         return self.nome

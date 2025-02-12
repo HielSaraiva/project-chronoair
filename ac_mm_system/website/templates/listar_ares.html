@@ -27,7 +27,7 @@
                     <th scope="col">Sala</th>
                     <th scope="col">Pavilhão</th>
                     <th scope="col">Tópico MQTT</th>
-                    <th scope="col">Potência(kWh)</th>
+                    <th scope="col">Potência</th>
                     <th scope="col">Ações</th>
                 </tr>
                 </thead>
@@ -38,7 +38,7 @@
                         <td>{{ ar.sala.nome }}</td>
                         <td>{{ ar.sala.pavilhao.nome }}</td>
                         <td>{{ ar.sala.topico_mqtt }}</td>
-                        <td>{{ ar.potencia }}</td>
+                        <td>{{ ar.potencia_kw|floatformat:4 }} kW</td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.id %}">Editar</a>
                             <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.id %}">Deletar</a>
