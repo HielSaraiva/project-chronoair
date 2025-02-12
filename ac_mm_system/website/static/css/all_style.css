@@ -309,8 +309,7 @@ body{
 }
 
 .horario-bloco {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
+    border: 2px solid #c3e6cb;
     padding: 5px;
     margin: 2px 0;
     display: inline-block;
