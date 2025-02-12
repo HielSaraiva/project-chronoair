@@ -86,6 +86,21 @@ class SalaModelForm(forms.ModelForm):
 
         return pavilhao
 
+    def clean_nome(self):
+        nome = self.cleaned_data.get("nome")
+        if not re.match(r'^[a-zA-Z0-9 ]+$', nome):
+            raise forms.ValidationError("O nome da sala só pode conter letras, números e espaços.")
+        return nome
+
+    def save(self, commit=True):
+        sala = super().save(commit=False)
+        sala.nome = re.sub(r'[^a-zA-Z0-9 ]', '', sala.nome)  # Remove caracteres especiais
+        sala.topico_mqtt = sala.nome.lower().replace(" ", "_")  # Formata o tópico MQTT
+
+        if commit:
+            sala.save()
+        return sala
+
 
 # Formulário para o modelo ArCondicionado
 class ArCondicionadoModelForm(forms.ModelForm):
@@ -94,26 +109,16 @@ class ArCondicionadoModelForm(forms.ModelForm):
         fields = [
             'nome',
             'sala',
-            'topico_mqtt',
+            'potencia'
         ]
         labels = {
             'nome': 'Ar-condicionado',
-            'topico_mqtt': 'Tópico MQTT',
+            'potencia': 'Potência'
         }
         widgets = {
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
-            'topico_mqtt': forms.TextInput(attrs={'placeholder': 'Nome'})
+            'potencia': forms.NumberInput(attrs={'placeholder': '(kWh/mês ou kWh/ano)', 'min': 1}),
         }
-
-    def clean_topico_mqtt(self):
-        topico = self.cleaned_data.get('topico_mqtt')
-
-        # Verifica se o tópico contém apenas letras minúsculas e números
-        if not re.match(r'^[a-z0-9]+$', topico):
-            raise ValidationError(
-                "O tópico MQTT deve conter apenas letras minúsculas e números, sem espaços e sem caracteres especiais.")
-
-        return topico
 
     def clean_sala(self):
         sala = self.cleaned_data.get('sala')
