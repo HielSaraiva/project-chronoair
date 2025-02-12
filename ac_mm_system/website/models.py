@@ -2,6 +2,7 @@ import re
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 from django.db.models import ForeignKey
@@ -52,6 +53,28 @@ class Horario(models.Model):
     turno = models.CharField(max_length=100)
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
+
+    def clean(self):
+        if self.horario_inicio >= self.horario_fim:
+            raise ValidationError("O horário de início deve ser antes do horário de fim.")
+
+        dias_selecionados = [dia.strip() for dia in self.dias_da_semana.split(",")]
+
+        conflitos = Horario.objects.filter(sala=self.sala).exclude(id=self.id)
+
+        for horario in conflitos:
+            dias_ocupados = [dia.strip() for dia in horario.dias_da_semana.split(",")]
+
+            if any(dia in dias_selecionados for dia in dias_ocupados):
+                if self.horario_inicio < horario.horario_fim and self.horario_fim > horario.horario_inicio:
+                    raise ValidationError(
+                        f"Conflito de horário! A sala já possui um horário criado."
+
+                    )
+
+    def save(self, *args, **kwargs):
+        self.clean()  # Chama a validação antes de salvar
+        super().save(*args, **kwargs)
 
     def __str__(self):  # Define a representação em texto do objeto
         return f'{self.horario_inicio} - {self.horario_fim}'

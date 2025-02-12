@@ -20,11 +20,11 @@
     <div class="bloco-central">
         <div class="lista-pavilhao overflow-auto">
             {% bootstrap_messages %}
-            <table class="table table-bordered border-success">
+            <table class="table table-bordered border-success table-fixed">
                 <thead>
-                <tr class="table-light" style="width: 15px;">
+                <tr class="table-light table-fixed">
                     {% for dia in dias_da_semana %}
-                        <th scope="col" class="text-center" style="width: 5px;">{{ dia }}</th>
+                        <th scope="col" class="text-center" >{{ dia }}</th>
                     {% endfor %}
                 </tr>
                 </thead>
@@ -35,7 +35,8 @@
                             <td class="align-top">
                                 {% for horario in horarios %}
                                     {% if dia in horario.dias_da_semana and horario.horario_inicio.hour == hora %}
-                                        <div class="horario-bloco" style="15px;">
+                                        <div class="horario-bloco">
+                                            <div class="dropdown">
                                                   <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     {{ horario.horario_inicio }} - {{ horario.horario_fim }}
                                                   </button>
@@ -43,6 +44,7 @@
                                                     <li><a class="dropdown-item" href="{% url 'website:editar_horarios' horario.id %}">Editar</a></li>
                                                     <li><a class="dropdown-item text-danger" href="{% url 'website:deletar_horarios' horario.id %}">Excluir</a></li>
                                                   </ul>
+                                            </div>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -62,7 +64,7 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-inline">
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao">
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" onchange="this.form.submit()">
                         <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões
                         </option>
                         {% for pavilhao in pavilhoes %}
@@ -72,7 +74,7 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala" onchange="this.form.submit()">
                         <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
                         {% for sala in salas %}
                             <option value="{{ sala.id }}"
@@ -81,7 +83,7 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno">
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno" onchange="this.form.submit()">
                         <option value="" class="list-group" {% if not filtrarturno %}selected{% endif %}>Turnos</option>
                         {% for turno in turnos %}
                             <option value="{{ turno.0 }}" {% if filtrarturno == turno.0 %}selected{% endif %}>
@@ -89,8 +91,6 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit"
-                           value="Buscar">
                     <a href="{% url 'website:listar_horarios' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
 
                 </div>

@@ -91,6 +91,7 @@ def listar_horarios(request):
 
     if filtrarpavilhao:
         filtros['pavilhao__id'] = filtrarpavilhao
+        salas = salas.filter(pavilhao__id=filtrarpavilhao)
 
     if filtrarturno:
         filtros['turno'] = filtrarturno
@@ -98,7 +99,10 @@ def listar_horarios(request):
     if filtrarsala:
         filtros['sala'] = filtrarsala
 
-    horarios = Horario.objects.filter(**filtros) if request.method == 'POST' else Horario.objects.all()
+    if request.method == 'POST':
+        horarios = Horario.objects.filter(**filtros)
+    else:
+        horarios = Horario.objects.none()
 
     # Ordenar os horários pela hora de início
     horarios = horarios.order_by("horario_inicio")

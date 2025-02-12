@@ -310,8 +310,13 @@ body{
 
 .horario-bloco {
     border: 2px solid #c3e6cb;
-    padding: 5px;
+    padding: 3px;
     margin: 2px 0;
     display: inline-block;
     width: 100%;
+}
+
+.table-fixed th, .table-fixed td {
+    width: 14.28%;
+    text-align: center;
 }
