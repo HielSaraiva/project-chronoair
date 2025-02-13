@@ -49,6 +49,7 @@ class ArCondicionado(models.Model):
     consumo_unidade = models.CharField(max_length=10, choices=CONSUMO_UNIDADES, default='kWh/ano')
 
     def save(self, *args, **kwargs):
+        """Fonte: https://agenciabrasil.ebc.com.br/economia/noticia/2023-01/aparelhos-de-ar-condicionado-mudam-forma-de-medir-consumo-de-energia"""
         if self.consumo_unidade == 'kWh/mês': # Mensal
             self.potencia_kw = self.consumo / 30  # Calculando a potencia (obedecendo à antiga norma = 30h/mes)
         elif self.consumo_unidade == 'kWh/ano': # Anual
