@@ -39,10 +39,10 @@ int currentStateReceiverOn;       // O estado atual do receiver (Ligar)
 int currentStateEmitterOn;        // O estado atual do emitter (Ligar)
 
 // Configuração Wi-Fi
-const char* ssid = "brisa-4160473";
-const char* password = "nsexdx3q";
-// const char* ssid = "IFCE";
-// const char* password = "ifcewifi";
+// const char* ssid = "brisa-4160473";
+// const char* password = "nsexdx3q";
+const char* ssid = "IFCE";
+const char* password = "ifcewifi";
 
 // Configurações do broker MQTT
 const char* mqtt_server = "70c7294fcccf4b729c7c25b7ce3006fb.s1.eu.hivemq.cloud";

@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 // Variáveis Globais
-#define RAW_LENGTH_RECEIVED_MIN 75  // Tamanho mínmo do código raw a ser recebido
+#define RAW_LENGTH_RECEIVED_MIN 30  // Tamanho mínmo do código raw a ser recebido
 
 // Definindo os GPIOs usados
 #define IR_RECEIVE 13  // Pino (D13) conectado ao LED IR Receptor VS1838B

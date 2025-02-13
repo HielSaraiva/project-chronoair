@@ -49,4 +49,5 @@ void loop() {
   analogWrite(LED_RGB_GREEN, 0);
   analogWrite(LED_RGB_RED, 0);
   delay(500);
+  Serial.println("teste");
 }

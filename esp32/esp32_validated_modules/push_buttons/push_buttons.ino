@@ -1,55 +1,31 @@
-// #define BUTTON1 22  // Botão 1 no pino 22
-// #define BUTTON2 23  // Botão 2 no pino 23
-#define BUTTON1 19  // Botão 1 no pino 19
-#define BUTTON2 21  // Botão 2 no pino 18
-#define LED_RED 4   // LED Vermelho no pino 4
-#define LED_GREEN 16 // LED Verde no pino 16
-#define LED_BLUE 17  // LED Azul no pino 17
+#define BOTAO1 19
+#define BOTAO2 21
+#define BOTAO3 22
+#define BOTAO4 23
 
 void setup() {
-  Serial.begin(115200);
-  // Configuração dos botões como entrada com pull-up interno
-  pinMode(BUTTON1, INPUT_PULLUP);
-  pinMode(BUTTON2, INPUT_PULLUP);
-
-  // Configuração dos pinos do LED como saída
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_GREEN, OUTPUT);
-  pinMode(LED_BLUE, OUTPUT);
-
-  // Inicializar LED desligado
-  digitalWrite(LED_RED, LOW);
-  digitalWrite(LED_GREEN, LOW);
-  digitalWrite(LED_BLUE, LOW);
+    Serial.begin(115200);  // Inicializa o monitor serial
+    pinMode(BOTAO1, INPUT_PULLDOWN);  // Ativa pull-up interno
+    pinMode(BOTAO2, INPUT_PULLUP);
+    pinMode(BOTAO3, INPUT_PULLUP);
+    pinMode(BOTAO4, INPUT_PULLUP);
 }
 
 void loop() {
-  // Leitura do estado dos botões
-  bool button1State = digitalRead(BUTTON1) == LOW; // LOW = pressionado
-  bool button2State = digitalRead(BUTTON2) == LOW; // LOW = pressionado
-
-  // Controle do LED RGB
-  if (button1State && button2State) {
-    // Ambos pressionados: LED verde
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, HIGH);
-    digitalWrite(LED_BLUE, LOW);
-  } else if (button1State) {
-    // Apenas o botão 1 pressionado: LED vermelho
-    digitalWrite(LED_RED, HIGH);
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_BLUE, LOW);
-  } else if (button2State) {
-    // Apenas o botão 2 pressionado: LED azul
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_BLUE, HIGH);
-  } else {
-    // Nenhum botão pressionado: LED apagado
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_BLUE, LOW);
-  }
-
-  delay(50); // Pequeno atraso para estabilidade
+    if (digitalRead(BOTAO1) == LOW) {
+        Serial.println("Botão 1 pressionado!");
+        delay(300);  // Debounce
+    }
+    if (digitalRead(BOTAO2) == LOW) {
+        Serial.println("Botão 2 pressionado!");
+        delay(300);
+    }
+    if (digitalRead(BOTAO3) == LOW) {
+        Serial.println("Botão 3 pressionado!");
+        delay(300);
+    }
+    if (digitalRead(BOTAO4) == LOW) {
+        Serial.println("Botão 4 pressionado!");
+        delay(300);
+    }
 }
