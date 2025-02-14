@@ -78,6 +78,7 @@ def listar_horarios(request):
         ('Matutino', 'Matutino'),
         ('Vespertino', 'Vespertino'),
         ('Noturno', 'Noturno'),
+        ('Sembrol', 'Sembrol')
     ]
 
     dias_da_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
@@ -89,28 +90,23 @@ def listar_horarios(request):
 
     filtros = {}
 
-    if filtrarpavilhao:
-        filtros['pavilhao__id'] = filtrarpavilhao
-        salas = salas.filter(pavilhao__id=filtrarpavilhao)
+    horarios = Horario.objects.none()
 
-    if filtrarturno:
-        filtros['turno'] = filtrarturno
+    if filtrarpavilhao:
+        salas = salas.filter(pavilhao__id=filtrarpavilhao)
 
     if filtrarsala:
         filtros['sala'] = filtrarsala
+        if filtrarturno:
+            filtros['turno__icontains'] = filtrarturno
+        if request.method == 'POST':
+            horarios = Horario.objects.filter(**filtros).order_by("horario_inicio")
 
-    if request.method == 'POST':
-        horarios = Horario.objects.filter(**filtros)
-    else:
-        horarios = Horario.objects.none()
-
-    # Ordenar os horários pela hora de início
-    horarios = horarios.order_by("horario_inicio")
 
     # Adicionar duração a cada horário antes de enviar ao template
-    for horario in horarios:
-        horario.duracao = (horario.horario_fim.hour - horario.horario_inicio.hour) * 60 + (
-                horario.horario_fim.minute - horario.horario_inicio.minute)
+            for horario in horarios:
+                horario.duracao = (horario.horario_fim.hour - horario.horario_inicio.hour) * 60 + (
+                        horario.horario_fim.minute - horario.horario_inicio.minute)
 
     context = {
         'horarios': horarios,

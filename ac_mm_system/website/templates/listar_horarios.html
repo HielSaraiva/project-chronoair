@@ -74,7 +74,7 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala" onchange="this.form.submit()">
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
                         <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
                         {% for sala in salas %}
                             <option value="{{ sala.id }}"
@@ -83,7 +83,7 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno" onchange="this.form.submit()">
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno">
                         <option value="" class="list-group" {% if not filtrarturno %}selected{% endif %}>Turnos</option>
                         {% for turno in turnos %}
                             <option value="{{ turno.0 }}" {% if filtrarturno == turno.0 %}selected{% endif %}>
@@ -91,6 +91,7 @@
                             </option>
                         {% endfor %}
                     </select>
+                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
                     <a href="{% url 'website:listar_horarios' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
 
                 </div>
