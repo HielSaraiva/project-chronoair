@@ -102,8 +102,7 @@ def listar_horarios(request):
         if request.method == 'POST':
             horarios = Horario.objects.filter(**filtros).order_by("horario_inicio")
 
-
-    # Adicionar duração a cada horário antes de enviar ao template
+            # Adicionar duração a cada horário antes de enviar ao template
             for horario in horarios:
                 horario.duracao = (horario.horario_fim.hour - horario.horario_inicio.hour) * 60 + (
                         horario.horario_fim.minute - horario.horario_inicio.minute)
@@ -325,15 +324,43 @@ def deletar_ares(request, pk):
     context = {'ar': ar}
     return render(request, 'deletar_ares.html', context)
 
+
 @login_required
-def enviar_comando(request, pk):
-    ar = ArCondicionado.objects.get(id=pk)  # Obtém o ar-condicionado
+def ajustar_ar(request, pk):
+    ar = ArCondicionado.objects.get(id=pk)
+
+    context = {
+        'ar': ar
+    }
+
+    return render(request, 'ajustar_ar.html', context)
+
+
+@login_required
+def ajustar_sala(request, pk):
+    sala = Sala.objects.get(id=pk)
+    ares = ArCondicionado.objects.filter(sala=sala)
+    ares_quantidade = ares.count()
+
+    context = {
+        'sala': sala,
+        'ares': ares,
+        'ares_quantidade': ares_quantidade
+    }
+
+    return render(request, 'ajustar_sala.html', context)
+
+
+@login_required
+def ajustes_ares(request, pk):
+    ar = ArCondicionado.objects.get(id=pk)  # Obtém o ar-condicionado atualizado
+    sala = ar.sala  # Pega a sala correta
     if request.method == 'POST':
         comando = request.POST.get('comando')
-        topico = ar.topico_mqtt
+        topico = sala.topico_mqtt
 
         try:
-            if comando in ['ligar', 'desligar', 'gravar_ligar', 'gravar_desligar']:
+            if comando in ['gravar_ligar', 'gravar_desligar']:
                 mqtt_publish(topico, {"comando": comando})
                 messages.success(request, f"Comando '{comando}' enviado com sucesso!")
             else:
@@ -341,4 +368,24 @@ def enviar_comando(request, pk):
         except Exception as e:
             messages.error(request, f"Erro ao enviar comando: {str(e)}")
 
-    return redirect("website:listar_ares")
+        return redirect('website:ajustar_ar', pk=pk)
+
+
+@login_required
+def ajustes_salas(request, pk):
+    sala = Sala.objects.get(id=pk)  # Obtém a sala
+
+    if request.method == 'POST':
+        comando = request.POST.get('comando')
+        topico = sala.topico_mqtt
+
+        try:
+            if comando in ['ligar', 'desligar']:
+                mqtt_publish(topico, {"comando": comando})
+                messages.success(request, f"Comando '{comando}' enviado com sucesso!")
+            else:
+                messages.error(request, "Comando inválido.")
+        except Exception as e:
+            messages.error(request, f"Erro ao enviar comando: {str(e)}")
+
+        return redirect('website:ajustar_sala', pk=pk)

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Ar-Condicionados{% endblock title %}
+
+{% block ar-condicionados %}
+    <div class="button-arcondicionados">
+        <div class="rectangle-white"></div>
+        <img class="img-botoes-menu" src="{% static 'buttons/snowflake0green.svg' %}"/>
+        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
+        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+    </div>
+{% endblock ar-condicionados %}
+
+{% block content %}
+    <div class="bloco-central">
+        <div class="lista-pavilhao overflow-auto">
+            {% bootstrap_messages %}
+            <table class="table table-bordered border-success">
+                <thead>
+                <tr class="table-light">
+                    <th scope="col">Ar-Condicionado</th>
+                    <th scope="col">Sala</th>
+                    <th scope="col">Pavilhão</th>
+                    <th scope="col">Tópico MQTT</th>
+                    <th scope="col">Potência</th>
+                    <th scope="col">Consumo</th>
+                    <th scope="col">Consumo Unidade</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-light">
+                    <td>{{ ar.nome }}</td>
+                    <td>{{ ar.sala.nome }}</td>
+                    <td>{{ ar.sala.pavilhao.nome }}</td>
+                    <td>{{ ar.sala.topico_mqtt }}</td>
+                    <td>{{ ar.potencia_kw|floatformat:4 }} kW</td>
+                    <td>{{ ar.consumo }}</td>
+                    <td>{{ ar.consumo_unidade }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <form action="{% url 'website:ajustes_ares' ar.pk %}" method="POST" class="d-flex justify-content-center">
+                {% csrf_token %}
+
+                <div class="ms-2">
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.pk %}'"
+                            class="btn btn-success btn-lg" name="comando"
+                            value="gravar_ligar">
+                        Gravar Sinal de Ligar
+                    </button>
+
+
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.pk %}'"
+                            class="btn btn-danger btn-lg" name="comando"
+                            value="gravar_desligar">
+                        Gravar Sinal de Desligar
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- Botão Voltar -->
+        <div class="botao-criarnovo">
+            <button onclick="window.location.href='{% url 'website:listar_ares' %}'" class="btn btn-secondary btn-sm">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+{% endblock content %}

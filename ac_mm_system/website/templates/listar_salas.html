@@ -41,6 +41,8 @@
                             <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
                             <a class="btn btn-danger btn-sm"
                                href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
+                            <a class="btn btn-warning btn-sm"
+                               href="{% url 'website:ajustar_sala' sala.id %}">Ajustes</a>
                         </td>
                     </tr>
                 {% endfor %}

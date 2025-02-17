@@ -42,53 +42,7 @@
                         <td>
                             <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.id %}">Editar</a>
                             <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.id %}">Deletar</a>
-
-                            <!-- Botão Ajustes -->
-                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#ajustesModal{{ ar.id }}">
-                                Ajustes
-                            </button>
-
-                            <!-- Modal Ajustes -->
-                            <div class="modal fade" id="ajustesModal{{ ar.id }}" tabindex="-1"
-                                 aria-labelledby="ajustesModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="justesModalLabel">Configuração do
-                                                Ar-Condicionado {{ ar.nome }} </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="{% url 'website:enviar_comando' ar.pk %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="topico" value="{{ ar.topico_mqtt }}">
-
-                                                <button type="submit" class="btn btn-primary btn-sm" name="comando"
-                                                        value="ligar">Ligar
-                                                </button>
-                                                <button type="submit" class="btn btn-danger btn-sm" name="comando"
-                                                        value="desligar">Desligar
-                                                </button>
-                                                <button type="submit" class="btn btn-success btn-sm" name="comando"
-                                                        value="gravar_ligar">Gravar Ligar
-                                                </button>
-                                                <button type="submit" class="btn btn-success btn-sm" name="comando"
-                                                        value="gravar_desligar">Gravar Desligar
-                                                </button>
-
-                                                {% if mensagem %}
-                                                    <div class="alert alert-success mt-3">{{ mensagem }}</div>
-                                                {% endif %}
-                                                {% if erro %}
-                                                    <div class="alert alert-danger mt-3">{{ erro }}</div>
-                                                {% endif %}
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="btn btn-warning btn-sm" href="{% url 'website:ajustar_ar' ar.id %}">Ajustes</a>
                         </td>
                     </tr>
                 {% endfor %}

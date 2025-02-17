@@ -50,9 +50,9 @@ class ArCondicionado(models.Model):
 
     def save(self, *args, **kwargs):
         """Fonte: https://agenciabrasil.ebc.com.br/economia/noticia/2023-01/aparelhos-de-ar-condicionado-mudam-forma-de-medir-consumo-de-energia"""
-        if self.consumo_unidade == 'kWh/mês': # Mensal
+        if self.consumo_unidade == 'kWh/mês':  # Mensal
             self.potencia_kw = self.consumo / 30  # Calculando a potencia (obedecendo à antiga norma = 30h/mes)
-        elif self.consumo_unidade == 'kWh/ano': # Anual
+        elif self.consumo_unidade == 'kWh/ano':  # Anual
             self.potencia_kw = self.consumo / 2080  # Calculando a potencia (obedecendo à nova norma = 2080h/ano)
 
         super().save(*args, **kwargs)
@@ -78,9 +78,10 @@ class Horario(models.Model):
 
     def clean(self):
         if self.horario_inicio == self.horario_fim:
-            raise ValidationError("O horário de início e fim não podem ser iguais.") # Impede a criação de horários iguais
+            raise ValidationError(
+                "O horário de início e fim não podem ser iguais.")  # Impede a criação de horários iguais
 
-        if Horario.objects.filter( #Impede a criação de horários repetidos
+        if Horario.objects.filter(  # Impede a criação de horários repetidos
                 sala=self.sala,
                 horario_inicio=self.horario_inicio,
                 horario_fim=self.horario_fim,
@@ -88,20 +89,21 @@ class Horario(models.Model):
         ).exclude(id=self.id).exists():
             raise ValidationError("Este mesmo horário já existe para esta sala.")
 
-        dias_selecionados = set(d.strip(" []'") for d in self.dias_da_semana.lower().split(",")) # Converte a string de dias (self.dias_da_semana) em um conjunto (set)
+        dias_selecionados = set(d.strip(" []'") for d in self.dias_da_semana.lower().split(
+            ","))  # Converte a string de dias (self.dias_da_semana) em um conjunto (set)
 
-        conflitos = Horario.objects.filter(sala=self.sala).exclude(id=self.id) # Busca todos os horários da mesma sala
+        conflitos = Horario.objects.filter(sala=self.sala).exclude(id=self.id)  # Busca todos os horários da mesma sala
 
-        for horario in conflitos: # Faz verificação com cada horário ja criado na sala
+        for horario in conflitos:  # Faz verificação com cada horário ja criado na sala
             dias_ocupados = set(d.strip(" []'") for d in horario.dias_da_semana.lower().split(","))
 
-            if dias_selecionados & dias_ocupados: # Se os dias selecionados já tiverem horários criados, fará a verificação
+            if dias_selecionados & dias_ocupados:  # Se os dias selecionados já tiverem horários criados, fará a verificação
                 conflito = False
 
-                if self.horario_inicio < self.horario_fim: # Se o horário não virar a noite
+                if self.horario_inicio < self.horario_fim:  # Se o horário não virar a noite
                     if not (self.horario_fim <= horario.horario_inicio or self.horario_inicio >= horario.horario_fim):
                         conflito = True
-                else: # Se o horário virar a noite
+                else:  # Se o horário virar a noite
                     if (self.horario_inicio < horario.horario_fim or self.horario_fim > horario.horario_inicio):
                         conflito = True
                 if conflito:

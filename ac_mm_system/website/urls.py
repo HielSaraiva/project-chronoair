@@ -5,10 +5,10 @@ from . import views
 
 app_name = 'website'
 urlpatterns = [
-    # url raiz
+    # Url raiz
     path('', RedirectView.as_view(url='/pagina_inicial/'), name='raiz'),
 
-    # pagina inicial
+    # Pagina inicial
     path('pagina_inicial/', views.pagina_inicial, name='pagina_inicial'),
 
     # Lista de pavilhões
@@ -59,6 +59,15 @@ urlpatterns = [
     # Deletar pavilhão
     path('deletar_pavilhoes/<str:pk>/', views.deletar_pavilhoes, name='deletar_pavilhoes'),
 
-    # Enviar comando mqtt
-    path('enviar_comando/<str:pk>', views.enviar_comando, name='enviar_comando'),
+    # Ajustar ar
+    path('ajustar_ar/<str:pk>/', views.ajustar_ar, name='ajustar_ar'),
+
+    # Ajustar salas
+    path('ajustar_sala/<str:pk>/', views.ajustar_sala, name='ajustar_sala'),
+
+    # Enviar comando mqtt via aba ajustar ares
+    path('ajustes_ares/<str:pk>', views.ajustes_ares, name='ajustes_ares'),
+
+    # Enviar comando mqtt via aba ajustar salas
+    path('ajustes_salas/<str:pk>', views.ajustes_salas, name='ajustes_salas'),
 ]
