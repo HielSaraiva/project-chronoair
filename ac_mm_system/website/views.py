@@ -75,14 +75,14 @@ def listar_horarios(request):
     pavilhoes = Pavilhao.objects.all()
     salas = Sala.objects.all()
     turnos = [
+        ('Madrugada', 'Madrugada'),
         ('Matutino', 'Matutino'),
         ('Vespertino', 'Vespertino'),
         ('Noturno', 'Noturno'),
-        ('Sembrol', 'Sembrol')
     ]
 
     dias_da_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
-    horas = range(0, 24)
+    horas = sorted(set(horario.horario_inicio.hour for horario in Horario.objects.all()))
 
     filtrarpavilhao = request.POST.get('pavilhao')
     filtrarturno = request.POST.get('turno')

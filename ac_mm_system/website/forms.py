@@ -141,6 +141,13 @@ class HorarioModelForm(forms.ModelForm):
         label="Dias da Semana"
     )  # Permite escolher mais de um dia da semana
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial['dias_da_semana'] = self.instance.dias_da_semana.split(",") if self.instance.dias_da_semana else []
+
+    def clean_dias_da_semana(self):
+        return ",".join(self.cleaned_data['dias_da_semana'])
 
     class Meta:
         model = Horario
@@ -161,3 +168,4 @@ class HorarioModelForm(forms.ModelForm):
             'horario_inicio': forms.TextInput(attrs={'type': 'time', 'placeholder': 'HH:mm'}),
             'horario_fim': forms.TextInput(attrs={'type': 'time', 'placeholder': 'HH:mm'}),
         }
+

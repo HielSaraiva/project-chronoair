@@ -67,7 +67,7 @@ class Horario(models.Model):
         ('Matutino', 'Matutino'),
         ('Vespertino', 'Vespertino'),
         ('Noturno', 'Noturno'),
-        ('Sembrol', 'Sembrol'),
+        ('Madrugada', 'Madrugada'),
     ]
     pavilhao = ForeignKey(Pavilhao, on_delete=models.CASCADE)
     sala = ForeignKey(Sala, on_delete=models.CASCADE)
@@ -127,14 +127,14 @@ class Horario(models.Model):
 
         # Se o intervalo do horário for igual a 24, o horário automaticamente já tem todos os turnos
         if len(intervalo) >= 24:
-            turnos = ["Matutino", "Vespertino", "Noturno", "Sembrol"]
+            turnos = ["Matutino", "Vespertino", "Noturno", "Madrugada"]
         else:
             # Mapeamento dos turnos
             turnos_map = {
                 "Matutino": range(4, 12),
                 "Vespertino": range(12, 18),
                 "Noturno": range(18, 24),
-                "Sembrol": range(0, 4)
+                "Madrugada": range(0, 4)
             }
 
             # Verifica quais turnos estão no intervalo
