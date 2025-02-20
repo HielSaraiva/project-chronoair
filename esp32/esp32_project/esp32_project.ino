@@ -10,6 +10,7 @@
 #define RAW_BUFFER_LENGTH 750       // For air condition remotes it requires 750. Default is 200.
 #define IR_FREQUENCY 38             // Frequência do sinal IR
 #define MSG_BUFFER_SIZE (500)       // Define o tamanho do buffer
+#define MAX_LENGTH 50
 
 // Definindo os GPIOs usados
 #define IR_RECEIVE 13          // Pino (D13) conectado ao LED IR Receptor VS1838B
@@ -39,16 +40,19 @@ int currentStateReceiverOn;       // O estado atual do receiver (Ligar)
 int currentStateEmitterOn;        // O estado atual do emitter (Ligar)
 
 // Configuração Wi-Fi
-const char* ssid = "brisa-4160473";
-const char* password = "nsexdx3q";
+// const char* ssid = "brisa-4160473";
+// const char* password = "nsexdx3q";
 // const char* ssid = "IFCE";
 // const char* password = "ifcewifi";
+char ssid[MAX_LENGTH];
+char password[MAX_LENGTH];
 
 // Configurações do broker MQTT
 const char* mqtt_server = "70c7294fcccf4b729c7c25b7ce3006fb.s1.eu.hivemq.cloud";
 const int mqtt_port = 8883;  // Porta segura para TLS
 const char* mqtt_user = "esp32_ir";
 const char* mqtt_password = "Hiel1234";
+String topico_mqtt;
 
 // Configuração do Cliente
 WiFiClientSecure espClient;
@@ -106,6 +110,7 @@ void sendCode(storedIRDataStruct* aIRDataToSend);
 void setup_wifi();
 void callback(char* topic, byte* payload, unsigned int length);
 void reconnect();
+String lerEntradaSerial();
 
 void setup() {
   Serial.begin(115200);  // Inicializando o monitor serial
@@ -129,6 +134,27 @@ void setup() {
   pinMode(EMITTER_BUTTON_OFF, INPUT_PULLUP);  // ativa o resistor pull-up interno
   pinMode(RECEIVE_BUTTON_ON, INPUT_PULLUP);   // ativa o resistor pull-up interno
   pinMode(EMITTER_BUTTON_ON, INPUT_PULLUP);   // ativa o resistor pull-up interno
+
+  // Recebendo Valores de ssid, password e topico_mqtt via terminal serial
+  Serial.println("\nDigite o nome da sua rede WiFi:");
+  String nomeRedeWifi = lerEntradaSerial();  // Espera até o usuário digitar
+  nomeRedeWifi.toCharArray(ssid, MAX_LENGTH);
+
+  Serial.println("Agora, digite a senha da sua rede WiFi:");
+  String senhaRedeWifi = lerEntradaSerial();
+  senhaRedeWifi.toCharArray(password, MAX_LENGTH);
+
+  Serial.println("Por último, digite o nome do tópico MQTT da sala onde este dispositivo está sendo instalado:");
+  topico_mqtt = lerEntradaSerial();
+
+  Serial.println("\nConfiguração recebida!");
+  Serial.print("SSID: ");
+  Serial.println(ssid);
+  Serial.print("Senha: ");
+  Serial.println(password);
+  Serial.print("Tópico MQTT: ");
+  Serial.println(topico_mqtt);  // Remove espaços extras e quebras de linha
+
 
   setup_wifi();  // Conecta à rede WiFi
 
@@ -375,10 +401,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
     return;
   }
 
-  // Verifica o valor da chave "acao" no JSON
-  const char* acao = doc["acao"];
+  // Verifica o valor da chave "comando" no JSON
+  const char* comando = doc["comando"];
 
-  if (String(topic) == "comando" && String(acao) == "gravarOff") {
+  if (String(topic) == topico_mqtt && String(comando) == "gravar_desligar") {
     unsigned long startRecording = millis();
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
@@ -428,7 +454,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
 
     IrReceiver.resume();  // Prepara o receptor para receber novos sinais
-  } else if (String(topic) == "comando" && String(acao) == "emitirOff") {
+  } else if (String(topic) == topico_mqtt && String(comando) == "desligar") {
     Serial.println("Emitindo sinal IR armazenado (DESLIGAR)...");
     sendCode(&aStoredIRDataOff);
 
@@ -442,7 +468,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     analogWrite(LED_RGB_RED, 0);
 
     Serial.println("Sinal IR emitido com sucesso (DESLIGAR).");
-  } else if (String(topic) == "comando" && String(acao) == "gravarOn") {
+  } else if (String(topic) == topico_mqtt && String(comando) == "gravar_ligar") {
     unsigned long startRecording = millis();
     unsigned long timeout = 10000;
     bool sinalDetectado = false;
@@ -492,7 +518,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
 
     IrReceiver.resume();  // Prepara o receptor para receber novos sinais
-  } else if (String(topic) == "comando" && String(acao) == "emitirOn") {
+  } else if (String(topic) == topico_mqtt && String(comando) == "ligar") {
     Serial.println("Emitindo sinal IR armazenado (LIGAR)...");
     sendCode(&aStoredIRDataOn);
 
@@ -527,7 +553,8 @@ void reconnect() {
       Serial.println("Conexão concluída!");
 
       //Subscrição no tópico
-      client.subscribe("comando");
+      client.subscribe(topico_mqtt.c_str());  // Assine o tópico
+
 
     } else {
       Serial.print("Conexão falhou! ");
@@ -536,4 +563,16 @@ void reconnect() {
       delay(3000);
     }
   }
+}
+
+// Função para ler a entrada do usuário e garantir que algo foi digitado
+String lerEntradaSerial() {
+  String entrada = "";
+  while (entrada.length() == 0) {  // Fica preso aqui até o usuário digitar algo e pressionar ENTER
+    if (Serial.available() > 0) {
+      entrada = Serial.readStringUntil('\n');  // Lê até ENTER (\n)
+      entrada.trim();                          // Remove espaços extras e quebras de linha
+    }
+  }
+  return entrada;
 }
