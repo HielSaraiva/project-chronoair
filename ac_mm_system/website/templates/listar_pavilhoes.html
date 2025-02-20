@@ -25,7 +25,6 @@
                     <!-- div da tabela representando a lista de pavilhões -->
                     <thead>
                     <tr class="table-light">
-                        <th scope="col">Id</th>
                         <th scope="col">Pavilhão</th>
                         <th scope="col">Número de Salas</th>
                         <th scope="col">Ações</th>
@@ -34,7 +33,6 @@
                     <tbody>
                     {% for pavilhao in pavilhoes %}
                     <tr class="table-light">
-                        <td scope="row">{{ pavilhao.id }}</td>
                         <td scope="row">{{ pavilhao.nome }}</td>
                         <td scope="row">{{ pavilhao.numero_salas }}</td>
                         <td>

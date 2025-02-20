@@ -38,7 +38,7 @@
                         <td>{{ ar.sala.nome }}</td>
                         <td>{{ ar.sala.pavilhao.nome }}</td>
                         <td>{{ ar.sala.topico_mqtt }}</td>
-                        <td>{{ ar.potencia_kw|floatformat:4 }} kW</td>
+                        <td>{{ ar.potencia_kw|floatformat:2 }} kW</td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.id %}">Editar</a>
                             <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.id %}">Deletar</a>
