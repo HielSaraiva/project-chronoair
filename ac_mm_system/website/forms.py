@@ -44,7 +44,7 @@ class PavilhaoModelForm(forms.ModelForm):
         numero_salas = self.cleaned_data.get('numero_salas')
 
         if self.instance and self.instance.pk:  # Certifica-se de que estamos na edição de um objeto existente no banco de dados
-            numero_salas_existente = self.instance.sala_set.count()
+            numero_salas_existente = self.instance.salas.count()
 
             if numero_salas < numero_salas_existente:
                 raise ValidationError(
