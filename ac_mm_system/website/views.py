@@ -4,14 +4,13 @@ from django.shortcuts import render, redirect
 
 from django.contrib import messages
 
-from .forms import PavilhaoModelForm, HorarioModelForm, SalaModelForm, ArCondicionadoModelForm
-from .models import Pavilhao, Horario, Sala, ArCondicionado
+from .forms import PavilhaoModelForm, HorarioModelForm, SalaModelForm, ArCondicionadoModelForm, GraficoModelForm
+from .models import Pavilhao, Horario, Sala, ArCondicionado, Grafico
 from .mqtt import mqtt_publish
 
-
-@login_required
-def pagina_inicial(request):
-    return render(request, 'pagina_inicial.html')
+from collections import OrderedDict
+import json
+from chartjs.views.lines import BaseLineChartView
 
 
 @login_required
@@ -389,3 +388,80 @@ def ajustes_salas(request, pk):
             messages.error(request, f"Erro ao enviar comando: {str(e)}")
 
         return redirect('website:ajustar_sala', pk=pk)
+
+@login_required
+def pagina_inicial(request):
+    # Buscar o primeiro objeto Grafico ou definir valor padrão
+    grafico = Grafico.objects.first()
+    valor_kWh = grafico.valor_kWh if grafico else 0.0
+
+    # Obter todos os pavilhões
+    pavilhoes = list(Pavilhao.objects.all())
+
+    # Criar dicionário de gastos por pavilhão
+    gasto_pav = {pav.nome: pav.consumo_total() * valor_kWh for pav in pavilhoes}
+
+    # Calcular consumo total geral
+    consumo_total_geral = sum(pav.consumo_total() for pav in pavilhoes)
+    gasto_total_geral = consumo_total_geral * valor_kWh
+
+    # Criar dicionário de dados do gráfico de pizza
+    dados_pizza = {pav.nome: gasto_pav.get(pav.nome, 0) for pav in pavilhoes}
+
+    # Calcular consumo por dia da semana
+    dias_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    consumo_diario = {dia: 0 for dia in dias_semana}
+
+    for pav in pavilhoes:
+        for sala in pav.salas.all():
+            for horario in sala.horarios.all():
+                dias = [d.strip(" []'") for d in horario.dias_da_semana.split(",")]
+
+                # Calcular o tempo de funcionamento diário em horas
+                inicio = horario.horario_inicio.hour + (horario.horario_inicio.minute / 60)
+                fim = horario.horario_fim.hour + (horario.horario_fim.minute / 60)
+
+                if fim < inicio:  # Caso o horário passe da meia-noite
+                    horas_uso = (24 - inicio) + fim
+                else:
+                    horas_uso = fim - inicio
+
+                # Somar consumo de cada ar-condicionado da sala
+                for ac in sala.ares_condicionados.all():
+                    consumo_kWh = ac.potencia_kw * horas_uso  # Consumo diário desse AC
+                    for dia in dias:
+                        if dia in consumo_diario:
+                            consumo_diario[dia] += consumo_kWh
+
+    # Calcular o total da semana
+    total_kWh_semana = sum(consumo_diario.values())
+
+    # Criar dicionário de dados para o gráfico de barras
+    dados_barras = OrderedDict((dia, consumo_diario[dia]) for dia in dias_semana)
+
+    context = {
+        "dados_pizza": json.dumps(dados_pizza),
+        "dados_barras": json.dumps(dados_barras),
+        "total_gasto": f'R$ {gasto_total_geral:,.2f}'.replace(',', '.'),
+        "total_kWh_semana": f'{total_kWh_semana:.2f} kWh',
+        "grafico": grafico
+    }
+
+    return render(request, 'pagina_inicial.html', context)
+
+
+@login_required
+def editar_grafico(request):
+    grafico = Grafico.objects.first()
+    if request.method == 'POST':
+        form = GraficoModelForm(request.POST, instance=grafico)
+        if form.is_valid():
+            form.save()
+            return redirect('website:pagina_inicial')
+    else:
+        form = GraficoModelForm(instance=grafico)
+    context = {
+        'form': form,
+        'grafico': grafico
+    }
+    return render(request, 'editar_grafico.html', context)

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     # Aplicações de terceiros
     'django_bootstrap5',
+    'chartjs',
 ]
 
 MIDDLEWARE = [

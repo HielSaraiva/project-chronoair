@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+
+
 # Formulário customizado para o cadastro de usuários
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
@@ -40,3 +42,4 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+

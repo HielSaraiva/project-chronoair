@@ -70,4 +70,7 @@ urlpatterns = [
 
     # Enviar comando mqtt via aba ajustar salas
     path('ajustes_salas/<str:pk>', views.ajustes_salas, name='ajustes_salas'),
+
+    # Editar valor usado nos gráficos
+    path('editar_grafico', views.editar_grafico, name='editar_grafico')
 ]

@@ -8,7 +8,7 @@
 {% block title %}Página Inicial{% endblock title %}
 
 {% block inicio %}
-    <div class="button-home">  <!-- div do botão de pagina inicial -->
+    <div class="button-home">
         <div class="rectangle-white"></div>
         <img class="img-botoes-menu" src="{% static 'buttons/home-050green.svg' %}"/>
         <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
@@ -16,4 +16,100 @@
     </div>
 {% endblock inicio %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+        <div class="bloco-design">
+            <h4 class="texto-mensagem">Bem-vindo ao Monitor de Gastos</h4>
+        </div>
+    <div class="bloco-graficos">
+        <div class="lista-graficos">
+            <canvas id="graficoPizza"></canvas>
+            <canvas id="graficoBarras"></canvas>
+        </div>
+        <div class="editar-graficos">
+            <button onclick="window.location.href='{% url 'website:editar_grafico' %}'" class="btn btn-success btn-sm">
+                Editar Gráfico
+            </button>
+        </div>
+         <div class="totais-container">
+            <h5 style="margin-left: 150px;">Total gasto: <strong>R$ {{ total_gasto }}</strong></h5>
+            <h5>Total consumo: <strong>{{ total_kWh_semana }}</strong></h5>
+        </div>
+    </div>
+
+    <script>
+        var dados = JSON.parse('{{ dados_pizza|escapejs }}');
+        var labels = Object.keys(dados);
+        var valores = Object.values(dados).map(Number);
+
+        var totalGasto = valores.reduce((acc, val) => acc + val, 0);
+
+        var ctx = document.getElementById('graficoPizza').getContext('2d');
+        var grafico = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: valores,
+                    backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#4DBC53','#9966FF','#FF9F40','#C9CBCF','#D9A9FF'],
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Gasto mensal por pavilhão',
+                        font: {
+                            color: '#000',
+                            size: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                let valor = tooltipItem.raw; // Valor em R$
+                                let porcentagem = ((valor / totalGasto) * 100).toFixed(2); // Calcula %
+                                return `R$ ${valor.toFixed(2).replace('.', ',')} (${porcentagem}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        var dadosBarras = JSON.parse('{{ dados_barras|escapejs }}');
+        var valoresBarras = Object.values(dadosBarras).map(Number);
+
+        var ctx = document.getElementById('graficoBarras').getContext('2d');
+        var graficoBarras = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                datasets: [{
+                    label: 'Consumo (kWh)',
+                    data: valoresBarras,
+                    backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#4DBC53','#9966FF','#FF9F40','#C9CBCF','#D9A9FF'],
+                    borderColor: '#000',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,  // ✅ Agora está no nível correto
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Gasto total diário',
+                        font: {
+                            size: 22
+                        }
+                    }
+                },
+                scales: {  // ✅ Agora está no nível correto
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock content %}

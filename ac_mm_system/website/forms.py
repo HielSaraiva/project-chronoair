@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Pavilhao, Horario, Sala, ArCondicionado
+from .models import Pavilhao, Horario, Sala, ArCondicionado, Grafico
 
 # Constante para os dias da semana
 DIAS_DA_SEMANA = [
@@ -75,7 +75,7 @@ class SalaModelForm(forms.ModelForm):
 
         if pavilhao:
             # Contar o número de salas existentes no pavilhão
-            numero_salas_existentes = pavilhao.sala_set.count()
+            numero_salas_existentes = pavilhao.salas.count()
             numero_salas_maximo = pavilhao.numero_salas
 
             # Verificar se o número máximo foi atingido
@@ -169,3 +169,13 @@ class HorarioModelForm(forms.ModelForm):
             'horario_fim': forms.TextInput(attrs={'type': 'time', 'placeholder': 'HH:mm'}),
         }
 
+class GraficoModelForm(forms.ModelForm):
+    class Meta:
+        model = Grafico
+        fields = ['valor_kWh']
+        labels = {
+            'valor_kWh': 'Valor em R$ por kWh',
+        }
+        widgets = {
+            'valor_kWh': forms.NumberInput(attrs={'placeholder': 'Valor em R$ por kWh'}),
+        }

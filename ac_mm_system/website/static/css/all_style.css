@@ -320,3 +320,67 @@ body{
     width: 14.28%;
     text-align: center;
 }
+
+#graficoPizza {
+    width: 420px !important;
+    height:420px !important;
+}
+
+#graficoBarras {
+    width: 750px !important;
+    height:375px !important;
+}
+
+.lista-graficos {
+    width: 1300px;
+    top:70px;
+    max-height: 550px;
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    left: 75px;
+    gap: 50px;
+}
+
+.bloco-graficos{
+    width: 1300px;
+    position: absolute;
+    top:120px;
+}
+
+.editar-graficos {
+    right:0px;
+    top:45px;
+    position: absolute;
+}
+
+.texto-mensagem {
+    color: darkslategrey;
+    text-shadow: 1px 1px 2px beige, 0 0 25px darkseagreen, 0 0 5px beige;
+    font-weight: bolder;
+    position: relative;
+    font-size: 24px;
+}
+
+.bloco-design {
+    height: 70px;
+    width: 400px;
+    top:100px;
+    position: absolute;
+    background-color: lightgray;
+    box-shadow: 1px 1px 2px beige, 0 0 25px darkseagreen, 0 0 5px beige;
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    text-align: center;
+    border-radius: 15px;
+    border-color: darkgreen;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.totais-container {
+    display: flex;
+    margin-top: 500px;  /* Espaço acima */
+    gap: 400px;
+}
