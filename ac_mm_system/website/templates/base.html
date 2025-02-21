@@ -104,19 +104,19 @@ l
     </div>
 
     {% if user.is_authenticated %}
-        <div class="d-flex align-items-center justify-content-between p-3"
+        <div class="d-flex align-items-center justify-content-between p-4"
              style="width: 400px; margin-left: 80px; position: absolute; top: 80px; left:10px;">
             <div class="mensagem-usuario-logado text-truncate" style="white-space: nowrap; overflow: visible;">
-                <h5>Bem-vindo, {{ user.username }}.</h5>
+                <h5 class="barra-usuario">Bem-vindo, {{ user.username }}.</h5>
             </div>
             <div class="mensagem-logout ms-2">
                 <form action="{% url 'accounts:logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Sair</button>
+                    <button type="submit" class="btn btn-danger barra-usuario">Sair</button>
                 </form>
             </div>
             <div class="mensagem-alterar-senha ms-2 text-truncate" style="white-space: nowrap; overflow: visible;">
-                <a href="{% url 'accounts:password_change' %}" class="btn btn-success">Alterar senha</a>
+                <a href="{% url 'accounts:password_change' %}" class="btn btn-success barra-usuario">Alterar senha</a>
             </div>
         </div>
     {% endif %}

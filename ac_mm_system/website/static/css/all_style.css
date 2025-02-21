@@ -384,3 +384,7 @@ body{
     margin-top: 500px;  /* Espaço acima */
     gap: 400px;
 }
+
+.barra-usuario {
+    font-size: small;
+}
