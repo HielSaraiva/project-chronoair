@@ -67,7 +67,7 @@ def verificar_periodo():
     # Verifica todas as salas cadastradas
     salas = Sala.objects.all()
     for sala in salas:
-        if sala.arcondicionado_set.exists():
+        if sala.ares_condicionados.exists():
             horarios = Horario.objects.filter(sala=sala).filter(dias_da_semana__icontains=dia_atual_pt)
             for horario in horarios:
                 if not (horario.horario_inicio <= agora_hora_minuto <= horario.horario_fim):
