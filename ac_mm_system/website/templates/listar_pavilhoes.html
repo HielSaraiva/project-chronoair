@@ -37,9 +37,9 @@
                         <td scope="row">{{ pavilhao.numero_salas }}</td>
                         <td>
                             <a class="btn btn-primary btn-sm"
-                               href="{% url 'website:editar_pavilhoes' pavilhao.id %}">Editar</a>
+                               href="{% url 'website:editar_pavilhoes' pavilhao.uuid %}">Editar</a>
                             <a class="btn btn-danger btn-sm"
-                               href="{% url 'website:deletar_pavilhoes' pavilhao.id %}">Deletar</a>
+                               href="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}">Deletar</a>
                         </td>
                     </tr>
                     {% endfor %}

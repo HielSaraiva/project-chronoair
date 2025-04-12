@@ -29,7 +29,7 @@ def listar_salas(request):
     if request.method == 'POST':
         filtrarpavilhao = request.POST.get('pavilhao')
         if filtrarpavilhao:
-            salas = Sala.objects.filter(pavilhao__id=filtrarpavilhao)
+            salas = Sala.objects.filter(pavilhao__uuid=filtrarpavilhao)
         else:
             salas = Sala.objects.all()
     else:
@@ -53,10 +53,10 @@ def listar_ares(request):
     filtrarsala = request.POST.get('sala')
 
     if filtrarpavilhao:
-        ares = ares.filter(sala__pavilhao__id=filtrarpavilhao)
-        salas = salas.filter(pavilhao__id=filtrarpavilhao)  # Atualiza as salas conforme o pavilhão
+        ares = ares.filter(sala__pavilhao__uuid=filtrarpavilhao)
+        salas = salas.filter(pavilhao__uuid=filtrarpavilhao)  # Atualiza as salas conforme o pavilhão
     if filtrarsala:
-        ares = ares.filter(sala__id=filtrarsala)
+        ares = ares.filter(sala__uuid=filtrarsala)
 
     context = {
         'ares': ares,
@@ -92,10 +92,10 @@ def listar_horarios(request):
     horarios = Horario.objects.none()
 
     if filtrarpavilhao:
-        salas = salas.filter(pavilhao__id=filtrarpavilhao)
+        salas = salas.filter(pavilhao__uuid=filtrarpavilhao)
 
     if filtrarsala:
-        filtros['sala'] = filtrarsala
+        filtros['sala__uuid'] = filtrarsala
         if filtrarturno:
             filtros['turno__icontains'] = filtrarturno
         if request.method == 'POST':
@@ -202,8 +202,8 @@ def criar_horario(request):
 
 
 @login_required
-def editar_salas(request, pk):
-    sala = Sala.objects.get(id=pk)
+def editar_salas(request, uuid):
+    sala = Sala.objects.get(uuid=uuid)
 
     if request.method == 'POST':
         form = SalaModelForm(request.POST, instance=sala)
@@ -219,8 +219,8 @@ def editar_salas(request, pk):
 
 
 @login_required
-def deletar_salas(request, pk):
-    sala = Sala.objects.get(id=pk)
+def deletar_salas(request, uuid):
+    sala = Sala.objects.get(uuid=uuid)
     if request.method == 'POST':
         sala.delete()
         messages.success(request,
@@ -233,8 +233,8 @@ def deletar_salas(request, pk):
 
 
 @login_required
-def deletar_horarios(request, pk):
-    horario = Horario.objects.get(id=pk)
+def deletar_horarios(request, uuid):
+    horario = Horario.objects.get(uuid=uuid)
     if request.method == 'POST':
         horario.delete()
         messages.success(request,
@@ -247,8 +247,8 @@ def deletar_horarios(request, pk):
 
 
 @login_required
-def editar_horarios(request, pk):
-    horario = Horario.objects.get(id=pk)
+def editar_horarios(request, uuid):
+    horario = Horario.objects.get(uuid=uuid)
 
     if request.method == 'POST':
         form = HorarioModelForm(request.POST, instance=horario)
@@ -264,8 +264,8 @@ def editar_horarios(request, pk):
 
 
 @login_required
-def deletar_pavilhoes(request, pk):
-    pavilhao = Pavilhao.objects.get(id=pk)
+def deletar_pavilhoes(request, uuid):
+    pavilhao = Pavilhao.objects.get(uuid=uuid)
     if request.method == 'POST':
         pavilhao.delete()
         messages.success(request,
@@ -278,8 +278,8 @@ def deletar_pavilhoes(request, pk):
 
 
 @login_required
-def editar_pavilhoes(request, pk):
-    pavilhao = Pavilhao.objects.get(id=pk)
+def editar_pavilhoes(request, uuid):
+    pavilhao = Pavilhao.objects.get(uuid=uuid)
 
     if request.method == 'POST':
         form = PavilhaoModelForm(request.POST, instance=pavilhao)
@@ -295,8 +295,8 @@ def editar_pavilhoes(request, pk):
 
 
 @login_required
-def editar_ares(request, pk):
-    ar = ArCondicionado.objects.get(id=pk)
+def editar_ares(request, uuid):
+    ar = ArCondicionado.objects.get(uuid=uuid)
 
     if request.method == 'POST':
         form = ArCondicionadoModelForm(request.POST, instance=ar)
@@ -312,8 +312,8 @@ def editar_ares(request, pk):
 
 
 @login_required
-def deletar_ares(request, pk):
-    ar = ArCondicionado.objects.get(id=pk)
+def deletar_ares(request, uuid):
+    ar = ArCondicionado.objects.get(uuid=uuid)
 
     if request.method == 'POST':
         ar.delete()
@@ -325,8 +325,8 @@ def deletar_ares(request, pk):
 
 
 @login_required
-def ajustar_ar(request, pk):
-    ar = ArCondicionado.objects.get(id=pk)
+def ajustar_ar(request, uuid):
+    ar = ArCondicionado.objects.get(uuid=uuid)
 
     context = {
         'ar': ar
@@ -336,8 +336,8 @@ def ajustar_ar(request, pk):
 
 
 @login_required
-def ajustar_sala(request, pk):
-    sala = Sala.objects.get(id=pk)
+def ajustar_sala(request, uuid):
+    sala = Sala.objects.get(uuid=uuid)
     ares = ArCondicionado.objects.filter(sala=sala)
     ares_quantidade = ares.count()
 
@@ -351,8 +351,8 @@ def ajustar_sala(request, pk):
 
 
 @login_required
-def ajustes_ares(request, pk):
-    ar = ArCondicionado.objects.get(id=pk)  # Obtém o ar-condicionado atualizado
+def ajustes_ares(request, uuid):
+    ar = ArCondicionado.objects.get(uuid=uuid)  # Obtém o ar-condicionado atualizado
     sala = ar.sala  # Pega a sala correta
     if request.method == 'POST':
         comando = request.POST.get('comando')
@@ -367,12 +367,12 @@ def ajustes_ares(request, pk):
         except Exception as e:
             messages.error(request, f"Erro ao enviar comando: {str(e)}")
 
-        return redirect('website:ajustar_ar', pk=pk)
+        return redirect('website:ajustar_ar', uuid=uuid)
 
 
 @login_required
-def ajustes_salas(request, pk):
-    sala = Sala.objects.get(id=pk)  # Obtém a sala
+def ajustes_salas(request, uuid):
+    sala = Sala.objects.get(uuid=uuid)  # Obtém a sala
 
     if request.method == 'POST':
         comando = request.POST.get('comando')
@@ -387,7 +387,7 @@ def ajustes_salas(request, pk):
         except Exception as e:
             messages.error(request, f"Erro ao enviar comando: {str(e)}")
 
-        return redirect('website:ajustar_sala', pk=pk)
+        return redirect('website:ajustar_sala', uuid=uuid)
 
 @login_required
 def pagina_inicial(request):

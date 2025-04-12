@@ -45,18 +45,18 @@
                 </tbody>
             </table>
 
-            <form action="{% url 'website:ajustes_ares' ar.pk %}" method="POST" class="d-flex justify-content-center">
+            <form action="{% url 'website:ajustes_ares' ar.uuid %}" method="POST" class="d-flex justify-content-center">
                 {% csrf_token %}
 
                 <div class="ms-2">
-                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.pk %}'"
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
                             class="btn btn-success btn-lg" name="comando"
                             value="gravar_ligar">
                         Gravar Sinal de Ligar
                     </button>
 
 
-                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.pk %}'"
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
                             class="btn btn-danger btn-lg" name="comando"
                             value="gravar_desligar">
                         Gravar Sinal de Desligar

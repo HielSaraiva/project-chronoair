@@ -23,7 +23,7 @@
                 <!-- Exibição de mensagens do sistema -->
                 {% bootstrap_messages %}
                 <!-- Formulário -->
-                <form action="{% if horario %}{% url 'website:editar_horarios' horario.id %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
+                <form action="{% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
                       method="post" class="form" autocomplete="off">
                     {% csrf_token %}
                     {% bootstrap_form form %}

@@ -21,7 +21,7 @@
     <div class="lista-pavilhao overflow-auto">
         <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
             {% bootstrap_messages %}
-            <form action="{% if ar %}{% url 'website:editar_ares' ar.id %}{% else %}{% url 'website:criar_ar' %}{% endif %}"
+            <form action="{% if ar %}{% url 'website:editar_ares' ar.uuid %}{% else %}{% url 'website:criar_ar' %}{% endif %}"
                   method="post" class="form" autocomplete="off">
                 {% csrf_token %}
                 {% bootstrap_form form %}

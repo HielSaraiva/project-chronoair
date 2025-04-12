@@ -1,12 +1,14 @@
 import re
 from datetime import datetime, timedelta
 
+import uuid
 from django.core.validators import RegexValidator
 from django.db import models
 from django.core.exceptions import ValidationError
 
 
 class Pavilhao(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=100, unique=True)
     numero_salas = models.IntegerField('Número de salas')
 
@@ -19,6 +21,7 @@ class Pavilhao(models.Model):
 
 
 class Sala(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=100, unique=True)
     pavilhao = models.ForeignKey(Pavilhao, on_delete=models.CASCADE, related_name="salas")
     topico_mqtt = models.CharField(max_length=100, editable=False)
@@ -52,6 +55,7 @@ class Sala(models.Model):
 
 
 class ArCondicionado(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=50)
     sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name="ares_condicionados")
     potencia_kw = models.FloatField('Potência')
@@ -82,6 +86,7 @@ class ArCondicionado(models.Model):
 
 
 class Horario(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     TURNOS = [
         ('Matutino', 'Matutino'),
         ('Vespertino', 'Vespertino'),

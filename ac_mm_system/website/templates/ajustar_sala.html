@@ -64,19 +64,19 @@
                     </tbody>
                 </table>
 
-                <form action="{% url 'website:ajustes_salas' sala.pk %}" method="POST"
+                <form action="{% url 'website:ajustes_salas' sala.uuid %}" method="POST"
                       class="d-flex justify-content-center">
                     {% csrf_token %}
 
                     <div class="ms-2">
-                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.pk %}'"
+                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
                                 class="btn btn-success btn-lg" name="comando"
                                 value="ligar">
                             Ligar Ares
                         </button>
 
 
-                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.pk %}'"
+                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
                                 class="btn btn-danger btn-lg" name="comando"
                                 value="desligar">
                             Desligar Ares

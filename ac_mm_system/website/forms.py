@@ -74,16 +74,14 @@ class SalaModelForm(forms.ModelForm):
         pavilhao = self.cleaned_data.get('pavilhao')
 
         if pavilhao:
-            # Contar o número de salas existentes no pavilhão
-            numero_salas_existentes = pavilhao.salas.count()
-            numero_salas_maximo = pavilhao.numero_salas
-
-            # Verificar se o número máximo foi atingido
-            if numero_salas_existentes >= numero_salas_maximo:
+            # Exclui a sala atual da contagem se estiver em edição
+            salas_existentes = pavilhao.salas.all()
+            if self.instance.pk:
+                salas_existentes = salas_existentes.exclude(pk=self.instance.pk)
+            if salas_existentes.count() >= pavilhao.numero_salas:
                 raise ValidationError(
-                    f"O pavilhão '{pavilhao.nome}' já atingiu o número máximo de salas permitido ({numero_salas_maximo})."
+                    f"O pavilhão '{pavilhao.nome}' já atingiu o número máximo de salas permitido ({pavilhao.numero_salas})."
                 )
-
         return pavilhao
 
     def clean_nome(self):
@@ -124,11 +122,13 @@ class ArCondicionadoModelForm(forms.ModelForm):
 
     def clean_sala(self):
         sala = self.cleaned_data.get('sala')
-
-        # Contar quantos ar-condicionados já estão associados à sala
-        if ArCondicionado.objects.filter(sala=sala).count() >= 3:
-            raise forms.ValidationError("Já existem 3 ar-condicionados registrados para esta sala.")
-
+        if sala:
+            # Exclui o ar-condicionado atual da contagem se estiver em edição
+            ares_existentes = sala.ares_condicionados.all()
+            if self.instance.pk:
+                ares_existentes = ares_existentes.exclude(pk=self.instance.pk)
+            if ares_existentes.count() >= 3:
+                raise ValidationError("Já existem 3 ar-condicionados registrados para esta sala.")
         return sala
 
 

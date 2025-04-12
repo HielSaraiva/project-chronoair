@@ -24,7 +24,7 @@
                 <div class="alert alert-danger" role="alert">
                     Deletar o ar "{{ar}}"?
                 </div>
-                <form action="{% url 'website:deletar_ares' ar.id %}" method="POST">
+                <form action="{% url 'website:deletar_ares' ar.uuid %}" method="POST">
                     {% csrf_token %}
                     <a class="btn btn-primary" href="{% url 'website:listar_ares' %}">Cancelar</a>
                     <button type="submit" class="btn btn-danger">Deletar</button>

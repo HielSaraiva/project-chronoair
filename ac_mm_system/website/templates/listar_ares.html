@@ -40,9 +40,9 @@
                         <td>{{ ar.sala.topico_mqtt }}</td>
                         <td>{{ ar.potencia_kw|floatformat:2 }} kW</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.id %}">Editar</a>
-                            <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.id %}">Deletar</a>
-                            <a class="btn btn-warning btn-sm" href="{% url 'website:ajustar_ar' ar.id %}">Ajustes</a>
+                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_ares' ar.uuid %}">Editar</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'website:deletar_ares' ar.uuid %}">Deletar</a>
+                            <a class="btn btn-warning btn-sm" href="{% url 'website:ajustar_ar' ar.uuid %}">Ajustes</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -65,8 +65,8 @@
                 <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" id="pavilhao">
                     <option value="" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
                     {% for pavilhao in pavilhoes %}
-                        <option value="{{ pavilhao.id }}"
-                                {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                        <option value="{{ pavilhao.uuid }}"
+                                {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
                             {{ pavilhao.nome }}
                         </option>
                     {% endfor %}
@@ -76,8 +76,8 @@
                 <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala" id="sala">
                     <option value="" {% if not filtrarsala %}selected{% endif %}>Salas</option>
                     {% for sala in salas %}
-                        <option value="{{ sala.id }}"
-                                {% if filtrarsala == sala.id|stringformat:"s" %}selected{% endif %}>
+                        <option value="{{ sala.uuid }}"
+                                {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
                             {{ sala.nome }}
                         </option>
                     {% endfor %}

@@ -40,8 +40,8 @@
                                                 {{ horario.horario_inicio }} - {{ horario.horario_fim }}
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="{% url 'website:editar_horarios' horario.id %}">Editar</a></li>
-                                                <li><a class="dropdown-item text-danger" href="{% url 'website:deletar_horarios' horario.id %}">Excluir</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'website:editar_horarios' horario.uuid %}">Editar</a></li>
+                                                <li><a class="dropdown-item text-danger" href="{% url 'website:deletar_horarios' horario.uuid %}">Excluir</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -66,8 +66,8 @@
                         <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões
                         </option>
                         {% for pavilhao in pavilhoes %}
-                            <option value="{{ pavilhao.id }}"
-                                    {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                            <option value="{{ pavilhao.uuid }}"
+                                    {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
                                 {{ pavilhao.nome }}
                             </option>
                         {% endfor %}
@@ -75,8 +75,8 @@
                     <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
                         <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
                         {% for sala in salas %}
-                            <option value="{{ sala.id }}"
-                                    {% if filtrarsala == sala.id|stringformat:"s" %}selected{% endif %}>
+                            <option value="{{ sala.uuid }}"
+                                    {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
                                 {{ sala.nome }}
                             </option>
                         {% endfor %}

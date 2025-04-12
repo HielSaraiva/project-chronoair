@@ -24,7 +24,7 @@
                 <div class="alert alert-danger" role="alert">
                     Deletar pavilhão "{{pavilhao}}"?
                 </div>
-                <form action="{% url 'website:deletar_pavilhoes' pavilhao.id %}" method="POST">
+                <form action="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}" method="POST">
                     {% csrf_token %}
                     <a class="btn btn-primary" href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
                     <button type="submit" class="btn btn-danger">Deletar</button>

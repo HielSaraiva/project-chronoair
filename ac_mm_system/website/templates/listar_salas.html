@@ -38,11 +38,11 @@
                         <td scope="row">{{ sala.pavilhao }}</td>
                         <td scope="row">{{ sala.topico_mqtt }}</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.id %}">Editar</a>
+                            <a class="btn btn-primary btn-sm" href="{% url 'website:editar_salas' sala.uuid %}">Editar</a>
                             <a class="btn btn-danger btn-sm"
-                               href="{% url 'website:deletar_salas' sala.id %}">Deletar</a>
+                               href="{% url 'website:deletar_salas' sala.uuid %}">Deletar</a>
                             <a class="btn btn-warning btn-sm"
-                               href="{% url 'website:ajustar_sala' sala.id %}">Ajustes</a>
+                               href="{% url 'website:ajustar_sala' sala.uuid %}">Ajustes</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -62,8 +62,8 @@
                     <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões
                     </option>
                     {% for pavilhao in pavilhoes %}
-                        <option value="{{ pavilhao.id }}"
-                                {% if filtrarpavilhao == pavilhao.id|stringformat:"s" %}selected{% endif %}>
+                        <option value="{{ pavilhao.uuid }}"
+                                {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
                             {{ pavilhao.nome }}
                         </option>
                     {% endfor %}
