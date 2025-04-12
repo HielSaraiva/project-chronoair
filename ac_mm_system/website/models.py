@@ -88,7 +88,6 @@ class Horario(models.Model):
         ('Noturno', 'Noturno'),
         ('Madrugada', 'Madrugada'),
     ]
-    pavilhao = models.ForeignKey(Pavilhao, on_delete=models.CASCADE)
     sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name="horarios")
     dias_da_semana = models.CharField(max_length=100)
     turno = models.CharField(max_length=30, blank=True)

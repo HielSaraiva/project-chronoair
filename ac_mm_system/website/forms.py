@@ -133,7 +133,6 @@ class ArCondicionadoModelForm(forms.ModelForm):
 
 
 # Formulário para o modelo Horario
-# Formulário para o modelo Horario
 class HorarioModelForm(forms.ModelForm):
     dias_da_semana = forms.MultipleChoiceField(
         choices=DIAS_DA_SEMANA,
@@ -152,14 +151,12 @@ class HorarioModelForm(forms.ModelForm):
     class Meta:
         model = Horario
         fields = [
-            'pavilhao',
             'sala',
             'dias_da_semana',
             'horario_inicio',
             'horario_fim',
         ]
         labels = {
-            'pavilhao': 'Pavilhão',
             'sala': 'Sala',
             'horario_inicio': 'Horário de Início',
             'horario_fim': 'Horário de Término',
