@@ -161,13 +161,13 @@ EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
 # EMAIL_HOST_USER = ''  # Não necessário
 # EMAIL_HOST_PASSWORD = ''  # Não necessário
 
-# MQTT Broker
-# Configurações do broker MQTT (HiveMQ com autenticação)
+## MQTT Broker
+
+### Configurações do broker MQTT (HiveMQ com autenticação)
 MQTT_BROKER = secrets['MQTT_BROKER_HOST']
 MQTT_PORT = secrets['MQTT_PORT_TLS']
 MQTT_CLIENT_ID = 'django_mqtt_client'
-# Caminho para o certificado CA
-MQTT_TLS_CERT = os.path.join(BASE_DIR, 'certificates', 'hivemq-ca.pem')
+MQTT_TLS_CERT = os.path.join(BASE_DIR, 'certificates', 'hivemq-ca.pem') # Caminho para o certificado CA
 MQTT_USERNAME = secrets['MQTT_USERNAME_HIVE_MQ']
 MQTT_PASSWORD = secrets['MQTT_PASSWORD_HIVE_MQ']
 MQTT_KEEPALIVE = 60

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 import uuid
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -11,6 +12,7 @@ class Pavilhao(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=100, unique=True)
     numero_salas = models.IntegerField('Número de salas')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def consumo_total(self):
         """Calcula o consumo total do pavilhão somando o consumo de todas as salas"""
@@ -166,7 +168,10 @@ class Horario(models.Model):
     def __str__(self):
         return f'{self.horario_inicio} - {self.horario_fim}'
 
+
 class Grafico(models.Model):
-    valor_kWh = models.FloatField('Valor em R$ por kWh')
+    valor_kWh = models.FloatField('Valor em R$ por kWh', default=0.0)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+
     def __str__(self):
         return f'R${self.valor_kWh}'

@@ -2,6 +2,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models.functions import Lower
 
 from .models import Pavilhao, Horario, Sala, ArCondicionado, Grafico
 
@@ -70,6 +71,12 @@ class SalaModelForm(forms.ModelForm):
             'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+        if usuario is not None:
+            self.fields['pavilhao'].queryset = Pavilhao.objects.filter(usuario=usuario).order_by(Lower('nome'))
+
     def clean_pavilhao(self):
         pavilhao = self.cleaned_data.get('pavilhao')
 
@@ -120,6 +127,12 @@ class ArCondicionadoModelForm(forms.ModelForm):
             'consumo_unidade': forms.Select(attrs={'placeholder': 'Unidade'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+        if usuario is not None:
+            self.fields['sala'].queryset = Sala.objects.filter(pavilhao__usuario=usuario).order_by(Lower('nome'))
+
     def clean_sala(self):
         sala = self.cleaned_data.get('sala')
         if sala:
@@ -140,14 +153,6 @@ class HorarioModelForm(forms.ModelForm):
         label="Dias da Semana"
     )  # Permite escolher mais de um dia da semana
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            self.initial['dias_da_semana'] = self.instance.dias_da_semana.split(",") if self.instance.dias_da_semana else []
-
-    def clean_dias_da_semana(self):
-        return ",".join(self.cleaned_data['dias_da_semana'])
-
     class Meta:
         model = Horario
         fields = [
@@ -165,6 +170,19 @@ class HorarioModelForm(forms.ModelForm):
             'horario_inicio': forms.TextInput(attrs={'type': 'time', 'placeholder': 'HH:mm'}),
             'horario_fim': forms.TextInput(attrs={'type': 'time', 'placeholder': 'HH:mm'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial['dias_da_semana'] = self.instance.dias_da_semana.split(
+                ",") if self.instance.dias_da_semana else []
+        if usuario is not None:
+            self.fields['sala'].queryset = Sala.objects.filter(pavilhao__usuario=usuario).order_by(Lower('nome'))
+
+    def clean_dias_da_semana(self):
+        return ",".join(self.cleaned_data['dias_da_semana'])
+
 
 class GraficoModelForm(forms.ModelForm):
     class Meta:
