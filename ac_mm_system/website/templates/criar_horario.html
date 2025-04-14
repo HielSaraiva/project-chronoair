@@ -20,25 +20,26 @@
     <div class="bloco-central">
         <div class="lista-pavilhao overflow-auto">
             <!-- Div que determina o tamanho do bloco central, onde fica o conteúdo -->
-                <!-- Exibição de mensagens do sistema -->
-                {% bootstrap_messages %}
-                <!-- Formulário -->
-                <form action="{% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
-                      method="post" class="form" autocomplete="off">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
+            <!-- Exibição de mensagens do sistema -->
+            {% bootstrap_messages %}
+            <!-- Formulário -->
+            <form action="
+                    {% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
+                  method="post" class="form" autocomplete="off">
+                {% csrf_token %}
+                {% bootstrap_form form %}
 
-                    <!-- Botões de ação -->
-                    <div class="d-flex justify-content-end align-items-center mt-3">
-                        <!-- Botão de cancelar -->
-                        <a class="btn btn-danger me-2" href="{% url 'website:listar_horarios' %}">Cancelar</a>
+                <!-- Botões de ação -->
+                <div class="d-flex justify-content-end align-items-center mt-3">
+                    <!-- Botão de cancelar -->
+                    <a class="btn btn-danger me-2" href="{% url 'website:listar_horarios' %}">Cancelar</a>
 
-                        <!-- Botão de cadastrar/atualizar -->
-                        <button type="submit" class="btn btn-primary">
-                            {% if horario %}Atualizar{% else %}Cadastrar{% endif %}
-                        </button>
-                    </div>
-                </form>
+                    <!-- Botão de cadastrar/atualizar -->
+                    <button type="submit" class="btn btn-primary">
+                        {% if horario %}Atualizar{% else %}Cadastrar{% endif %}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock content %}

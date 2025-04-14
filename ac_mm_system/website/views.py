@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.db.models.functions import Lower
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -139,13 +140,16 @@ def criar_pavilhao(request):
     if request.method == 'POST':
         form = PavilhaoModelForm(request.POST)
         if form.is_valid():  # Verifica se os dados inseridos são válidos
-            novo_pavilhao = form.save(commit=False)
-            novo_pavilhao.usuario = request.user
-            novo_pavilhao.save()
-            messages.success(request,
-                             'Pavilhão criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o pavilhão seja criado
+            try:
+                novo_pavilhao = form.save(commit=False)
+                novo_pavilhao.usuario = request.user
+                novo_pavilhao.save()
+                messages.success(request,
+                                 'Pavilhão criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o pavilhão seja criado
 
-            return redirect('website:listar_pavilhoes')
+                return redirect('website:listar_pavilhoes')
+            except IntegrityError:
+                messages.error(request, "Você já tem um pavilhão com esse nome.")
         else:
             messages.error(request,
                            'Erro ao criar pavilhão')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
@@ -163,10 +167,13 @@ def criar_sala(request):
     if request.method == 'POST':
         form = SalaModelForm(request.POST, usuario=request.user)
         if form.is_valid():  # Verifica se os dados inseridos são válidos
-            form.save()
-            messages.success(request,
-                             'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
-            return redirect('website:listar_salas')
+            try:
+                form.save()
+                messages.success(request,
+                                 'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
+                return redirect('website:listar_salas')
+            except IntegrityError:
+                messages.error(request, "Você já tem uma sala com esse nome neste pavilhão.")
     else:
         form = SalaModelForm(usuario=request.user)
     context = {
@@ -181,10 +188,13 @@ def criar_ar(request):
     if request.method == 'POST':
         form = ArCondicionadoModelForm(request.POST, usuario=request.user)
         if form.is_valid():  # Verifica se os dados inseridos são validos
-            form.save()  # Se os dados forem válidos, ele irá salvar
-            messages.success(request,
-                             'Ar-condicionado criado com sucesso!')
-            return redirect('website:listar_ares')
+            try:
+                form.save()  # Se os dados forem válidos, ele irá salvar
+                messages.success(request,
+                                 'Ar-condicionado criado com sucesso!')
+                return redirect('website:listar_ares')
+            except IntegrityError:
+                messages.error(request, "Você já tem um ar-condicionado com esse nome nesta sala.")
     else:
         form = ArCondicionadoModelForm(usuario=request.user)
     context = {
@@ -204,9 +214,6 @@ def criar_horario(request):
                              'Horário criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o horário seja criado
             # form = HorarioModelForm()  # Cria um novo formulário vazio após salvar os dados
             return redirect('website:listar_horarios')
-        else:
-            messages.error(request,
-                           'Erro ao criar horário')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
     else:
         form = HorarioModelForm(usuario=request.user)
     context = {
@@ -226,10 +233,13 @@ def editar_salas(request, uuid):
     if request.method == 'POST':
         form = SalaModelForm(request.POST, instance=sala, usuario=request.user)
         if form.is_valid():
-            form.save()
-            messages.success(request,
-                             'Sala editada com sucesso!')
-            return redirect('website:listar_salas')
+            try:
+                form.save()
+                messages.success(request,
+                                 'Sala editada com sucesso!')
+                return redirect('website:listar_salas')
+            except IntegrityError:
+                messages.error(request, "Você já tem uma sala com esse nome neste pavilhão.")
     else:
         form = SalaModelForm(instance=sala, usuario=request.user)
     context = {'form': form, 'sala': sala}
@@ -323,10 +333,13 @@ def editar_pavilhoes(request, uuid):
     if request.method == 'POST':
         form = PavilhaoModelForm(request.POST, instance=pavilhao)
         if form.is_valid():
-            form.save()
-            messages.success(request,
-                             'Pavilhão editado com sucesso!')
-            return redirect('website:listar_pavilhoes')
+            try:
+                form.save()
+                messages.success(request,
+                                 'Pavilhão editado com sucesso!')
+                return redirect('website:listar_pavilhoes')
+            except IntegrityError:
+                messages.error(request, "Você já tem um pavilhão com esse nome")
     else:
         form = PavilhaoModelForm(instance=pavilhao)
     context = {'form': form, 'pavilhao': pavilhao}
@@ -344,10 +357,13 @@ def editar_ares(request, uuid):
     if request.method == 'POST':
         form = ArCondicionadoModelForm(request.POST, instance=ar, usuario=request.user)
         if form.is_valid():
-            form.save()
-            messages.success(request,
-                             'Ar-condicionado editado com sucesso!')
-            return redirect('website:listar_ares')
+            try:
+                form.save()
+                messages.success(request,
+                                 'Ar-condicionado editado com sucesso!')
+                return redirect('website:listar_ares')
+            except IntegrityError:
+                messages.error(request, "Você já tem um ar-condicionado com esse nome nesta sala.")
     else:
         form = ArCondicionadoModelForm(instance=ar, usuario=request.user)
     context = {'form': form, 'ar': ar}

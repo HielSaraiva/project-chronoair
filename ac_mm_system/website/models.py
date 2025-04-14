@@ -10,9 +10,14 @@ from django.core.exceptions import ValidationError
 
 class Pavilhao(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    nome = models.CharField('Nome', max_length=100, unique=True)
+    nome = models.CharField('Nome', max_length=100)
     numero_salas = models.IntegerField('Número de salas')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['usuario', 'nome'], name='unique_pavilhao_por_usuario')
+        ]
 
     def consumo_total(self):
         """Calcula o consumo total do pavilhão somando o consumo de todas as salas"""
@@ -24,9 +29,14 @@ class Pavilhao(models.Model):
 
 class Sala(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    nome = models.CharField('Nome', max_length=100, unique=True)
+    nome = models.CharField('Nome', max_length=100)
     pavilhao = models.ForeignKey(Pavilhao, on_delete=models.CASCADE, related_name="salas")
     topico_mqtt = models.CharField(max_length=100, editable=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['pavilhao', 'nome'], name='unique_sala_por_pavilhao')
+        ]
 
     def total_horas_diarias(self):
         """Calcula o total de horas que a sala está em uso por dia."""
@@ -68,6 +78,11 @@ class ArCondicionado(models.Model):
         ('kWh/ano', 'kWh/ano'),
     ]
     consumo_unidade = models.CharField(max_length=10, choices=CONSUMO_UNIDADES, default='kWh/ano')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['sala', 'nome'], name='unique_arcondicionado_por_sala'),
+        ]
 
     def save(self, *args, **kwargs):
         if self.consumo_unidade == 'kWh/mês':
