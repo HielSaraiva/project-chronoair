@@ -58,12 +58,17 @@ def listar_ares(request):
     filtrarpavilhao = request.POST.get('pavilhao')
     filtrarsala = request.POST.get('sala')
 
-    if filtrarpavilhao:
-        salas = salas.filter(pavilhao__uuid=filtrarpavilhao).order_by(Lower('nome'))
-        ares = ares.filter(sala__pavilhao__uuid=filtrarpavilhao)
+    filtros = {}
 
+    ares = ArCondicionado.objects.none()
+
+    if filtrarpavilhao:
+        salas = salas.filter(pavilhao__uuid=filtrarpavilhao)
     if filtrarsala:
-        ares = ares.filter(sala__uuid=filtrarsala)
+        filtros['sala__uuid'] = filtrarsala
+
+        if request.method == 'POST':
+            ares = ArCondicionado.objects.filter(**filtros).order_by("nome")
 
     ares = ares.order_by(
         Lower('sala__pavilhao__nome'),

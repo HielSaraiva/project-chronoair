@@ -62,25 +62,26 @@
             <form method="POST">
                 {% csrf_token %}
                 <!-- Filtro por Pavilhão -->
-                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" id="pavilhao">
-                    <option value="" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
-                    {% for pavilhao in pavilhoes %}
-                        <option value="{{ pavilhao.uuid }}"
-                                {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
-                            {{ pavilhao.nome }}
+                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" onchange="this.form.submit()">
+                        <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões
                         </option>
-                    {% endfor %}
-                </select>
+                        {% for pavilhao in pavilhoes %}
+                            <option value="{{ pavilhao.uuid }}"
+                                    {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
+                                {{ pavilhao.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
 
                 <!-- Filtro por Sala -->
-                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala" id="sala">
-                    <option value="" {% if not filtrarsala %}selected{% endif %}>Salas</option>
-                    {% for sala in salas %}
-                        <option value="{{ sala.uuid }}"
-                                {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
-                            {{ sala.nome }}
-                        </option>
-                    {% endfor %}
+                <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
+                        <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
+                        {% for sala in salas %}
+                            <option value="{{ sala.uuid }}"
+                                    {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
+                                {{ sala.nome }}
+                            </option>
+                        {% endfor %}
                 </select>
 
                 <!-- Botão Buscar -->
