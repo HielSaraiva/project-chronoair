@@ -22,12 +22,25 @@
             <!-- Div que determina o tamanho do bloco central, onde fica o conteúdo -->
             <!-- Exibição de mensagens do sistema -->
             {% bootstrap_messages %}
-            <!-- Formulário -->
-            <form action="
-                    {% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
+
+            <!-- Formulário do Pavilhão (GET) -->
+            <form method="get">
+                <label for="id_pavilhao">Pavilhão</label>
+                <select name="pavilhao" id="id_pavilhao" class="form-select" onchange="this.form.submit()">
+                    <option value="">---------</option>
+                    {% for p in pavilhoes %}
+                        <option value="{{ p.id }}" {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <!-- Formulário de Horário (POST) -->
+            <form action="{% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
                   method="post" class="form" autocomplete="off">
                 {% csrf_token %}
-                {% bootstrap_form form %}
+
+                <!-- Gerando todos os campos menos o de pavilhão -->
+                {% bootstrap_form form exclude="pavilhao" %}
 
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-end align-items-center mt-3">

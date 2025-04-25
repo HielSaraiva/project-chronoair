@@ -207,24 +207,43 @@ def criar_ar(request):
     }
     return render(request, 'criar_ar.html', context)
 
-
 @login_required
 def criar_horario(request):
-    # Validação e envio do formulário da sala
+    pavilhao_id = request.GET.get('pavilhao')
+
     if request.method == 'POST':
         form = HorarioModelForm(request.POST, usuario=request.user)
-        if form.is_valid():  # Verifica se os dados inseridos são válidos
-            form.save()  # Se os dados forem válidos ele irá salvar
-            messages.success(request,
-                             'Horário criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o horário seja criado
-            # form = HorarioModelForm()  # Cria um novo formulário vazio após salvar os dados
-            return redirect('website:listar_horarios')
+        if form.is_valid():
+            horario = form.save(commit=False)  # Não salva ainda
+
+            # Verifica se uma sala foi escolhida, se não, adiciona erro
+            sala = form.cleaned_data.get('sala')
+            if not sala:
+                form.add_error('sala', 'Você deve selecionar uma sala.')
+            else:
+                horario.sala = sala
+                horario.save()
+                messages.success(request, 'Horário criado com sucesso!')
+                return redirect('website:listar_horarios')
+
     else:
         form = HorarioModelForm(usuario=request.user)
+
+    if pavilhao_id:
+        try:
+            form.fields['sala'].queryset = Sala.objects.filter(pavilhao_id=pavilhao_id).order_by('nome')
+        except ValueError:
+            form.fields['sala'].queryset = Sala.objects.none()
+    else:
+        form.fields['sala'].queryset = Sala.objects.none()  # Campo sem opções quando pavilhão não é escolhido
+
     context = {
-        'form': form
+        'form': form,
+        'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
+        'pavilhao_id': pavilhao_id,
     }
     return render(request, 'criar_horario.html', context)
+
 
 
 @login_required
@@ -301,13 +320,21 @@ def editar_horarios(request, uuid):
         form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request,
-                             'Horário editado com sucesso!')
+            messages.success(request, 'Horário editado com sucesso!')
             return redirect('website:listar_horarios')
     else:
         form = HorarioModelForm(instance=horario, usuario=request.user)
-    context = {'form': form, 'horario': horario}
+
+    pavilhao_id = str(pavilhao.id)
+
+    context = {
+        'form': form,
+        'horario': horario,
+        'pavilhao_id': pavilhao_id,
+        'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
+    }
     return render(request, 'criar_horario.html', context)
+
 
 
 @login_required
