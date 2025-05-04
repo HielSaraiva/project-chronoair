@@ -55,8 +55,12 @@ class Sala(models.Model):
         return sum(ac.consumo_mensal() for ac in self.ares_condicionados.all())
 
     def save(self, *args, **kwargs):
+        usuario = kwargs.pop('usuario', None)
         self.nome = re.sub(r'[^a-zA-Z0-9 ]', '', self.nome)
-        self.topico_mqtt = self.nome.lower().replace(" ", "_")
+        if usuario:
+            self.topico_mqtt = f"{usuario.username}_{self.pavilhao.nome.replace(' ', '_')}_{self.nome.replace(' ', '_')}"
+        else:
+            self.topico_mqtt = self.nome.lower().replace(" ", "_")
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -132,14 +132,14 @@ class SalaModelForm(forms.ModelForm):
                 "O nome da sala só pode conter letras, números e espaços.")
         return nome
 
-    def save(self, commit=True):
+    def save(self, commit=True, *, usuario):
         sala = super().save(commit=False)
-        # Remove caracteres especiais
-        sala.nome = re.sub(r'[^a-zA-Z0-9 ]', '', sala.nome)
-        sala.topico_mqtt = sala.nome.lower().replace(" ", "_")  # Formata o tópico MQTT
-
-        if commit:
-            sala.save()
+        if usuario:
+            # Usa o usuário passado para o save do form
+            sala.save(usuario=usuario)
+        else:
+            raise ValueError(
+                "O argumento 'usuario' deve ser fornecido para salvar a Sala.")
         return sala
 
 

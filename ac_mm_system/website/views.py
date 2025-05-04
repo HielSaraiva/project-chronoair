@@ -186,7 +186,8 @@ def criar_sala(request):
         form = SalaModelForm(request.POST, usuario=request.user)
         if form.is_valid():  # Verifica se os dados inseridos são válidos
             try:
-                form.save()
+                # Se os dados forem válidos, ele irá salvar
+                form.save(usuario=request.user)
                 messages.success(request,
                                  'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
                 return redirect('website:listar_salas')
@@ -275,7 +276,7 @@ def editar_salas(request, uuid):
         form = SalaModelForm(request.POST, instance=sala, usuario=request.user)
         if form.is_valid():
             try:
-                form.save()
+                form.save(usuario=request.user)
                 messages.success(request,
                                  'Sala editada com sucesso!')
                 return redirect('website:listar_salas')
