@@ -338,9 +338,21 @@ def editar_horarios(request, uuid):
     if pavilhao.usuario != request.user:
         raise Http404
 
+    # Verifica se foi selecionado um pavilhão no GET
+    pavilhao_id_get = request.GET.get('pavilhao')
+    if pavilhao_id_get:
+        try:
+            pavilhao_get = Pavilhao.objects.get(id=pavilhao_id_get, usuario=request.user)
+        except Pavilhao.DoesNotExist:
+            pavilhao_get = pavilhao
+    else:
+        pavilhao_get = pavilhao
+
+    # Filtra as salas de acordo com o pavilhão selecionado
+    salas = Sala.objects.filter(pavilhao=pavilhao_get).order_by('nome')
+
     if request.method == 'POST':
-        form = HorarioModelForm(
-            request.POST, instance=horario, usuario=request.user)
+        form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Horário editado com sucesso!')
@@ -348,15 +360,17 @@ def editar_horarios(request, uuid):
     else:
         form = HorarioModelForm(instance=horario, usuario=request.user)
 
-    pavilhao_id = str(pavilhao.id)
+    # Atualiza o queryset do campo de salas com base no pavilhão selecionado
+    form.fields['sala'].queryset = salas
 
     context = {
         'form': form,
         'horario': horario,
-        'pavilhao_id': pavilhao_id,
+        'pavilhao_id': str(pavilhao_get.id),
         'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
     }
     return render(request, 'criar_horario.html', context)
+
 
 
 @login_required
