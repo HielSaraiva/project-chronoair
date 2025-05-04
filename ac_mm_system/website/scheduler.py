@@ -10,8 +10,10 @@ from django.utils import timezone
 
 def verificar_horarios():
     agora = timezone.localtime()
-    agora_hora_minuto = agora.time().replace(second=0, microsecond=0)  # Removendo segundos e milissegundos
-    dia_atual = agora.strftime('%A')  # Obtém o dia da semana em inglês (Monday, Tuesday, ...)
+    agora_hora_minuto = agora.time().replace(
+        second=0, microsecond=0)  # Removendo segundos e milissegundos
+    # Obtém o dia da semana em inglês (Monday, Tuesday, ...)
+    dia_atual = agora.strftime('%A')
 
     # Mapeamento para o formato salvo no banco de dados
     traducao_dias = {
@@ -29,12 +31,14 @@ def verificar_horarios():
     horarios_inicio = Horario.objects.filter(
         horario_inicio__hour=agora_hora_minuto.hour,
         horario_inicio__minute=agora_hora_minuto.minute,
-    ).filter(dias_da_semana__icontains=dia_atual_pt)  # Verifica se o dia está incluído na string
+        # Verifica se o dia está incluído na string
+    ).filter(dias_da_semana__icontains=dia_atual_pt)
 
     horarios_fim = Horario.objects.filter(
         horario_fim__hour=agora_hora_minuto.hour,
         horario_fim__minute=agora_hora_minuto.minute,
-    ).filter(dias_da_semana__icontains=dia_atual_pt)  # Mesma lógica para desligar
+        # Mesma lógica para desligar
+    ).filter(dias_da_semana__icontains=dia_atual_pt)
 
     for horario in horarios_inicio:
         topico = horario.sala.topico_mqtt
@@ -49,8 +53,10 @@ def verificar_horarios():
 
 def verificar_periodo():
     agora = timezone.localtime()
-    agora_hora_minuto = agora.time().replace(second=0, microsecond=0)  # Removendo segundos e milissegundos
-    dia_atual = agora.strftime('%A')  # Obtém o dia da semana em inglês (Monday, Tuesday, ...)
+    agora_hora_minuto = agora.time().replace(
+        second=0, microsecond=0)  # Removendo segundos e milissegundos
+    # Obtém o dia da semana em inglês (Monday, Tuesday, ...)
+    dia_atual = agora.strftime('%A')
 
     # Mapeamento para o formato salvo no banco de dados
     traducao_dias = {
@@ -68,7 +74,8 @@ def verificar_periodo():
     salas = Sala.objects.all()
     for sala in salas:
         if sala.ares_condicionados.exists():
-            horarios = Horario.objects.filter(sala=sala).filter(dias_da_semana__icontains=dia_atual_pt)
+            horarios = Horario.objects.filter(sala=sala).filter(
+                dias_da_semana__icontains=dia_atual_pt)
             for horario in horarios:
                 if not (horario.horario_inicio <= agora_hora_minuto <= horario.horario_fim):
                     topico = sala.topico_mqtt
@@ -79,10 +86,13 @@ def verificar_periodo():
 def iniciar_scheduler():
     scheduler = BackgroundScheduler()
 
-    scheduler.add_job(verificar_horarios, 'interval', minutes=1)  # Executa a cada 1 minuto
+    scheduler.add_job(verificar_horarios, 'interval',
+                      minutes=1)  # Executa a cada 1 minuto
 
-    scheduler.add_job(verificar_periodo, CronTrigger(minute='0,30', hour='6-21')) # Horário comercial (6h-21h59)
+    scheduler.add_job(verificar_periodo, CronTrigger(
+        minute='0,30', hour='6-21'))  # Horário comercial (6h-21h59)
 
-    scheduler.add_job(verificar_periodo, CronTrigger(minute=0, hour='22-23,0-5')) # Período noturno (22h-5h59)
+    scheduler.add_job(verificar_periodo, CronTrigger(
+        minute=0, hour='22-23,0-5'))  # Período noturno (22h-5h59)
 
     scheduler.start()
