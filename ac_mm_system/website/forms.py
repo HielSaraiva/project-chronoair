@@ -102,9 +102,14 @@ class SalaModelForm(forms.ModelForm):
         pavilhao = cleaned_data.get('pavilhao')
 
         if nome and pavilhao:
-            if Sala.objects.filter(pavilhao=pavilhao, nome=nome).exists():
+            # Exclui a instância atual se estiver sendo editada
+            queryset = Sala.objects.filter(pavilhao=pavilhao, nome=nome)
+            if self.instance and self.instance.pk:
+                queryset = queryset.exclude(pk=self.instance.pk)
+
+            if queryset.exists():
                 self.add_error('nome', ValidationError(
-                    ("Já existe uma sala com este nome neste pavilhão."),
+                    _("Já existe uma sala com este nome neste pavilhão."),
                     code='unique_together'
                 ))
         return cleaned_data
@@ -176,9 +181,14 @@ class ArCondicionadoModelForm(forms.ModelForm):
         sala = cleaned_data.get('sala')
 
         if nome and sala:
-            if ArCondicionado.objects.filter(sala=sala, nome=nome).exists():
+            # Exclui a instância atual se estiver sendo editada
+            queryset = ArCondicionado.objects.filter(sala=sala, nome=nome)
+            if self.instance and self.instance.pk:
+                queryset = queryset.exclude(pk=self.instance.pk)
+
+            if queryset.exists():
                 self.add_error('nome', ValidationError(
-                    ("Já existe um ar-condicionado com este nome nesta sala."),
+                    _("Já existe um ar-condicionado com este nome nesta sala."),
                     code='unique_together'
                 ))
         return cleaned_data
