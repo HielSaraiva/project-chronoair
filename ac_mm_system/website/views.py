@@ -18,7 +18,8 @@ from chartjs.views.lines import BaseLineChartView
 
 @login_required
 def listar_pavilhoes(request):
-    pavilhoes = Pavilhao.objects.filter(usuario=request.user).order_by(Lower('nome'))
+    pavilhoes = Pavilhao.objects.filter(
+        usuario=request.user).order_by(Lower('nome'))
 
     context = {
         'pavilhoes': pavilhoes
@@ -28,18 +29,22 @@ def listar_pavilhoes(request):
 
 @login_required
 def listar_salas(request):
-    pavilhoes = Pavilhao.objects.filter(usuario=request.user).order_by(Lower('nome'))
+    pavilhoes = Pavilhao.objects.filter(
+        usuario=request.user).order_by(Lower('nome'))
 
     filtrarpavilhao = None
 
     if request.method == 'POST':
         filtrarpavilhao = request.POST.get('pavilhao')
         if filtrarpavilhao:
-            salas = Sala.objects.filter(pavilhao__uuid=filtrarpavilhao).order_by(Lower('nome'))
+            salas = Sala.objects.filter(
+                pavilhao__uuid=filtrarpavilhao).order_by(Lower('nome'))
         else:
-            salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(Lower('pavilhao__nome'), Lower('nome'))
+            salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
+                Lower('pavilhao__nome'), Lower('nome'))
     else:
-        salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(Lower('pavilhao__nome'), Lower('nome'))
+        salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
+            Lower('pavilhao__nome'), Lower('nome'))
 
     context = {
         'salas': salas,
@@ -51,8 +56,10 @@ def listar_salas(request):
 
 @login_required
 def listar_ares(request):
-    pavilhoes = Pavilhao.objects.filter(usuario=request.user).order_by(Lower('nome'))
-    salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(Lower('nome'))
+    pavilhoes = Pavilhao.objects.filter(
+        usuario=request.user).order_by(Lower('nome'))
+    salas = Sala.objects.filter(
+        pavilhao__usuario=request.user).order_by(Lower('nome'))
     ares = ArCondicionado.objects.filter(sala__pavilhao__usuario=request.user)
 
     filtrarpavilhao = request.POST.get('pavilhao')
@@ -89,8 +96,10 @@ def listar_ares(request):
 
 @login_required
 def listar_horarios(request):
-    pavilhoes = Pavilhao.objects.filter(usuario=request.user).order_by(Lower('nome'))
-    salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(Lower('nome'))
+    pavilhoes = Pavilhao.objects.filter(
+        usuario=request.user).order_by(Lower('nome'))
+    salas = Sala.objects.filter(
+        pavilhao__usuario=request.user).order_by(Lower('nome'))
     turnos = [
         ('Madrugada', 'Madrugada'),
         ('Matutino', 'Matutino'),
@@ -98,7 +107,8 @@ def listar_horarios(request):
         ('Noturno', 'Noturno'),
     ]
 
-    dias_da_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    dias_da_semana = ["Segunda", "Terça", "Quarta",
+                      "Quinta", "Sexta", "Sábado", "Domingo"]
     horas = sorted(
         set(horario.horario_inicio.hour for horario in Horario.objects.filter(sala__pavilhao__usuario=request.user)))
 
@@ -118,12 +128,13 @@ def listar_horarios(request):
         if filtrarturno:
             filtros['turno__icontains'] = filtrarturno
         if request.method == 'POST':
-            horarios = Horario.objects.filter(**filtros).order_by("horario_inicio")
+            horarios = Horario.objects.filter(
+                **filtros).order_by("horario_inicio")
 
             # Adicionar duração a cada horário antes de enviar ao template
             for horario in horarios:
                 horario.duracao = (horario.horario_fim.hour - horario.horario_inicio.hour) * 60 + (
-                        horario.horario_fim.minute - horario.horario_inicio.minute)
+                    horario.horario_fim.minute - horario.horario_inicio.minute)
 
     context = {
         'horarios': horarios,
@@ -150,11 +161,13 @@ def criar_pavilhao(request):
                 novo_pavilhao.usuario = request.user
                 novo_pavilhao.save()
                 messages.success(request,
-                                 'Pavilhão criado com sucesso!')  # Exibe uma mensagem de sucesso, caso o pavilhão seja criado
+                                 # Exibe uma mensagem de sucesso, caso o pavilhão seja criado
+                                 'Pavilhão criado com sucesso!')
 
                 return redirect('website:listar_pavilhoes')
             except IntegrityError:
-                messages.error(request, "Você já tem um pavilhão com esse nome.")
+                messages.error(
+                    request, "Você já tem um pavilhão com esse nome.")
         else:
             messages.error(request,
                            'Erro ao criar pavilhão')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
@@ -178,7 +191,8 @@ def criar_sala(request):
                                  'Sala criada com sucesso!')  # Exibe uma mensagem de sucesso, caso a sala seja criada
                 return redirect('website:listar_salas')
             except IntegrityError:
-                messages.error(request, "Você já tem uma sala com esse nome neste pavilhão.")
+                messages.error(
+                    request, "Você já tem uma sala com esse nome neste pavilhão.")
     else:
         form = SalaModelForm(usuario=request.user)
     context = {
@@ -199,13 +213,15 @@ def criar_ar(request):
                                  'Ar-condicionado criado com sucesso!')
                 return redirect('website:listar_ares')
             except IntegrityError:
-                messages.error(request, "Você já tem um ar-condicionado com esse nome nesta sala.")
+                messages.error(
+                    request, "Você já tem um ar-condicionado com esse nome nesta sala.")
     else:
         form = ArCondicionadoModelForm(usuario=request.user)
     context = {
         'form': form  # Passa o formulário para o contexto do template
     }
     return render(request, 'criar_ar.html', context)
+
 
 @login_required
 def criar_horario(request):
@@ -231,11 +247,13 @@ def criar_horario(request):
 
     if pavilhao_id:
         try:
-            form.fields['sala'].queryset = Sala.objects.filter(pavilhao_id=pavilhao_id).order_by('nome')
+            form.fields['sala'].queryset = Sala.objects.filter(
+                pavilhao_id=pavilhao_id).order_by('nome')
         except ValueError:
             form.fields['sala'].queryset = Sala.objects.none()
     else:
-        form.fields['sala'].queryset = Sala.objects.none()  # Campo sem opções quando pavilhão não é escolhido
+        # Campo sem opções quando pavilhão não é escolhido
+        form.fields['sala'].queryset = Sala.objects.none()
 
     context = {
         'form': form,
@@ -243,7 +261,6 @@ def criar_horario(request):
         'pavilhao_id': pavilhao_id,
     }
     return render(request, 'criar_horario.html', context)
-
 
 
 @login_required
@@ -263,7 +280,8 @@ def editar_salas(request, uuid):
                                  'Sala editada com sucesso!')
                 return redirect('website:listar_salas')
             except IntegrityError:
-                messages.error(request, "Você já tem uma sala com esse nome neste pavilhão.")
+                messages.error(
+                    request, "Você já tem uma sala com esse nome neste pavilhão.")
     else:
         form = SalaModelForm(instance=sala, usuario=request.user)
     context = {'form': form, 'sala': sala}
@@ -317,7 +335,8 @@ def editar_horarios(request, uuid):
         raise Http404
 
     if request.method == 'POST':
-        form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
+        form = HorarioModelForm(
+            request.POST, instance=horario, usuario=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Horário editado com sucesso!')
@@ -334,7 +353,6 @@ def editar_horarios(request, uuid):
         'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
     }
     return render(request, 'criar_horario.html', context)
-
 
 
 @login_required
@@ -371,7 +389,8 @@ def editar_pavilhoes(request, uuid):
                                  'Pavilhão editado com sucesso!')
                 return redirect('website:listar_pavilhoes')
             except IntegrityError:
-                messages.error(request, "Você já tem um pavilhão com esse nome")
+                messages.error(
+                    request, "Você já tem um pavilhão com esse nome")
     else:
         form = PavilhaoModelForm(instance=pavilhao)
     context = {'form': form, 'pavilhao': pavilhao}
@@ -387,7 +406,8 @@ def editar_ares(request, uuid):
         raise Http404
 
     if request.method == 'POST':
-        form = ArCondicionadoModelForm(request.POST, instance=ar, usuario=request.user)
+        form = ArCondicionadoModelForm(
+            request.POST, instance=ar, usuario=request.user)
         if form.is_valid():
             try:
                 form.save()
@@ -395,7 +415,8 @@ def editar_ares(request, uuid):
                                  'Ar-condicionado editado com sucesso!')
                 return redirect('website:listar_ares')
             except IntegrityError:
-                messages.error(request, "Você já tem um ar-condicionado com esse nome nesta sala.")
+                messages.error(
+                    request, "Você já tem um ar-condicionado com esse nome nesta sala.")
     else:
         form = ArCondicionadoModelForm(instance=ar, usuario=request.user)
     context = {'form': form, 'ar': ar}
@@ -469,7 +490,8 @@ def ajustes_ares(request, uuid):
         try:
             if comando in ['gravar_ligar', 'gravar_desligar']:
                 mqtt_publish(topico, {"comando": comando})
-                messages.success(request, f"Comando '{comando}' enviado com sucesso!")
+                messages.success(
+                    request, f"Comando '{comando}' enviado com sucesso!")
             else:
                 messages.error(request, "Comando inválido.")
         except Exception as e:
@@ -493,7 +515,8 @@ def ajustes_salas(request, uuid):
         try:
             if comando in ['ligar', 'desligar']:
                 mqtt_publish(topico, {"comando": comando})
-                messages.success(request, f"Comando '{comando}' enviado com sucesso!")
+                messages.success(
+                    request, f"Comando '{comando}' enviado com sucesso!")
             else:
                 messages.error(request, "Comando inválido.")
         except Exception as e:
@@ -514,7 +537,8 @@ def pagina_inicial(request):
     pavilhoes = list(Pavilhao.objects.filter(usuario=usuario))
 
     # Criar dicionário de gastos por pavilhão
-    gasto_pav = {pav.nome: pav.consumo_total() * valor_kWh for pav in pavilhoes}
+    gasto_pav = {pav.nome: pav.consumo_total(
+    ) * valor_kWh for pav in pavilhoes}
 
     # Calcular consumo total geral
     consumo_total_geral = sum(pav.consumo_total() for pav in pavilhoes)
@@ -524,16 +548,20 @@ def pagina_inicial(request):
     dados_pizza = {pav.nome: gasto_pav.get(pav.nome, 0) for pav in pavilhoes}
 
     # Consumo por dia da semana
-    dias_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    dias_semana = ["Segunda", "Terça", "Quarta",
+                   "Quinta", "Sexta", "Sábado", "Domingo"]
     consumo_diario = {dia: 0 for dia in dias_semana}
 
     for pav in pavilhoes:
         for sala in pav.salas.all():
             for horario in sala.horarios.all():
-                dias = [d.strip(" []'") for d in horario.dias_da_semana.split(",")]
+                dias = [d.strip(" []'")
+                        for d in horario.dias_da_semana.split(",")]
 
-                inicio = horario.horario_inicio.hour + (horario.horario_inicio.minute / 60)
-                fim = horario.horario_fim.hour + (horario.horario_fim.minute / 60)
+                inicio = horario.horario_inicio.hour + \
+                    (horario.horario_inicio.minute / 60)
+                fim = horario.horario_fim.hour + \
+                    (horario.horario_fim.minute / 60)
 
                 if fim < inicio:
                     horas_uso = (24 - inicio) + fim
@@ -548,7 +576,8 @@ def pagina_inicial(request):
 
     total_kWh_semana = sum(consumo_diario.values())
 
-    dados_barras = OrderedDict((dia, consumo_diario[dia]) for dia in dias_semana)
+    dados_barras = OrderedDict(
+        (dia, consumo_diario[dia]) for dia in dias_semana)
 
     context = {
         "dados_pizza": json.dumps(dados_pizza),

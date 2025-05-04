@@ -1,35 +1,42 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Salas{% endblock title %}
-
+{% block title %}
+    Salas
+{% endblock title %}
 {% block salas %}
-<div class="button-salas"> <!-- div do botão de salas -->
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/book-040green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-    <div class="nome-botoes-menu">Salas</div>
-</div>
+    <div class="button-salas">
+        <!-- div do botão de salas -->
+        <div class="rectangle-white"></div>
+        <img class="img-botoes-menu"
+             src="{% static 'buttons/book-040green.svg' %}" />
+        <button class="img-botoes-menu"
+                onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
+        <div class="nome-botoes-menu">Salas</div>
+    </div>
 {% endblock salas %}
-
 {% block content %}
- <div class="bloco-central">
-    <div class="lista-pavilhao overflow-auto">
-        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
+    <div class="bloco-central">
+        <div class="lista-pavilhao overflow-auto">
+            <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
             {% bootstrap_messages %}
             <form action="{% if sala %}{% url 'website:editar_salas' sala.uuid %}{% else %}{% url 'website:criar_sala' %}{% endif %}"
-                  method="post" class="form" autocomplete="off">
+                  method="post"
+                  class="form"
+                  autocomplete="off">
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <a class="btn btn-danger" href="{% url 'website:listar_salas' %}">Cancelar</a>
                 <button type="submit" class="btn btn-primary">
-                    {% if sala %}Atualizar{% else %}Cadastrar{% endif %}
+                    {% if sala %}
+                        Atualizar
+                    {% else %}
+                        Cadastrar
+                    {% endif %}
                 </button>
             </form>
+        </div>
     </div>
- </div>
 {% endblock content %}

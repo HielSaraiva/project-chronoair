@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
-
 # Formulário customizado para o cadastro de usuários
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
@@ -22,7 +21,8 @@ class CustomUserCreationForm(UserCreationForm):
 
         # Verifica se já existe um usuário com o mesmo email
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este email já está em uso. Por favor, escolha outro email.")
+            raise forms.ValidationError(
+                "Este email já está em uso.")
 
         return email
 
@@ -32,7 +32,7 @@ class CustomUserCreationForm(UserCreationForm):
 
         # Verifica se já existe um usuário com o mesmo username
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Este nome de usuário já está em uso. Escolha outro nome de usuário.")
+            raise forms.ValidationError("Este nome de usuário já está em uso.")
 
         return username
 
@@ -42,4 +42,3 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-

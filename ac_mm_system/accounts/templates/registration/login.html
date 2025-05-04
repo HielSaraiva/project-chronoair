@@ -3,35 +3,39 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Login{% endblock %}
+{% block title %}
+    Login
+{% endblock title %}
 {% block content %}
-        <img class="imglogin" src="{% static 'icons/icone-login.svg' %}"/>
-        <h3 class="texto-mensagem">Login</h3>
-
-        <form action="{% url 'accounts:login' %}" method='post'>
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger p-2" >
-                    {% for error in form.non_field_errors %}
-                        {{ error }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <div class="form-floating mb-3">
-                <input type="text" name="{{ form.username.name }}" class="form-control" id="floatingUsername" placeholder="Usuário" required>
-                <label for="floatingUsername">Usuário</label>
+    <img class="imglogin" src="{% static 'icons/icone-login.svg' %}" />
+    <h3 class="texto-mensagem">Login</h3>
+    <form action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger p-2">
+                {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
             </div>
-
-            <div class="form-floating mb-3">
-                <input type="password" name="{{ form.password.name }}" class="form-control" id="floatingPassword" placeholder="Senha" required>
-                <label for="floatingPassword">Senha</label>
-            </div>
-            <button name="submit" class="btn btn-success">Entrar</button>
-        </form>
-
-        <a href="{% url 'accounts:register' %}">Criar conta</a>
-        <a href="{% url 'accounts:password_reset' %}">Esqueci a senha</a>
-
+        {% endif %}
+        <div class="form-floating mb-3">
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   id="floatingUsername"
+                   placeholder="Usuário"
+                   required />
+            <label for="floatingUsername">Usuário</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   id="floatingPassword"
+                   placeholder="Senha"
+                   required />
+            <label for="floatingPassword">Senha</label>
+        </div>
+        <button name="submit" class="btn btn-success">Entrar</button>
+    </form>
+    <a href="{% url 'accounts:register' %}">Criar conta</a>
+    <a href="{% url 'accounts:password_reset' %}">Esqueci a senha</a>
 {% endblock content %}

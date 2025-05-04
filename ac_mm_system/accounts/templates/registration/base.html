@@ -4,21 +4,26 @@
 {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8">
-    <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}">
-    <title>Title</title>
-</head>
-<body>
-
-
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh">
-    <div class="divteste overflow-auto">
-        {% block content %}
-        {% endblock %}
-
-    </div>
-</div>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=0.8" />
+        <link rel="icon"
+              type="image/x-icon"
+              href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+        <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}" />
+        <title>
+            {% block title %}
+                Título
+            {% endblock title %}
+        </title>
+    </head>
+    <body>
+        <div class="d-flex justify-content-center align-items-center"
+             style="height: 100vh">
+            <div class="divteste overflow-auto">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </body>
 </html>

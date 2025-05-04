@@ -16,7 +16,8 @@ class Pavilhao(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['usuario', 'nome'], name='unique_pavilhao_por_usuario')
+            models.UniqueConstraint(
+                fields=['usuario', 'nome'], name='unique_pavilhao_por_usuario')
         ]
 
     def consumo_total(self):
@@ -30,13 +31,9 @@ class Pavilhao(models.Model):
 class Sala(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=100)
-    pavilhao = models.ForeignKey(Pavilhao, on_delete=models.CASCADE, related_name="salas")
+    pavilhao = models.ForeignKey(
+        Pavilhao, on_delete=models.CASCADE, related_name="salas")
     topico_mqtt = models.CharField(max_length=100, editable=False)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['pavilhao', 'nome'], name='unique_sala_por_pavilhao')
-        ]
 
     def total_horas_diarias(self):
         """Calcula o total de horas que a sala está em uso por dia."""
@@ -69,7 +66,8 @@ class Sala(models.Model):
 class ArCondicionado(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=50)
-    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name="ares_condicionados")
+    sala = models.ForeignKey(
+        Sala, on_delete=models.CASCADE, related_name="ares_condicionados")
     potencia_kw = models.FloatField('Potência')
     consumo = models.FloatField('Consumo')
 
@@ -77,12 +75,8 @@ class ArCondicionado(models.Model):
         ('kWh/mês', 'kWh/mês'),
         ('kWh/ano', 'kWh/ano'),
     ]
-    consumo_unidade = models.CharField(max_length=10, choices=CONSUMO_UNIDADES, default='kWh/ano')
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['sala', 'nome'], name='unique_arcondicionado_por_sala'),
-        ]
+    consumo_unidade = models.CharField(
+        max_length=10, choices=CONSUMO_UNIDADES, default='kWh/ano')
 
     def save(self, *args, **kwargs):
         if self.consumo_unidade == 'kWh/mês':
@@ -110,7 +104,8 @@ class Horario(models.Model):
         ('Noturno', 'Noturno'),
         ('Madrugada', 'Madrugada'),
     ]
-    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name="horarios")
+    sala = models.ForeignKey(
+        Sala, on_delete=models.CASCADE, related_name="horarios")
     dias_da_semana = models.CharField(max_length=100)
     turno = models.CharField(max_length=30, blank=True)
     horario_inicio = models.TimeField()
@@ -118,7 +113,8 @@ class Horario(models.Model):
 
     def clean(self):
         if self.horario_inicio == self.horario_fim:
-            raise ValidationError("O horário de início e fim não podem ser iguais.")
+            raise ValidationError(
+                "O horário de início e fim não podem ser iguais.")
 
         if Horario.objects.filter(
                 sala=self.sala,
@@ -126,14 +122,17 @@ class Horario(models.Model):
                 horario_fim=self.horario_fim,
                 dias_da_semana=self.dias_da_semana
         ).exclude(id=self.id).exists():
-            raise ValidationError("Este mesmo horário já existe para esta sala.")
+            raise ValidationError(
+                "Este mesmo horário já existe para esta sala.")
 
-        dias_selecionados = {d.strip(" []'") for d in self.dias_da_semana.lower().split(",")}
+        dias_selecionados = {d.strip(" []'")
+                             for d in self.dias_da_semana.lower().split(",")}
 
         conflitos = Horario.objects.filter(sala=self.sala).exclude(id=self.id)
 
         for horario in conflitos:
-            dias_ocupados = {d.strip(" []'") for d in horario.dias_da_semana.lower().split(",")}
+            dias_ocupados = {d.strip(" []'")
+                             for d in horario.dias_da_semana.lower().split(",")}
 
             if dias_selecionados & dias_ocupados:
                 conflito = False
