@@ -39,6 +39,8 @@
                   method="post" class="form" autocomplete="off">
                 {% csrf_token %}
 
+                <input type="hidden" name="pavilhao" value="{{ pavilhao_id }}">
+
                 <!-- Gerando todos os campos menos o de pavilhão -->
                 {% bootstrap_form form exclude="pavilhao" %}
 

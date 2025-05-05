@@ -353,6 +353,16 @@ def editar_horarios(request, uuid):
 
     if request.method == 'POST':
         form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
+
+        pavilhao_id_post = request.POST.get('pavilhao')
+        if pavilhao_id_post:
+            try:
+                pavilhao_post = Pavilhao.objects.get(id=pavilhao_id_post, usuario=request.user)
+                # Atualizar a lista de salas de acordo com o pavilhão escolhido
+                form.fields['sala'].queryset = Sala.objects.filter(pavilhao=pavilhao_post).order_by('nome')
+            except Pavilhao.DoesNotExist:
+                form.fields['sala'].queryset = Sala.objects.none()
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Horário editado com sucesso!')
