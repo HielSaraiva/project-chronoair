@@ -6,48 +6,6 @@ from website.models import Horario, Sala
 from celery import shared_task
 
 
-# @shared_task
-# def verificar_horarios():
-#     # import dentro da função evita problemas de import circular
-#     from website.tasks_mqtt import enviar_comando_mqtt
-
-#     agora = timezone.localtime()
-#     agora_hora_minuto = agora.time().replace(second=0, microsecond=0)
-#     dia_atual = agora.strftime('%A')
-
-#     traducao_dias = {
-#         'Monday': 'Segunda',
-#         'Tuesday': 'Terça',
-#         'Wednesday': 'Quarta',
-#         'Thursday': 'Quinta',
-#         'Friday': 'Sexta',
-#         'Saturday': 'Sábado',
-#         'Sunday': 'Domingo'
-#     }
-#     dia_atual_pt = traducao_dias[dia_atual]
-
-#     horarios_inicio = Horario.objects.filter(
-#         horario_inicio__hour=agora_hora_minuto.hour,
-#         horario_inicio__minute=agora_hora_minuto.minute,
-#         dias_da_semana__icontains=dia_atual_pt
-#     )
-
-#     horarios_fim = Horario.objects.filter(
-#         horario_fim__hour=agora_hora_minuto.hour,
-#         horario_fim__minute=agora_hora_minuto.minute,
-#         dias_da_semana__icontains=dia_atual_pt
-#     )
-
-#     for horario in horarios_inicio:
-#         enviar_comando_mqtt.delay(
-#             horario.sala.topico_mqtt, {'comando': 'ligar'})
-
-#     for horario in horarios_fim:
-#         enviar_comando_mqtt.delay(horario.sala.topico_mqtt, {
-#                                   'comando': 'desligar'})
-
-#     return horarios_inicio, horarios_fim
-
 @shared_task
 def verificar_horarios():
     # Import dentro da função evita problemas de import circular
