@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import os, json
+import sys
+import os
+import json
+from celery.schedules import crontab
 from pathlib import Path
 
 # Secrets Keys
@@ -53,6 +56,7 @@ INSTALLED_APPS = [
     # Aplicações de terceiros
     'django_bootstrap5',
     'chartjs',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -137,14 +141,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Minhas configurações
 
-## Login/Logout
+# Login/Logout
 LOGIN_REDIRECT_URL = 'website:pagina_inicial'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 LOGIN_URL = 'accounts:login'
 
-## Recuperação de senha via email
+# Recuperação de senha via email
 
-### Email via Web
+# Email via Web
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -152,7 +156,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = secrets['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
 
-### Email via Terminal
+# Email via Terminal
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = 1025
@@ -161,13 +165,43 @@ EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
 # EMAIL_HOST_USER = ''  # Não necessário
 # EMAIL_HOST_PASSWORD = ''  # Não necessário
 
-## MQTT Broker
+# MQTT Broker
 
-### Configurações do broker MQTT (HiveMQ com autenticação)
+# Configurações do broker MQTT (HiveMQ com autenticação)
 MQTT_BROKER = secrets['MQTT_BROKER_HOST']
 MQTT_PORT = secrets['MQTT_PORT_TLS']
 MQTT_CLIENT_ID = 'django_mqtt_client'
-MQTT_TLS_CERT = os.path.join(BASE_DIR, 'certificates', 'hivemq-ca.pem') # Caminho para o certificado CA
+# Caminho para o certificado CA
+MQTT_TLS_CERT = os.path.join(BASE_DIR, 'certificates', 'hivemq-ca.pem')
 MQTT_USERNAME = secrets['MQTT_USERNAME_HIVE_MQ']
 MQTT_PASSWORD = secrets['MQTT_PASSWORD_HIVE_MQ']
 MQTT_KEEPALIVE = 60
+
+# Celery
+
+# Localhost
+CELERY_BROKER_URL = 'pyamqp://guest@localhost//'  # URL do broker RabbitMQ
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULE = {
+    'verificar_horarios_cada_minuto': {
+        'task': 'website.tasks.verificar_horarios',
+        'schedule': crontab(),  # Executa a cada minuto
+    },
+    'verificar_periodo_30_em_horario_comercial': {
+        'task': 'website.tasks.verificar_periodo',
+        # a cada 30 min entre 6h e 21h59
+        'schedule': crontab(minute='*/30', hour='6-21'),
+    },
+    'verificar_periodo_1h_madrugada': {
+        'task': 'website.tasks.verificar_periodo',
+        # a cada 1h entre 22h e 5h59
+        'schedule': crontab(minute=0, hour='0-5,22-23'),
+    },
+}
+CELERY_TASK_ACKS_LATE = True  # Para garantir que a tarefa seja re-executada se falhar
+# Para garantir que a tarefa seja re-executada se o worker falhar
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_TASK_DEFAULT_RETRY_DELAY = 5  # Tempo de espera antes de tentar novamente
+CELERY_TASK_MAX_RETRIES = 3  # Número máximo de tentativas

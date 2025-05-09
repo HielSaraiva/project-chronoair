@@ -109,7 +109,7 @@ class SalaModelForm(forms.ModelForm):
 
             if queryset.exists():
                 self.add_error('nome', ValidationError(
-                    _("Já existe uma sala com este nome neste pavilhão."),
+                    ("Já existe uma sala com este nome neste pavilhão."),
                     code='unique_together'
                 ))
         return cleaned_data
@@ -188,7 +188,7 @@ class ArCondicionadoModelForm(forms.ModelForm):
 
             if queryset.exists():
                 self.add_error('nome', ValidationError(
-                    _("Já existe um ar-condicionado com este nome nesta sala."),
+                    ("Já existe um ar-condicionado com este nome nesta sala."),
                     code='unique_together'
                 ))
         return cleaned_data

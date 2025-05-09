@@ -400,3 +400,6 @@ pyrightconfig.json
 # Secret Keys
 /secrets.json
 /certificates/
+
+# Celery 
+celerybeat-schedule*

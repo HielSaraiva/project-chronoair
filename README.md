@@ -88,9 +88,8 @@ The project is organized into a **main directory** containing two primary folder
 - **Communication Protocol:** 
    - MQTT (Paho-mqtt with HiveMQ)
    - HTTP
-- **Task Scheduling:** APScheduler
+- **Task Scheduling:** Celery with RabbitMQ
 - **Microcontroller:** ESP32
-<!-- - **Task Scheduling:** Celery with RabbitMQ -->
 <!-- - **Deployment:** Railway -->
 
 ---
@@ -138,6 +137,62 @@ Before running the Django project, ensure you have all the required dependencies
 1. Install Python 3.8+
 
 2. VSCode or PyCharm
+
+3. RabbitMQ 
+
+   - Windows:
+
+      1. Install the Erlang version compatible with RabbitMQ
+
+      2. Install RabbitMQ
+
+      3. Add the RabbitMQ ````sbin```` folder to the system Path
+
+      4. Enable the management plugin:
+
+         ````
+         rabbitmq-plugins enable rabbitmq_management
+         ````
+
+      5. Start the service:
+
+         ````
+         rabbitmq-service start
+         ````
+
+      6. Access the management panel:
+
+         - ```http://localhost:15672```
+         - User: guest
+         - Password: guest
+      
+   - MacOS:
+
+      1. Install RabbitMQ:
+
+         ````
+         brew install rabbitmq
+         ````
+      
+      2. Add the path to your shell.
+
+      3. Start RabbitMQ:
+
+         ````
+         brew services start rabbitmq
+         ````
+
+      4. Enable the management panel:
+
+         ````
+         rabbitmq-plugins enable rabbitmq_management
+         ````
+
+      5. Access the management panel:
+
+         - ```http://localhost:15672```
+         - User: guest
+         - Password: guest
 
 #### macOS
 
@@ -228,6 +283,26 @@ Before running the Django project, ensure you have all the required dependencies
 
 7. Visit ```http://localhost:8000``` in your browser to access the Django web interface.
 
+8. Run Celery Worker: 
+
+   ````
+   celery -A ac_mm_system worker --pool=prefork --loglevel=INFO
+   ````
+
+   ````
+   celery -A ac_mm_system worker --pool=threads --loglevel=info
+   ````
+
+   ````
+   celery -A ac_mm_system worker --pool=solo --loglevel=info
+   ````
+
+9. Run Celery Beat: 
+
+   ````
+   celery -A ac_mm_system beat --loglevel=INFO
+   ````
+
 #### Windows
 
 1. Clone the repository and navigate to your project folder:
@@ -316,6 +391,22 @@ Before running the Django project, ensure you have all the required dependencies
    ```
 
 7. Visit ```http://localhost:8000``` in your browser to access the Django web interface.
+
+8. Run Celery Worker: 
+
+   ````
+   celery -A ac_mm_system worker --pool=threads --loglevel=info
+   ````
+
+   ````
+   celery -A ac_mm_system worker --pool=solo --loglevel=info
+   ````
+
+9. Run Celery Beat: 
+
+   ````
+   celery -A ac_mm_system beat --loglevel=INFO
+   ````
 
 ### ESP32 Firmware
 
