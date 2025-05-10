@@ -5,74 +5,76 @@
     Criar Conta
 {% endblock title %}
 {% block content %}
-    <h3 class="texto-mensagem">Crie sua conta</h3>
-    <h5 class="texto-mensagem">Preencha seus dados</h5>
-    <form action="{% url 'accounts:register' %}" method="post">
-        {% csrf_token %}
-        <!-- Nome de usuário -->
-        <div class="form-floating mb-3">
-            <input type="text"
-                   name="{{ form.username.name }}"
-                   class="form-control"
-                   id="floatingUsername"
-                   placeholder="Usuário"
-                   required />
-            <label for="floatingUsername">Nome de usuário</label>
-            {% if form.username.errors %}
-                <div class="text-danger">
-                    {% for error in form.username.errors %}<small>{{ error }}</small>{% endfor %}
+    <div class="card shadow-lg p-4 custom-card">
+        <h3 class="fw-bold text-success">Crie sua conta</h3>
+        <h5 class="text-dark-green">Preencha seus dados</h5>
+        <form action="{% url 'accounts:register' %}" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger p-2">
+                    {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
                 </div>
             {% endif %}
-        </div>
-        <!-- Senha -->
-        <div class="form-floating mb-3">
-            <input type="password"
-                   name="{{ form.password1.name }}"
-                   class="form-control"
-                   id="floatingPassword1"
-                   placeholder="Senha"
-                   required />
-            <label for="floatingPassword">Senha</label>
-            {% if form.password1.errors %}
-                <div class="text-danger">
-                    {% for error in form.password1.errors %}<small>{{ error }}</small>{% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        <!-- Confirmar senha -->
-        <div class="form-floating mb-3">
-            <input type="password"
-                   name="{{ form.password2.name }}"
-                   class="form-control"
-                   id="floatingPassword2"
-                   placeholder="Confirmar senha"
-                   required />
-            <label for="floatingConfirmPassword">Confirmar senha</label>
-            {% if form.password2.errors %}
-                <div class="text-danger">
-                    {% for error in form.password2.errors %}<small>{{ error }}</small>{% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        <!-- E-mail -->
-        <div class="form-floating mb-3">
-            <input type="email"
-                   name="{{ form.email.name }}"
-                   class="form-control"
-                   id="floatingEmail"
-                   placeholder="Email"
-                   required />
-            <label for="floatingEmail">E-mail</label>
-            {% if form.email.errors %}
-                <div class="text-danger">
-                    {% for error in form.email.errors %}<small>{{ error }}</small>{% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        <!-- Botão de registrar -->
-        <button type="submit" class="btn btn-success">Registrar</button>
-        <button type="button"
-                class="btn btn-danger"
-                onclick="window.location.href='{% url 'accounts:login' %}'">Voltar</button>
-    </form>
+            <div class="form-floating mb-3">
+                <input type="text"
+                       name="{{ form.username.name }}"
+                       class="form-control"
+                       id="floatingUsername"
+                       placeholder="Usuário"
+                       required />
+                <label for="floatingUsername">Nome de usuário</label>
+                {% if form.username.errors %}
+                    <div class="text-danger">
+                        {% for error in form.username.errors %}<small>{{ error }}</small>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email"
+                       name="{{ form.email.name }}"
+                       class="form-control"
+                       id="floatingEmail"
+                       placeholder="Email"
+                       required />
+                <label for="floatingEmail">E-mail</label>
+                {% if form.email.errors %}
+                    <div class="text-danger">
+                        {% for error in form.email.errors %}<small>{{ error }}</small>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password"
+                       name="{{ form.password1.name }}"
+                       class="form-control"
+                       id="floatingPassword1"
+                       placeholder="Senha"
+                       required />
+                <label for="floatingPassword">Senha</label>
+                {% if form.password1.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password1.errors %}<small>{{ error }}</small>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password"
+                       name="{{ form.password2.name }}"
+                       class="form-control"
+                       id="floatingPassword2"
+                       placeholder="Confirmar senha"
+                       required />
+                <label for="floatingConfirmPassword">Confirmar senha</label>
+                {% if form.password2.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password2.errors %}<small>{{ error }}</small>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <button name="submit" class="btn btn-success w-100">Criar conta</button>
+            <button type="button"
+                    class="btn btn-danger w-100 mt-2"
+                    onclick="window.location.href='{% url 'accounts:login' %}'">Voltar</button>
+        </form>
+    </div>
 {% endblock content %}

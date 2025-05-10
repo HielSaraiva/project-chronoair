@@ -2,22 +2,24 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="height=device-height, initial-scale=0.2,">
-
-    <title>{% block title %}Título{% endblock title %}</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-    <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
-
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="height=device-height, initial-scale=0.2,">
+        <title>
+            {% block title %}
+                Título
+            {% endblock title %}
+        </title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="icon"
+              type="image/svg+xml"
+              href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+        <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
+        <style>
         /* Estilização base */
         a, button, input, select, h1, h2, h3, h4, h5, * {
             box-sizing: border-box;
@@ -34,99 +36,104 @@
             margin: 0;
             padding: 0;
         }
-    </style>
-</head>
-l
-<body>
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <!-- div principal, última a ser fechada -->
-
-    <div class="rectangle-menu"></div>
-    <div class="menu-buttons">
-        {% block horarios %}
-            <div class="button-horarios">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/calendar-020white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-                <div class="nome-botoes-menu">Horários</div>
+        </style>
+    </head>
+    l
+    <body>
+        <div class="d-flex justify-content-center align-items-center"
+             style="height: 100vh">
+            <!-- div principal, última a ser fechada -->
+            <div class="rectangle-menu"></div>
+            <div class="menu-buttons">
+                {% block horarios %}
+                    <div class="button-horarios">
+                        <div class="rectangle-green"></div>
+                        <img class="img-botoes-menu"
+                             src="{% static 'buttons/calendar-020white.svg' %}" />
+                        <button class="img-botoes-menu"
+                                onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
+                        <div class="nome-botoes-menu">Horários</div>
+                    </div>
+                {% endblock horarios %}
+                {% block ar-condicionados %}
+                    <div class="button-arcondicionados">
+                        <div class="rectangle-green"></div>
+                        <img class="img-botoes-menu"
+                             src="{% static 'buttons/snowflake0white.svg' %}" />
+                        <button class="img-botoes-menu"
+                                onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
+                        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+                    </div>
+                {% endblock ar-condicionados %}
+                {% block salas %}
+                    <div class="button-salas">
+                        <div class="rectangle-green"></div>
+                        <img class="img-botoes-menu"
+                             src="{% static 'buttons/book-040white.svg' %}" />
+                        <button class="img-botoes-menu"
+                                onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
+                        <div class="nome-botoes-menu">Salas</div>
+                    </div>
+                {% endblock salas %}
+                {% block pavilhoes %}
+                    <div class="button-pavilhao">
+                        <div class="rectangle-green"></div>
+                        <img class="img-botoes-menu"
+                             src="{% static 'buttons/buildings-20white.svg' %}" />
+                        <button class="img-botoes-menu"
+                                onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
+                        <div class="nome-botoes-menu">Pavilhões</div>
+                    </div>
+                {% endblock pavilhoes %}
+                {% block inicio %}
+                    <div class="button-home">
+                        <div class="rectangle-green"></div>
+                        <img class="img-botoes-menu"
+                             src="{% static 'buttons/home-050white.svg' %}" />
+                        <button class="img-botoes-menu"
+                                onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
+                        <div class="nome-botoes-menu">Início</div>
+                    </div>
+                {% endblock inicio %}
             </div>
-        {% endblock horarios %}
-
-        {% block ar-condicionados %}
-            <div class="button-arcondicionados">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/snowflake0white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
-                <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+            <!-- Barra Superior -->
+            <div class="menu-bar d-flex align-items-center">
+                <div class="rectangle-barra-superior"></div>
+                <img class="img-barra-superior"
+                     src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+                <div class="sistema-de-gestao-de-ar-condicionado">Sistema de Gestão de Ar-Condicionado</div>
             </div>
-        {% endblock ar-condicionados %}
-
-        {% block salas %}
-            <div class="button-salas">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/book-040white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-                <div class="nome-botoes-menu">Salas</div>
-            </div>
-        {% endblock salas %}
-
-        {% block pavilhoes %}
-            <div class="button-pavilhao">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/buildings-20white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-                <div class="nome-botoes-menu">Pavilhões</div>
-            </div>
-        {% endblock pavilhoes %}
-
-        {% block inicio %}
-            <div class="button-home">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/home-050white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
-                <div class="nome-botoes-menu">Início</div>
-            </div>
-        {% endblock inicio %}
-    </div>
-
-    <!-- Barra Superior -->
-    <div class="menu-bar d-flex align-items-center">
-        <div class="rectangle-barra-superior"></div>
-        <img class="img-barra-superior" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-        <div class="sistema-de-gestao-de-ar-condicionado">
-            Sistema de Gestão de Ar-Condicionado
+            {% if user.is_authenticated %}
+                <div class="d-flex align-items-center justify-content-between p-4"
+                     style="width: 400px;
+                            margin-left: 80px;
+                            position: absolute;
+                            top: 80px;
+                            left:10px">
+                    <div class="mensagem-usuario-logado text-truncate"
+                         style="white-space: nowrap;
+                                overflow: visible">
+                        <h5 class="barra-usuario">Bem-vindo, {{ user.username }}.</h5>
+                    </div>
+                    <div class="mensagem-logout ms-2">
+                        <form action="{% url 'accounts:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger barra-usuario">Sair</button>
+                        </form>
+                    </div>
+                    <div class="mensagem-alterar-senha ms-2 text-truncate"
+                         style="white-space: nowrap;
+                                overflow: visible">
+                        <a href="{% url 'accounts:password_change' %}"
+                           class="btn btn-success barra-usuario">Alterar senha</a>
+                    </div>
+                </div>
+            {% endif %}
+            {% block content %}
+            {% endblock content %}
         </div>
-    </div>
-
-    {% if user.is_authenticated %}
-        <div class="d-flex align-items-center justify-content-between p-4"
-             style="width: 400px; margin-left: 80px; position: absolute; top: 80px; left:10px;">
-            <div class="mensagem-usuario-logado text-truncate" style="white-space: nowrap; overflow: visible;">
-                <h5 class="barra-usuario">Bem-vindo, {{ user.username }}.</h5>
-            </div>
-            <div class="mensagem-logout ms-2">
-                <form action="{% url 'accounts:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger barra-usuario">Sair</button>
-                </form>
-            </div>
-            <div class="mensagem-alterar-senha ms-2 text-truncate" style="white-space: nowrap; overflow: visible;">
-                <a href="{% url 'accounts:password_change' %}" class="btn btn-success barra-usuario">Alterar senha</a>
-            </div>
-        </div>
-    {% endif %}
-
-    {% block content %} {% endblock content %}
-
-</div>
-
-<!-- Script para esconder mensagens Bootstrap automaticamente -->
-<script>
+        <!-- Script para esconder mensagens Bootstrap automaticamente -->
+        <script>
     document.addEventListener("DOMContentLoaded", function () {
         let alertList = document.querySelectorAll(".alert");
         alertList.forEach(function (alert) {
@@ -139,7 +146,6 @@ l
             }, 3000); // Tempo de exibição: 3 segundos
         });
     });
-</script>
-
-</body>
+        </script>
+    </body>
 </html>

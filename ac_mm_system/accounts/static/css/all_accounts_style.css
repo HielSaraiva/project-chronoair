@@ -1,5 +1,20 @@
-body{
-     background-color: var(--var-sds-color-background-default-secondary-hover, #e6e6e6);
+body {
+    background: url('../backgrounds/Snow.svg') no-repeat center center fixed;
+    background-size: cover;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Work Sans', Arial, sans-serif;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .divteste{
@@ -17,12 +32,147 @@ body{
 }
 
 .imglogin{
-    width:150px;
-    height:150px;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 30px;
 }
 
 .texto-mensagem {
     color: rgba(25, 135, 84, 1);
     text-shadow: 1px 1px 2px beige, 0 0 25px darkseagreen, 0 0 5px beige;
     font-weight: bolder;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.btn-success {
+    background-color: #31D843; 
+    border-color: #31D843;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #38A700; 
+    border-color: #38A700;
+}
+
+.text-decoration-none {
+    transition: color 0.3s ease;
+}
+
+.text-decoration-none:hover {
+    color: #31D843;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+.text-success {
+    color: #38A700;
+}
+
+.text-dark-green {
+    color: #386C0B;
+}
+
+.text-neon {
+    color: #000000; 
+    transition: color 0.3s ease;
+}
+
+.text-neon:hover {
+    color: #38A700; 
+}
+
+.custom-card {
+    max-width: 600px;
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #293F14;
+}
+
+.btn-danger {
+    background-color: white; 
+    border: 1px solid gray; 
+    color: black; 
+    transition: all 0.3s ease; 
+}
+
+.btn-danger:hover {
+    background-color: gray; 
+    border-color: gray; 
+    color: white; 
+}
+
+.btn-danger:active {
+    background-color: black !important;
+    border-color: black !important; 
+    color: white !important; 
+}
+
+button {
+    font-size: 20px !important; 
+}
+
+@media (max-width: 768px) {
+    .custom-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+
+    h4, h5 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    button {
+        height: 50px; 
+        font-size: 20px; 
+    }
+
+    h4 {
+        font-size: 24px; 
+    }
+
+    p {
+        font-size: 18px; 
+    }
+}
+
+@media (max-width: 576px) {
+    .custom-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+    h4, h5 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    button {
+        font-size: 20px; 
+    }
 }

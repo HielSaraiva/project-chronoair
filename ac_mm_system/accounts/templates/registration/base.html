@@ -9,21 +9,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=0.8" />
         <link rel="icon"
               type="image/x-icon"
-              href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-        <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}" />
+              href="{% static 'icons/icon-air-conditioner.svg' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap"
+              rel="stylesheet">
+        <meta name="description"
+              content="Sistema de Gerenciamento de Ar Condicionado - Login e Registro" />
+        <meta name="keywords"
+              content="ar condicionado, gerenciamento, login, registro" />
         <title>
             {% block title %}
                 Título
             {% endblock title %}
         </title>
+        <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}" />
     </head>
     <body>
-        <div class="d-flex justify-content-center align-items-center"
-             style="height: 100vh">
-            <div class="divteste overflow-auto">
-                {% block content %}
-                {% endblock content %}
-            </div>
+        <div class="content-wrapper">
+            {% block content %}
+            {% endblock content %}
         </div>
     </body>
 </html>
