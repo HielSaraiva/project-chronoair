@@ -21,15 +21,39 @@
     <div class="lista-pavilhao overflow-auto">
         <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
             {% bootstrap_messages %}
+            <form method="get">
+                <label for="id_pavilhao">Pavilhão</label>
+                <select name="pavilhao" id="id_pavilhao" class="form-select" onchange="this.form.submit()">
+                    <option value="">---------</option>
+                    {% for p in pavilhoes %}
+                        <option value="{{ p.id }}" {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <!-- Formulário de Horário (POST) -->
             <form action="{% if ar %}{% url 'website:editar_ares' ar.uuid %}{% else %}{% url 'website:criar_ar' %}{% endif %}"
                   method="post" class="form" autocomplete="off">
                 {% csrf_token %}
-                {% bootstrap_form form %}
-                <a class="btn btn-danger" href="{% url 'website:listar_ares' %}">Cancelar</a>
-                <button type="submit" class="btn btn-primary">
-                    {% if ar %}Atualizar{% else %}Cadastrar{% endif %}
-                </button>
+
+                <input type="hidden" name="pavilhao_id" value="{{ pavilhao_id }}">
+
+                <!-- Gerando todos os campos menos o de pavilhão -->
+                {% bootstrap_form form exclude="pavilhao" %}
+
+                <!-- Botões de ação -->
+                <div class="d-flex justify-content-end align-items-center mt-3">
+                    <!-- Botão de cancelar -->
+                    <a class="btn btn-danger me-2" href="{% url 'website:listar_ares' %}">Cancelar</a>
+
+                    <!-- Botão de cadastrar/atualizar -->
+                    <button type="submit" class="btn btn-primary">
+                        {% if ar %}Atualizar{% else %}Cadastrar{% endif %}
+                    </button>
+                </div>
             </form>
+
+
     </div>
  </div>
 {% endblock content %}

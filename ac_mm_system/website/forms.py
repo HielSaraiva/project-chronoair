@@ -150,15 +150,23 @@ class SalaModelForm(forms.ModelForm):
 
 # Formulário para o modelo ArCondicionado
 class ArCondicionadoModelForm(forms.ModelForm):
+    pavilhao = forms.ModelChoiceField(
+        queryset=Pavilhao.objects.all(),
+        required=False,
+        label="Pavilhão",
+        widget=forms.Select(attrs={'onchange': 'this.form.submit();'})
+    )
+
     class Meta:
         model = ArCondicionado
         fields = [
-            'nome',
             'sala',
+            'nome',
             'consumo',
             'consumo_unidade'
         ]
         labels = {
+            'sala': 'Sala',
             'nome': 'Ar-condicionado',
             'consumo': 'Consumo'
         }
@@ -171,9 +179,33 @@ class ArCondicionadoModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         usuario = kwargs.pop('usuario', None)
         super().__init__(*args, **kwargs)
+
         if usuario is not None:
             self.fields['sala'].queryset = Sala.objects.filter(
                 pavilhao__usuario=usuario).order_by(Lower('nome'))
+        pavilhao_id = self.data.get('pavilhao') or self.initial.get('pavilhao')
+
+        # Caso não tenha pavilhao, faça a consulta de salas vazia (sem opções)
+        if pavilhao_id:
+            try:
+                pavilhao_id = int(pavilhao_id)
+                salas = Sala.objects.filter(pavilhao_id=pavilhao_id)
+                if usuario:
+                    salas = salas.filter(pavilhao__usuario=usuario)
+                self.fields['sala'].queryset = salas.order_by(Lower('nome'))
+                self.initial['pavilhao'] = pavilhao_id
+                self.fields['pavilhao'].initial = pavilhao_id
+            except (ValueError, TypeError):
+                self.fields['sala'].queryset = Sala.objects.none()
+        # Quando for edição, se a sala já estiver associada ao horário
+        elif self.instance.pk and self.instance.sala:
+            salas = Sala.objects.filter(pavilhao=self.instance.sala.pavilhao)
+            if usuario:
+                salas = salas.filter(pavilhao__usuario=usuario)
+            self.fields['sala'].queryset = salas.order_by(Lower('nome'))
+            self.initial['pavilhao'] = self.instance.sala.pavilhao.id
+            self.fields['pavilhao'].initial = self.instance.sala.pavilhao
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -203,11 +235,14 @@ class ArCondicionadoModelForm(forms.ModelForm):
             if ares_existentes.count() >= 3:
                 raise ValidationError(
                     "Já existem 3 ar-condicionados registrados para esta sala.")
+        cleaned_data = super().clean()
+        sala = cleaned_data.get('sala')
+        if not sala:
+            self.add_error('sala', 'Você deve selecionar uma sala.')
         return sala
 
+
 # Formulário para o modelo Horario
-
-
 class HorarioModelForm(forms.ModelForm):
     pavilhao = forms.ModelChoiceField(
         queryset=Pavilhao.objects.all(),
