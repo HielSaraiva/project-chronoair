@@ -33,12 +33,6 @@ button {
     font-weight: bolder;
 }
 
-.card {
-    border: none;
-    border-radius: 10px;
-    background: #ffffff;
-}
-
 .btn-success {
     background-color: #31D843; 
     border-color: #31D843;
@@ -88,6 +82,18 @@ button {
     padding: 20px;
     color: #293F14;
 }
+
+.custom-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #293F14;
+}
+
 
 .btn-danger {
     background-color: white; 
