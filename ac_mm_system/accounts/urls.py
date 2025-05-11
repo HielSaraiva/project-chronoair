@@ -32,15 +32,17 @@ urlpatterns = [
     # Páginas de recuperação de senha
     path(
         'password_reset/',
-        auth_views.PasswordResetView.as_view(
+        views.CustomPasswordResetView.as_view(
             template_name='registration/password_reset_form.html',
-            success_url=reverse_lazy('accounts:password_reset_done')
+            success_url=reverse_lazy('accounts:password_reset_done'),
+            html_email_template_name='registration/password_reset_email.html'
         ),
         name='password_reset',
     ),
     path(
         'password_reset_done/',
-        auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'),
+        auth_views.PasswordResetDoneView.as_view(
+            template_name='registration/password_reset_done.html'),
         name='password_reset_done',
     ),
     path(
