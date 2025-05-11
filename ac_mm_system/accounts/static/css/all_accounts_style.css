@@ -10,6 +10,10 @@ body {
     font-family: 'Work Sans', Arial, sans-serif;
 }
 
+button {
+    font-size: 20px !important; 
+}
+
 .content-wrapper {
     flex: 1;
     display: flex;
@@ -17,23 +21,9 @@ body {
     align-items: center;
 }
 
-.divteste{
-    position: absolute;
-    width: 400px;
-    height: 550px;
-    max-height: 700px;
-    overflow: hidden;
-    border: 3px solid #116b16;
-    border-radius: 10px;
-    padding:10px;
-    text-align: center;
-    background: rgba(181, 233, 179, 1);
-    align-content: center;
-}
-
-.imglogin{
-    width: 80px;
-    height: 80px;
+.img-login {
+    display: flex;
+    flex-direction: row;
     margin-bottom: 30px;
 }
 
@@ -90,7 +80,7 @@ body {
 }
 
 .custom-card {
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.95); 
@@ -118,11 +108,47 @@ body {
     color: white !important; 
 }
 
-button {
-    font-size: 20px !important; 
+.login-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95); 
+    max-width: 1000px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.login-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 100%);
+    padding: 20px;
+    color: #293F14;
+}
+
+.login-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
+    padding: 20px;
+    color: #293F14;
 }
 
 @media (max-width: 768px) {
+    .login-description {
+        display: none;
+    }
+
     .custom-card {
         width: 90%;
         padding: 20px;
