@@ -20,87 +20,6 @@ button {
     font-size: 20px !important; 
 }
 
-.content-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.img-login {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 30px;
-}
-
-.texto-mensagem {
-    color: rgba(25, 135, 84, 1);
-    text-shadow: 1px 1px 2px beige, 0 0 25px darkseagreen, 0 0 5px beige;
-    font-weight: bolder;
-}
-
-.btn-success {
-    background-color: #31D843; 
-    border-color: #31D843;
-    transition: background-color 0.3s ease;
-}
-
-.btn-success:hover {
-    background-color: #38A700; 
-    border-color: #38A700;
-}
-
-.text-decoration-none {
-    transition: color 0.3s ease;
-}
-
-.text-decoration-none:hover {
-    color: #31D843;
-}
-
-.fw-bold {
-    font-weight: bold;
-}
-
-.text-success {
-    color: #38A700;
-}
-
-.text-dark-green {
-    color: #386C0B;
-}
-
-.text-neon {
-    color: #000000; 
-    transition: color 0.3s ease;
-}
-
-.text-neon:hover {
-    color: #38A700; 
-}
-
-.custom-card {
-    max-width: 500px;
-    width: 100%;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.95); 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    color: #293F14;
-}
-
-.custom-card {
-    max-width: 500px;
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.95); 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    color: #293F14;
-}
-
-
 .btn-danger {
     background-color: white; 
     border: 1px solid gray; 
@@ -118,6 +37,34 @@ button {
     background-color: black !important;
     border-color: black !important; 
     color: white !important; 
+}
+
+.btn-success {
+    background-color: #31D843; 
+    border-color: #31D843;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #38A700; 
+    border-color: #38A700;
+}
+
+.custom-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #293F14;
+}
+
+.img-logo {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
 }
 
 .login-block {
@@ -148,6 +95,21 @@ button {
     color: #293F14;
 }
 
+.login-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
+    padding: 20px;
+    color: #293F14;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .register-description {
     display: flex;
     flex-direction: column;
@@ -163,14 +125,6 @@ button {
     color: #293F14;
 }
 
-.login-card {
-    max-width: 500px;
-    width: 100%;
-    border: none;
-    padding: 20px;
-    color: #293F14;
-}
-
 .register-description-card {
     width: 100%;
     background: rgba(255, 255, 255, 0.5);
@@ -179,32 +133,32 @@ button {
     border-radius: 10px;
 }
 
+.text-decoration-none {
+    transition: color 0.3s ease;
+}
+
+.text-decoration-none:hover {
+    color: #31D843;
+}
+
+.text-success {
+    color: #38A700;
+}
+
+.text-dark-green {
+    color: #386C0B;
+}
+
+.text-neon {
+    color: #000000; 
+    transition: color 0.3s ease;
+}
+
+.text-neon:hover {
+    color: #38A700; 
+}
+
 @media (max-width: 768px) {
-    .login-block {
-        max-width: 500px;
-    }
-
-    .login-description, .register-description {
-        display: none;
-    }
-
-    .custom-card {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .btn {
-        font-size: 14px;
-    }
-
-    h4, h5 {
-        font-size: 18px;
-    }
-
-    p {
-        font-size: 14px;
-    }
-
     button {
         height: 50px; 
         font-size: 20px; 
@@ -214,22 +168,38 @@ button {
         font-size: 24px; 
     }
 
+    h5 {
+        font-size: 18px;
+    }
+
     p {
         font-size: 18px; 
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+
+    .custom-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .login-block {
+        max-width: 500px;
+    }
+
+    .login-description, .register-description {
+        display: none;
     }
 }
 
 @media (max-width: 576px) {
-    .custom-card {
-        width: 90%;
-        padding: 15px;
+    h4 {
+        font-size: 18px;
     }
 
-    .btn {
-        font-size: 12px;
-    }
-
-    h4, h5 {
+    h5 {
         font-size: 16px;
     }
 
@@ -237,7 +207,12 @@ button {
         font-size: 12px;
     }
 
-    button {
-        font-size: 20px; 
+    .btn {
+        font-size: 12px;
+    }
+
+    .custom-card {
+        width: 90%;
+        padding: 15px;
     }
 }
