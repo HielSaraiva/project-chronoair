@@ -1,5 +1,11 @@
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
 body {
-    background: url('../backgrounds/Snow.svg') no-repeat center center fixed;
+    background: url('../backgrounds/spectrum-gradient.svg') no-repeat center center fixed;
     background-size: cover;
     color: #ffffff;
     margin: 0;
@@ -137,7 +143,22 @@ button {
     border-top-right-radius: 20px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 20px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 50%, rgba(62, 255, 139, 0.2) 100%);
+    padding: 20px;
+    color: #293F14;
+}
+
+.register-description {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    max-width: 500px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 50%, rgba(62, 255, 139, 0.2) 100%);
     padding: 20px;
     color: #293F14;
 }
@@ -150,8 +171,20 @@ button {
     color: #293F14;
 }
 
+.register-description-card {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    margin-bottom: 20px;
+    padding: 8px;
+    border-radius: 10px;
+}
+
 @media (max-width: 768px) {
-    .login-description {
+    .login-block {
+        max-width: 500px;
+    }
+
+    .login-description, .register-description {
         display: none;
     }
 

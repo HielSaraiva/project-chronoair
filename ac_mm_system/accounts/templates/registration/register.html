@@ -5,76 +5,119 @@
     Criar Conta
 {% endblock title %}
 {% block content %}
-    <div class="shadow-lg p-4 custom-card">
-        <h3 class="fw-bold text-success">Crie sua conta</h3>
-        <h5 class="text-dark-green">Preencha seus dados</h5>
-        <form action="{% url 'accounts:register' %}" method="post">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger p-2">
-                    {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
+    <div class="login-block shadow-lg">
+        <div class="register-description p-4">
+            <div class="img-login mb-1 gap-2">
+                <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                     alt="Login Icon"
+                     width="50"
+                     height="50" />
+                <h3 class="fw-bold text-success d-flex align-items-center">ChronoAir</h3>
+            </div>
+            <p class="fw-bold fs-5">
+                Junte-se ao <span class="fw-bold text-success">ChronoAir</span> e comece a controlar o clima com inteligência
+            </p>
+            <div class="register-description-card">
+                <i class="bi bi-calendar-check">
+                    <span class="fw-semibold">Agendamento Inteligente</span>
+                </i>
+                <p class="fs-7 m-0">Agende horários, economize energia e tenha conforto na medida certa</p>
+            </div>
+            <div class="register-description-card">
+                <i class="bi bi-phone">
+                    <span class="fw-semibold">Controle Remoto</span>
+                </i>
+                <p class="fs-7 m-0">Gerencie seus aparelhos de qualquer lugar, a qualquer hora</p>
+            </div>
+            <div class="register-description-card">
+                <i class="bi bi-gear">
+                    <span class="fw-semibold">Automação Simplificada</span>
+                </i>
+                <p class="fs-7 m-0">Automatize o funcionamento do ar-condicionado sem complicações</p>
+            </div>
+        </div>
+        <div class="login-card p-4">
+            <div class="mb-4">
+                <div class="d-block d-md-none">
+                    <div class="img-login mb-3 gap-2">
+                        <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                             alt="Login Icon"
+                             width="50"
+                             height="50" />
+                        <h3 class="fw-bold text-success d-flex align-items-center">ChronoAir</h3>
+                    </div>
                 </div>
-            {% endif %}
-            <div class="form-floating mb-3">
-                <input type="text"
-                       name="{{ form.username.name }}"
-                       class="form-control"
-                       id="floatingUsername"
-                       placeholder="Usuário"
-                       required />
-                <label for="floatingUsername">Nome de usuário</label>
-                {% if form.username.errors %}
-                    <div class="text-danger">
-                        {% for error in form.username.errors %}<small>{{ error }}</small>{% endfor %}
+                <h3 class="fw-bold text-success">Crie sua conta</h3>
+                <h5 class="text-dark-green">Preencha seus dados</h5>
+                <form action="{% url 'accounts:register' %}" method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger p-2">
+                            {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="form-floating mb-3">
+                        <input type="text"
+                               name="{{ form.username.name }}"
+                               class="form-control"
+                               id="floatingUsername"
+                               placeholder="Usuário"
+                               required />
+                        <label for="floatingUsername">Nome de usuário</label>
+                        {% if form.username.errors %}
+                            <div class="text-danger">
+                                {% for error in form.username.errors %}<small>{{ error }}</small>{% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
-            </div>
-            <div class="form-floating mb-3">
-                <input type="email"
-                       name="{{ form.email.name }}"
-                       class="form-control"
-                       id="floatingEmail"
-                       placeholder="Email"
-                       required />
-                <label for="floatingEmail">E-mail</label>
-                {% if form.email.errors %}
-                    <div class="text-danger">
-                        {% for error in form.email.errors %}<small>{{ error }}</small>{% endfor %}
+                    <div class="form-floating mb-3">
+                        <input type="email"
+                               name="{{ form.email.name }}"
+                               class="form-control"
+                               id="floatingEmail"
+                               placeholder="Email"
+                               required />
+                        <label for="floatingEmail">E-mail</label>
+                        {% if form.email.errors %}
+                            <div class="text-danger">
+                                {% for error in form.email.errors %}<small>{{ error }}</small>{% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password"
-                       name="{{ form.password1.name }}"
-                       class="form-control"
-                       id="floatingPassword1"
-                       placeholder="Senha"
-                       required />
-                <label for="floatingPassword">Senha</label>
-                {% if form.password1.errors %}
-                    <div class="text-danger">
-                        {% for error in form.password1.errors %}<small>{{ error }}</small>{% endfor %}
+                    <div class="form-floating mb-3">
+                        <input type="password"
+                               name="{{ form.password1.name }}"
+                               class="form-control"
+                               id="floatingPassword1"
+                               placeholder="Senha"
+                               required />
+                        <label for="floatingPassword">Senha</label>
+                        {% if form.password1.errors %}
+                            <div class="text-danger">
+                                {% for error in form.password1.errors %}<small>{{ error }}</small>{% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password"
-                       name="{{ form.password2.name }}"
-                       class="form-control"
-                       id="floatingPassword2"
-                       placeholder="Confirmar senha"
-                       required />
-                <label for="floatingConfirmPassword">Confirmar senha</label>
-                {% if form.password2.errors %}
-                    <div class="text-danger">
-                        {% for error in form.password2.errors %}<small>{{ error }}</small>{% endfor %}
+                    <div class="form-floating mb-3">
+                        <input type="password"
+                               name="{{ form.password2.name }}"
+                               class="form-control"
+                               id="floatingPassword2"
+                               placeholder="Confirmar senha"
+                               required />
+                        <label for="floatingConfirmPassword">Confirmar senha</label>
+                        {% if form.password2.errors %}
+                            <div class="text-danger">
+                                {% for error in form.password2.errors %}<small>{{ error }}</small>{% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                    <button name="submit" class="btn btn-success w-100">Criar conta</button>
+                    <button type="button"
+                            class="btn btn-danger w-100 mt-2"
+                            onclick="window.location.href='{% url 'accounts:login' %}'">Voltar</button>
+                </form>
             </div>
-            <button name="submit" class="btn btn-success w-100">Criar conta</button>
-            <button type="button"
-                    class="btn btn-danger w-100 mt-2"
-                    onclick="window.location.href='{% url 'accounts:login' %}'">Voltar</button>
-        </form>
+        </div>
     </div>
 {% endblock content %}
