@@ -4,8 +4,8 @@ from accounts.forms import CustomUserCreationForm
 from django.contrib.auth.views import PasswordResetView
 from django.core.mail import EmailMultiAlternatives
 
-
 # Create your views here.
+
 
 def register(request):
     if request.method == 'POST':
