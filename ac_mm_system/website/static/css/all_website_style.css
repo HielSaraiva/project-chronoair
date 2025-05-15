@@ -1,0 +1,130 @@
+/* Geral */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'Work Sans', Arial, sans-serif;
+   background-color: rgb(246, 249, 255);
+}
+
+/* Header */
+.dropdown-toggle-custom {
+    border: none;
+}
+
+.dropdown-toggle-custom:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.dropdown-toggle-custom:hover,
+.dropdown-toggle-custom:focus {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.dropdown-menu-custom {
+   background-color: rgb(255, 255, 255);
+   border: none;
+   min-width: 200px;
+   width: 256px;
+   box-shadow: 2px;
+  }
+
+.dropdown-menu-custom .dropdown-item:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.dropdown-item:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.dropdown-item:active {
+   color: rgba(0, 0, 0, 1)
+}
+
+.offcanvas-open-button {
+   border: none;
+}
+
+.offcanvas-open-button:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.offcanvas-open-button:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+#logout-btn {
+   color: rgb(208, 18, 18) !important;
+}
+
+#logout-btn:hover {
+   background-color: rgba(255, 0, 0, 0.1) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#logout-btn:active {
+   background-color: rgba(255, 0, 0, 0.2) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+.text-green-light {
+   color: var(--green-light-color)
+}
+
+.text-green-medium {
+   color: var(--green-medium-color)
+}
+
+.text-green-dark {
+   color: var(--green-dark-color)
+}
+
+/* Menus */
+.btn-menu-custom {
+   border: none !important;
+   color: var(--green-dark-color) !important;
+}
+
+.btn-menu-custom:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.btn-menu-custom:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.btn-menu-custom.active {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.offcanvas-custom {
+   max-width: 80vw !important;
+}
+
+/* Página Inicial */
+
+/* Pavilhões */
+
+/* Salas */
+
+/* Ares */
+
+/* Horários */
