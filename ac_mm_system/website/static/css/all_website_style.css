@@ -95,6 +95,23 @@ body {
    color: var(--green-dark-color)
 }
 
+.btn-modal-welcome {
+   border: none;
+}
+
+.btn-modal-welcome:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.btn-modal-welcome:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.btn-modal-welcome:focus {
+   color: var(--green-medium-color) !important;
+}
+
 /* Menus */
 .btn-menu-custom {
    border: none !important;
@@ -117,6 +134,36 @@ body {
 
 .offcanvas-custom {
    max-width: 80vw !important;
+}
+
+/* Modal de Bem-vindos */
+.modal-body a {
+   text-decoration: none;
+   color: var(--green-medium-color);
+}
+
+.modal-body a:hover {
+  text-decoration: underline;
+  color: var(--green-light-color)
+}
+
+.modal-body p {
+   text-indent: 30px;
+   text-align: justify;
+}
+
+.modal-content .modal-footer button {
+   border: none !important;
+   color: var(--green-dark-color) !important;
+}
+
+.modal-content .modal-footer button:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.modal-content .modal-footer button:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
 }
 
 /* Página Inicial */
