@@ -48,7 +48,7 @@
                         </div>
                         <!-- Botão do menu lateral (visível apenas em telas menores) -->
                         <div class="d-flex d-md-none my-2">
-                              <button class="btn text-success offcanvas-open-button"
+                              <button class="btn offcanvas-open-button text-green-medium"
                                       type="button"
                                       data-bs-toggle="offcanvas"
                                       data-bs-target="#sidebarMenu"
@@ -71,7 +71,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom shadow-sm border border-1 p-0"
                                         aria-labelledby="userDropdown">
                                           <li>
-                                                <a class="dropdown-item d-flex align-items-center border-bottom border-1 p-2"
+                                                <a class="dropdown-item d-flex align-items-center text-green-medium border-bottom border-1 p-2"
                                                    href="{% url 'accounts:password_change' %}">
                                                       <i class="bi bi-shield-lock me-2"></i> Alterar senha
                                                 </a>
@@ -95,7 +95,7 @@
             <div class="container-fluid">
                   <div class="row">
                         <!-- Menus do Site -->
-                        <div class="sidebar border-left col-md-3 col-lg-2 p-0 bg-white">
+                        <div class="sidebar border-left col-md-3 col-lg-2 p-0 bg-white position-fixed">
                               <!-- Menu para telas menores (botão sanduíche) -->
                               <div class="offcanvas offcanvas-start offcanvas-custom"
                                    tabindex="-1"
@@ -198,7 +198,7 @@
                   </div>
             </div>
             {% now "Y" as current_year %}
-            <footer class="footer mt-auto py-3 bg-light border-top">
+            <footer class="footer mt-auto py-3 col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-light border-top">
                   <div class="container d-flex align-items-center justify-content-start gap-2">
                         <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
                              alt="Ícone ChronoAir"

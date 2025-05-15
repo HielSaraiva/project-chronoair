@@ -1,41 +1,43 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Página Inicial{% endblock title %}
-
+{% block title %}
+    Página Inicial
+{% endblock title %}
 {% block inicio %}
     <div class="button-home">
         <div class="rectangle-white"></div>
-        <img class="img-botoes-menu" src="{% static 'buttons/home-050green.svg' %}"/>
-        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
+        <img class="img-botoes-menu"
+             src="{% static 'buttons/home-050green.svg' %}" />
+        <button class="img-botoes-menu"
+                onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
         <div class="nome-botoes-menu">Início</div>
     </div>
 {% endblock inicio %}
-
 {% block content %}
-        <div class="bloco-design">
-            <h4 class="texto-mensagem">Bem-vindo ao Monitor de Gastos</h4>
-        </div>
+    <div class="bloco-design">
+        <h4 class="texto-mensagem">Bem-vindo ao Monitor de Gastos</h4>
+    </div>
     <div class="bloco-graficos">
         <div class="lista-graficos">
             <canvas id="graficoPizza"></canvas>
             <canvas id="graficoBarras"></canvas>
         </div>
         <div class="editar-graficos">
-            <button onclick="window.location.href='{% url 'website:editar_grafico' %}'" class="btn btn-success btn-sm">
-                Editar Gráfico
-            </button>
+            <button onclick="window.location.href='{% url 'website:editar_grafico' %}'"
+                    class="btn btn-success btn-sm">Editar Gráfico</button>
         </div>
-         <div class="totais-container">
-            <h5 style="margin-left: 150px;">Total gasto: <strong>R$ {{ total_gasto }}</strong></h5>
-            <h5>Total consumo: <strong>{{ total_kWh_semana }}</strong></h5>
+        <div class="totais-container">
+            <h5 style="margin-left: 150px;">
+                Total gasto: <strong>R$ {{ total_gasto }}</strong>
+            </h5>
+            <h5>
+                Total consumo: <strong>{{ total_kWh_semana }}</strong>
+            </h5>
         </div>
     </div>
-
     <script>
         var dados = JSON.parse('{{ dados_pizza|escapejs }}');
         var labels = Object.keys(dados);
