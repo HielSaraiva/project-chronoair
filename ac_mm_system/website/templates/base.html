@@ -197,6 +197,7 @@
                         </main>
                   </div>
             </div>
+            {% now "Y" as current_year %}
             <footer class="footer mt-auto py-3 bg-light border-top">
                   <div class="container d-flex align-items-center justify-content-start gap-2">
                         <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
@@ -204,8 +205,9 @@
                              width="25"
                              height="25"
                              class="me-2" />
-                        <i class="bi bi-c-circle fs-6"></i>
-                        <span class="text-muted">2025 ChronoAir. Todos os direitos reservados.</span>
+                        <span class="text-muted">© 2025
+                              {% if current_year != '2025' %}–{{ current_year }}{% endif %}
+                        ChronoAir. Todos os direitos reservados.</span>
                   </div>
             </footer>
       </body>
