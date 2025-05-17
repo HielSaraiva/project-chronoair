@@ -1,35 +1,36 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Horários{% endblock title %}
-
-{% block horarios %}
-<div class="button-horarios">  <!-- div do botão de horarios -->
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/calendar-020green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-    <div class="nome-botoes-menu">Horários</div>
-</div>
-{% endblock horarios %}
-
+{% block title %}
+    Horários
+{% endblock title %}
 {% block content %}
-     <div class="bloco-central">
-        <div class="lista-pavilhao overflow-auto">
-            <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-                <center>
-                    <div class="alert alert-danger" role="alert">
-                        Deletar a horário "{{horario}}"?
-                    </div>
-                    <form action="{% url 'website:deletar_horarios' horario.uuid %}" method="POST">
-                        {% csrf_token %}
-                        <a class="btn btn-primary" href="{% url 'website:listar_horarios' %}">Cancelar</a>
-                        <button type="submit" class="btn btn-danger">Deletar</button>
-                    </form>
-                </center>
+    <div class="container">
+        <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Deletar Horário</h2>
+        <p class="text-green-medium">
+            Confirme abaixo a exclusão do horário selecionado. Esta ação é irreversível e removerá todas as informações relacionadas a este horário do sistema.
+        </p>
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="text-danger d-flex align-items-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2 fs-4"></i>
+                <div>
+                    Tem certeza que deseja <strong>deletar</strong> o horário <strong>"{{ horario }}"</strong>?
+                    <br>
+                    <small class="text-muted">Esta ação não poderá ser desfeita.</small>
+                </div>
+            </div>
+            <form action="{% url 'website:deletar_horarios' horario.uuid %}"
+                  method="post"
+                  class="d-flex gap-2">
+                {% csrf_token %}
+                <a class="btn btn-outline-secondary"
+                   href="{% url 'website:listar_horarios' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i> Deletar
+                </button>
+            </form>
         </div>
-     </div>
+    </div>
 {% endblock content %}

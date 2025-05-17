@@ -1,57 +1,59 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Horários{% endblock title %}
-
-{% block horarios %}
-    <div class="button-horarios">  <!-- div do botão de horarios -->
-        <div class="rectangle-white"></div>
-        <img class="img-botoes-menu" src="{% static 'buttons/calendar-020green.svg' %}"/>
-        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-        <div class="nome-botoes-menu">Horários</div>
-    </div>
-{% endblock horarios %}
-
+{% block title %}
+    Horários
+{% endblock title %}
 {% block content %}
-    <div class="bloco-central">
-        <div class="lista-pavilhao overflow-auto">
-            <!-- Div que determina o tamanho do bloco central, onde fica o conteúdo -->
-            <!-- Exibição de mensagens do sistema -->
-            {% bootstrap_messages %}
-
-            <!-- Formulário do Pavilhão (GET) -->
-            <form method="get">
-                <label for="id_pavilhao">Pavilhão</label>
-                <select name="pavilhao" id="id_pavilhao" class="form-select" onchange="this.form.submit()">
+    <div class="container">
+        {% if horario %}
+            <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Editar Horário</h2>
+            <p class="text-green-medium">
+                Altere as informações do horário selecionado abaixo. Atualize o pavilhão, a sala, os dias da semana ou o horário conforme necessário e salve as alterações
+            </p>
+        {% else %}
+            <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Criar Horário</h2>
+            <p class="text-green-medium">
+                Preencha os campos abaixo para cadastrar um novo horário no sistema. Informe o pavilhão, a sala, os dias da semana e o horário que ele irá possuir
+            </p>
+        {% endif %}
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <form method="get" class="pb-3">
+                <label for="id_pavilha" class="mb-2">Pavilhão</label>
+                <select name="pavilhao"
+                        id="id_pavilhao"
+                        class="form-select"
+                        onchange="this.form.submit()">
                     <option value="">---------</option>
                     {% for p in pavilhoes %}
-                        <option value="{{ p.id }}" {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
+                        <option value="{{ p.id }}"
+                                {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
                     {% endfor %}
                 </select>
             </form>
-
             <!-- Formulário de Horário (POST) -->
             <form action="{% if horario %}{% url 'website:editar_horarios' horario.uuid %}{% else %}{% url 'website:criar_horario' %}{% endif %}"
-                  method="post" class="form" autocomplete="off">
+                  method="post"
+                  class="form"
+                  autocomplete="off">
                 {% csrf_token %}
-
                 <input type="hidden" name="pavilhao" value="{{ pavilhao_id }}">
-
                 <!-- Gerando todos os campos menos o de pavilhão -->
                 {% bootstrap_form form exclude="pavilhao" %}
-
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     <!-- Botão de cancelar -->
-                    <a class="btn btn-danger me-2" href="{% url 'website:listar_horarios' %}">Cancelar</a>
-
+                    <a class="btn btn-outline-secondary me-2"
+                       href="{% url 'website:listar_horarios' %}">Cancelar</a>
                     <!-- Botão de cadastrar/atualizar -->
-                    <button type="submit" class="btn btn-primary">
-                        {% if horario %}Atualizar{% else %}Cadastrar{% endif %}
+                    <button type="submit" class="btn btn-success">
+                        {% if horario %}
+                            Atualizar
+                        {% else %}
+                            Cadastrar
+                        {% endif %}
                     </button>
                 </div>
             </form>

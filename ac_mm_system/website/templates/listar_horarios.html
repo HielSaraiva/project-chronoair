@@ -6,22 +6,12 @@
 {% block title %}
     Horários
 {% endblock title %}
-{% block horarios %}
-    <div class="button-horarios">
-        <div class="rectangle-white"></div>
-        <img class="img-botoes-menu"
-             src="{% static 'buttons/calendar-020green.svg' %}" />
-        <button class="img-botoes-menu"
-                onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-        <div class="nome-botoes-menu">Horários</div>
-    </div>
-{% endblock horarios %}
 {% block content %}
-    <div class="bloco-central">
+    {% comment %} <div class="bloco-central">
         <div class="lista-pavilhao overflow-auto">
             {% bootstrap_messages %}
-            <table class="table table-bordered border-success table-fixed">
-                <thead>
+            <table class="table table-hover mb-0">
+                <thead class="table-white">
                     <tr class="table-light table-fixed">
                         {% for dia in dias_da_semana %}<th scope="col" class="text-center">{{ dia }}</th>{% endfor %}
                     </tr>
@@ -34,20 +24,15 @@
                                     {% if dia in horario.dias_da_semana %}
                                         <div class="horario-bloco">
                                             <div class="">
-                                                <button class="btn btn-light btn-sm dropdown-toggle"
-                                                        type="button"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
+                                                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     {{ horario.horario_inicio }} - {{ horario.horario_fim }}
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a class="dropdown-item"
-                                                           href="{% url 'website:editar_horarios' horario.uuid %}">Editar</a>
+                                                        <a class="dropdown-item" href="{% url 'website:editar_horarios' horario.uuid %}">Editar</a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item text-danger"
-                                                           href="{% url 'website:deletar_horarios' horario.uuid %}">Excluir</a>
+                                                        <a class="dropdown-item text-danger" href="{% url 'website:deletar_horarios' horario.uuid %}">Excluir</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -61,19 +46,66 @@
             </table>
         </div>
         <div class="botao-criarnovo">
-            <button onclick="window.location.href='{% url 'website:criar_horario' %}'"
-                    class="btn btn-success btn-sm">Criar Novo</button>
+            <button onclick="window.location.href='{% url 'website:criar_horario' %}'" class="btn btn-success btn-sm">Criar Novo</button>
         </div>
         <div class="filtro-search">
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-inline">
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm"
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" onchange="this.form.submit()">
+                        <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
+                        {% for pavilhao in pavilhoes %}
+                            <option value="{{ pavilhao.uuid }}" {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
+                                {{ pavilhao.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
+                        <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
+                        {% for sala in salas %}
+                            <option value="{{ sala.uuid }}" {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
+                                {{ sala.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno">
+                        <option value="" class="list-group" {% if not filtrarturno %}selected{% endif %}>Turnos</option>
+                        {% for turno in turnos %}
+                            <option value="{{ turno.0 }}" {% if filtrarturno == turno.0 %}selected{% endif %}>{{ turno.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
+                    <a href="{% url 'website:listar_horarios' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
+                </div>
+            </form>
+        </div>
+    </div> {% endcomment %}
+    <div class="container">
+        {% if messages %}
+            <div class="position-fixed bottom-0 end-0">
+                {% for message in messages %}
+                    <div class="alert alert-success d-flex align-items-center rounded-0 shadow-sm mb-3"
+                         role="alert">
+                        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h1 class="h3 mt-3 text-green-dark fw-bold">Horários</h1>
+        <p class="text-green-medium">Gerencie e monitore os horários do sistema</p>
+        <!-- Filtros -->
+        <div class="bg-white shadow-sm rounded-1 ps-3 pt-2 pe-3 pb-3 mb-4">
+            <h2 class="h4 text-green-dark fw-semibold">Filtros</h2>
+            <form method="POST" class="row gy-2 gx-3 align-items-center">
+                {% csrf_token %}
+                <div class="col-12 col-md-4">
+                    <label for="filtroPavilhao" class="form-label mb-1">Pavilhão</label>
+                    <select id="filtroPavilhao"
+                            class="form-select form-select-sm"
                             name="pavilhao"
                             onchange="this.form.submit()">
-                        <option value=""
-                                class="list-group"
-                                {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
+                        <option value="" {% if not filtrarpavilhao %}selected{% endif %}>Todos os pavilhões</option>
                         {% for pavilhao in pavilhoes %}
                             <option value="{{ pavilhao.uuid }}"
                                     {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
@@ -81,11 +113,11 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm"
-                            name="sala">
-                        <option value=""
-                                class="list-group"
-                                {% if not filtrarsala %}selected{% endif %}>Salas</option>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="filtroSala" class="form-label mb-1">Sala</label>
+                    <select id="filtroSala" class="form-select form-select-sm" name="sala">
+                        <option value="" {% if not filtrarsala %}selected{% endif %}>Todas as salas</option>
                         {% for sala in salas %}
                             <option value="{{ sala.uuid }}"
                                     {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
@@ -93,23 +125,90 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm"
-                            name="turno">
-                        <option value=""
-                                class="list-group"
-                                {% if not filtrarturno %}selected{% endif %}>Turnos</option>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="filtroTurno" class="form-label mb-1">Turno</label>
+                    <select id="filtroTurno" class="form-select form-select-sm" name="turno">
+                        <option value="" {% if not filtrarturno %}selected{% endif %}>Todos os turnos</option>
                         {% for turno in turnos %}
                             <option value="{{ turno.0 }}"
                                     {% if filtrarturno == turno.0 %}selected{% endif %}>{{ turno.1 }}</option>
                         {% endfor %}
                     </select>
-                    <input class="filtro-search-botoes form-control btn btn-success btn-sm"
-                           type="submit"
-                           value="Buscar">
-                    <a href="{% url 'website:listar_horarios' %}"
-                       class="btn btn-secondary btn-sm">Limpar Filtro</a>
+                </div>
+                <div class="col-12 col-md-auto d-flex gap-2 align-items-end mt-2">
+                    <button type="submit"
+                            class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+                        <i class="bi bi-search"></i>
+                        Buscar
+                    </button>
+                    {% if filtrarpavilhao or filtrarsala or filtrarturno %}
+                        <a href="{% url 'website:listar_horarios' %}"
+                           class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
+                            <i class="bi bi-x-circle"></i>
+                            Limpar Filtro
+                        </a>
+                    {% endif %}
                 </div>
             </form>
+        </div>
+        <!-- Resultados -->
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                <h2 class="h5 text-green-dark fw-bold mb-0">Resultados</h2>
+                <a href="{% url 'website:criar_horario' %}"
+                   class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm p-1 m-1">
+                    <i class="bi bi-plus-lg"></i>
+                    Horário
+                </a>
+            </div>
+            <!-- Tabela -->
+            <div class="table-responsive rounded-1">
+                <table class="table table-hover mb-0">
+                    <thead class="table-white">
+                        <tr>
+                            {% for dia in dias_da_semana %}<th scope="col" class="text-center">{{ dia }}</th>{% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for horario in horarios %}
+                            <tr>
+                                {% for dia in dias_da_semana %}
+                                    <td class="align-top text-center">
+                                        {% if dia in horario.dias_da_semana %}
+                                            <div>
+                                                <div>
+                                                    <button class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-custom"
+                                                            type="button"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                        {{ horario.horario_inicio }} - {{ horario.horario_fim }}
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-custom shadow-sm p-0">
+                                                        <li>
+                                                            <a class="dropdown-item text-success d-flex align-items-center gap-2 border-bottom border-1 p-2"
+                                                               href="{% url 'website:editar_horarios' horario.uuid %}">
+                                                                <i class="bi bi-pencil-square"></i> Editar
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a id="del-btn"
+                                                               class="dropdown-item text-danger d-flex align-items-center gap-2 p-2"
+                                                               href="{% url 'website:deletar_horarios' horario.uuid %}">
+                                                                <i class="bi bi-trash"></i> Deletar
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock content %}

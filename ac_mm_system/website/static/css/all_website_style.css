@@ -198,11 +198,11 @@ body {
    padding-bottom: 2px;
 }
 
-#del-pav-btn {
+#del-btn {
    color: rgb(208, 18, 18) !important;
 }
 
-#del-pav-btn:hover {
+#del-btn:hover {
    background-color: rgba(255, 0, 0, 0.1) !important;
    border-top-left-radius: 0 !important;
    border-top-right-radius: 0 !important;
@@ -210,7 +210,7 @@ body {
    border-bottom-right-radius: 5px;
 }
 
-#del-pav-btn:active {
+#del-btn:active {
    background-color: rgba(255, 0, 0, 0.2) !important;
    border-top-left-radius: 0 !important;
    border-top-right-radius: 0 !important;

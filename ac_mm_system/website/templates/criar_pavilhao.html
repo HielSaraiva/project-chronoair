@@ -26,8 +26,9 @@
                   autocomplete="off">
                 {% csrf_token %}
                 {% bootstrap_form form %}
-                <a class="btn btn-danger" href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
-                <button type="submit" class="btn btn-primary">
+                <a class="btn btn-outline-secondary"
+                   href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
+                <button type="submit" class="btn btn-success">
                     {% if pavilhao %}
                         Atualizar
                     {% else %}
