@@ -167,6 +167,17 @@ body {
 }
 
 /* Página Inicial */
+.card-grafico-min {
+    min-height: 350px;
+    max-height: 400px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.card-grafico-min canvas {
+    flex: 1 1 auto;
+    max-height: 300px;
+}
 
 /* Páginas de listagem */
 .btn-custom-active {
@@ -218,8 +229,6 @@ body {
    border-bottom-right-radius: 5px;
 }
 
-/* Páginas de criação/edição */
-
 /* Remove as setas dos campos numéricos em todos os navegadores */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -230,7 +239,5 @@ input[type=number] {
   -moz-appearance: textfield; /* Firefox */
   appearance: textfield; /* Compatibilidade padrão */
 }
-
-/* Páginas de deleção */
 
 /* Páginas de ajustes */

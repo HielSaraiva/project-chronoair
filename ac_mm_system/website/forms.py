@@ -202,7 +202,7 @@ class ArCondicionadoModelForm(forms.ModelForm):
                 ares_existentes = ares_existentes.exclude(pk=self.instance.pk)
             if ares_existentes.count() >= 3:
                 raise ValidationError(
-                    "Já existem 3 ar-condicionados registrados para esta sala.")
+                    "Já existem 3 ares-condicionados registrados para esta sala.")
         return sala
 
 # Formulário para o modelo Horario

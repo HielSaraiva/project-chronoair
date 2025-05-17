@@ -22,7 +22,7 @@
                 </div>
             </div>
             <form action="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}"
-                  method="POST"
+                  method="post"
                   class="d-flex gap-2">
                 {% csrf_token %}
                 <a class="btn btn-outline-secondary"

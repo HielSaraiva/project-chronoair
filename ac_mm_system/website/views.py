@@ -574,6 +574,17 @@ def pagina_inicial(request):
 
     # Obter pavilhões do usuário
     pavilhoes = list(Pavilhao.objects.filter(usuario=usuario))
+    qtd_pavilhoes = len(pavilhoes)
+    salas = Sala.objects.filter(pavilhao__usuario=usuario)
+    qtd_salas = salas.count()
+    ares = ArCondicionado.objects.filter(sala__pavilhao__usuario=usuario)
+    qtd_ares = ares.count()
+
+    # Calcular horas totais ligadas dos ares-condicionados
+    horas_ares = 0
+    for ar in ares:
+        horas_ares += ar.horas_diarias() * 30  # Aproximação mensal
+    horas_ares = f"{horas_ares:.1f}h/mês"
 
     # Criar dicionário de gastos por pavilhão
     gasto_pav = {pav.nome: pav.consumo_total(
@@ -586,44 +597,79 @@ def pagina_inicial(request):
     # Dados para gráfico de pizza
     dados_pizza = {pav.nome: gasto_pav.get(pav.nome, 0) for pav in pavilhoes}
 
-    # Consumo por dia da semana
+    # Consumo por dia da semana (kWh)
     dias_semana = ["Segunda", "Terça", "Quarta",
                    "Quinta", "Sexta", "Sábado", "Domingo"]
     consumo_diario = {dia: 0 for dia in dias_semana}
-
     for pav in pavilhoes:
         for sala in pav.salas.all():
             for horario in sala.horarios.all():
                 dias = [d.strip(" []'")
                         for d in horario.dias_da_semana.split(",")]
-
                 inicio = horario.horario_inicio.hour + \
                     (horario.horario_inicio.minute / 60)
                 fim = horario.horario_fim.hour + \
                     (horario.horario_fim.minute / 60)
-
                 if fim < inicio:
                     horas_uso = (24 - inicio) + fim
                 else:
                     horas_uso = fim - inicio
-
                 for ac in sala.ares_condicionados.all():
                     consumo_kWh = ac.potencia_kw * horas_uso
                     for dia in dias:
                         if dia in consumo_diario:
                             consumo_diario[dia] += consumo_kWh
-
     total_kWh_semana = sum(consumo_diario.values())
-
     dados_barras = OrderedDict(
         (dia, consumo_diario[dia]) for dia in dias_semana)
+
+    # Consumo por horário do dia (linha)
+    horarios_labels = [f"{h:02d}:00" for h in range(24)]
+    consumo_por_hora = {label: 0 for label in horarios_labels}
+    for pav in pavilhoes:
+        for sala in pav.salas.all():
+            for ac in sala.ares_condicionados.all():
+                for horario in sala.horarios.all():
+                    inicio = horario.horario_inicio.hour + \
+                        (horario.horario_inicio.minute / 60)
+                    fim = horario.horario_fim.hour + \
+                        (horario.horario_fim.minute / 60)
+                    if fim <= inicio:
+                        fim += 24
+                    h = int(inicio)
+                    while h < int(fim) or (h == int(fim) and fim % 1 != 0):
+                        hora_real = h % 24
+                        label = f"{hora_real:02d}:00"
+                        # Calcular início e fim reais dentro da hora
+                        start = max(inicio, h)
+                        end = min(fim, h+1)
+                        tempo_ativo = max(0, end - start)
+                        if tempo_ativo > 0:
+                            consumo_por_hora[label] += ac.potencia_kw * \
+                                tempo_ativo
+                        h += 1
+    dados_linha = consumo_por_hora
+
+    # Consumo de energia por sala (barras horizontais)
+    dados_salas = OrderedDict()
+    lista_consumo_salas = [(sala.nome, sala.consumo_total()) for sala in salas]
+    # Maior consumo primeiro
+    lista_consumo_salas.sort(key=lambda x: x[1], reverse=True)
+    for nome, consumo in lista_consumo_salas:
+        dados_salas[nome] = consumo
 
     context = {
         "dados_pizza": json.dumps(dados_pizza),
         "dados_barras": json.dumps(dados_barras),
+        "dados_linha": json.dumps(dados_linha),
+        "dados_salas": json.dumps(dados_salas),
         "total_gasto": f'R$ {gasto_total_geral:,.2f}'.replace(',', '.'),
         "total_kWh_semana": f'{total_kWh_semana:.2f} kWh',
-        "grafico": grafico
+        "grafico": grafico,
+        "qtd_pavilhoes": qtd_pavilhoes,
+        "qtd_salas": qtd_salas,
+        "qtd_ares": qtd_ares,
+        "horas_ares": horas_ares,
     }
 
     return render(request, 'pagina_inicial.html', context)
@@ -640,6 +686,8 @@ def editar_grafico(request):
             novo_grafico = form.save(commit=False)
             novo_grafico.usuario = usuario
             novo_grafico.save()
+            messages.success(request,
+                             'Valor kWh editado com sucesso!')
             return redirect('website:pagina_inicial')
     else:
         form = GraficoModelForm(instance=grafico)

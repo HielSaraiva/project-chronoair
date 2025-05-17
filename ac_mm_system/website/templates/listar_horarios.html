@@ -7,79 +7,6 @@
     Horários
 {% endblock title %}
 {% block content %}
-    {% comment %} <div class="bloco-central">
-        <div class="lista-pavilhao overflow-auto">
-            {% bootstrap_messages %}
-            <table class="table table-hover mb-0">
-                <thead class="table-white">
-                    <tr class="table-light table-fixed">
-                        {% for dia in dias_da_semana %}<th scope="col" class="text-center">{{ dia }}</th>{% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for horario in horarios %}
-                        <tr class="table-light">
-                            {% for dia in dias_da_semana %}
-                                <td class="align-top">
-                                    {% if dia in horario.dias_da_semana %}
-                                        <div class="horario-bloco">
-                                            <div class="">
-                                                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    {{ horario.horario_inicio }} - {{ horario.horario_fim }}
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a class="dropdown-item" href="{% url 'website:editar_horarios' horario.uuid %}">Editar</a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item text-danger" href="{% url 'website:deletar_horarios' horario.uuid %}">Excluir</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="botao-criarnovo">
-            <button onclick="window.location.href='{% url 'website:criar_horario' %}'" class="btn btn-success btn-sm">Criar Novo</button>
-        </div>
-        <div class="filtro-search">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-inline">
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="pavilhao" onchange="this.form.submit()">
-                        <option value="" class="list-group" {% if not filtrarpavilhao %}selected{% endif %}>Pavilhões</option>
-                        {% for pavilhao in pavilhoes %}
-                            <option value="{{ pavilhao.uuid }}" {% if filtrarpavilhao == pavilhao.uuid|stringformat:"s" %}selected{% endif %}>
-                                {{ pavilhao.nome }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="sala">
-                        <option value="" class="list-group" {% if not filtrarsala %}selected{% endif %}>Salas</option>
-                        {% for sala in salas %}
-                            <option value="{{ sala.uuid }}" {% if filtrarsala == sala.uuid|stringformat:"s" %}selected{% endif %}>
-                                {{ sala.nome }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <select class="filtro-search-botoes form-select btn btn-success btn-sm" name="turno">
-                        <option value="" class="list-group" {% if not filtrarturno %}selected{% endif %}>Turnos</option>
-                        {% for turno in turnos %}
-                            <option value="{{ turno.0 }}" {% if filtrarturno == turno.0 %}selected{% endif %}>{{ turno.1 }}</option>
-                        {% endfor %}
-                    </select>
-                    <input class="filtro-search-botoes form-control btn btn-success btn-sm" type="submit" value="Buscar">
-                    <a href="{% url 'website:listar_horarios' %}" class="btn btn-secondary btn-sm">Limpar Filtro</a>
-                </div>
-            </form>
-        </div>
-    </div> {% endcomment %}
     <div class="container">
         {% if messages %}
             <div class="position-fixed bottom-0 end-0">
@@ -97,7 +24,7 @@
         <!-- Filtros -->
         <div class="bg-white shadow-sm rounded-1 ps-3 pt-2 pe-3 pb-3 mb-4">
             <h2 class="h4 text-green-dark fw-semibold">Filtros</h2>
-            <form method="POST" class="row gy-2 gx-3 align-items-center">
+            <form method="post" class="row gy-2 gx-3 align-items-center">
                 {% csrf_token %}
                 <div class="col-12 col-md-4">
                     <label for="filtroPavilhao" class="form-label mb-1">Pavilhão</label>
@@ -157,7 +84,7 @@
             <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                 <h2 class="h5 text-green-dark fw-bold mb-0">Resultados</h2>
                 <a href="{% url 'website:criar_horario' %}"
-                   class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm p-1 m-1">
+                   class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm pe-3 m-1">
                     <i class="bi bi-plus-lg"></i>
                     Horário
                 </a>
