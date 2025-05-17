@@ -80,10 +80,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row g-3 mb-4">
+        </div>        <div class="row g-3 mb-4">
             <!-- Card 1: Pizza - Consumo total de reais por pavilhão em 1 mês -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                 <div class="bg-white shadow-sm border-0 rounded-top-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-pie-chart-fill me-2"></i>Consumo por Pavilhão (R$)
@@ -96,7 +95,7 @@
                 </div>
             </div>
             <!-- Card 2: Barras - Consumo diário em kWh da semana -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                 <div class="bg-white shadow-sm border-0 rounded-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-bar-chart-fill me-2"></i>Consumo Diário (kWh/dia)
@@ -104,8 +103,10 @@
                     <canvas id="graficoBarras"></canvas>
                 </div>
             </div>
+        </div>
+        <div class="row g-3 mb-4 mt-4 mt-sm-5">
             <!-- Card 3: Linha - Consumo por horário do dia -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                 <div class="bg-white shadow-sm border-0 rounded-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-graph-up-arrow me-2"></i>Consumo por Horário do Dia (kWh/hora)
@@ -216,18 +217,36 @@
                         easing: 'easeInOutCubic'
                     }
                 }
-            });
-
-            // Gráfico Barras Horizontais - Consumo por sala
+            });            // Gráfico Barras Horizontais - Consumo por sala
             var dadosSalas = JSON.parse('{{ dados_salas|escapejs }}');
+            
+            // Transformar em array para poder ordenar corretamente
+            var salaLabels = Object.keys(dadosSalas);
+            var salaValues = Object.values(dadosSalas).map(Number);
+            
+            // Criar array de pares [nome, valor] para ordenação
+            var salasPares = [];
+            for (var i = 0; i < salaLabels.length; i++) {
+                salasPares.push([salaLabels[i], salaValues[i]]);
+            }
+            
+            // Ordenar do maior para o menor
+            salasPares.sort(function(a, b) {
+                return b[1] - a[1]; // Ordem decrescente
+            });
+            
+            // Separar novamente em arrays de labels e valores
+            var labelsOrdenados = salasPares.map(function(item) { return item[0]; });
+            var valoresOrdenados = salasPares.map(function(item) { return item[1]; });
+            
             var ctxSalas = document.getElementById('graficoSalas').getContext('2d');
             new Chart(ctxSalas, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(dadosSalas),
+                    labels: labelsOrdenados,
                     datasets: [{
                         label: 'kWh/mês',
-                        data: Object.values(dadosSalas),
+                        data: valoresOrdenados,
                         backgroundColor: '#36A2EB',
                         borderColor: '#4DBC53',
                         borderWidth: 1

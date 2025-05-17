@@ -647,14 +647,18 @@ def pagina_inicial(request):
                         if tempo_ativo > 0:
                             consumo_por_hora[label] += ac.potencia_kw * \
                                 tempo_ativo
+                        # Consumo de energia por sala (barras horizontais)
                         h += 1
     dados_linha = consumo_por_hora
-
-    # Consumo de energia por sala (barras horizontais)
     dados_salas = OrderedDict()
     lista_consumo_salas = [(sala.nome, sala.consumo_total()) for sala in salas]
-    # Maior consumo primeiro
+    # Filtra apenas salas com consumo > 0
+    lista_consumo_salas = [item for item in lista_consumo_salas if item[1] > 0]
+    # Ordena por consumo decrescente
     lista_consumo_salas.sort(key=lambda x: x[1], reverse=True)
+    # Limita para no máximo 5 salas
+    lista_consumo_salas = lista_consumo_salas[:5]
+    # A ordenação será feita pelo JavaScript no frontend
     for nome, consumo in lista_consumo_salas:
         dados_salas[nome] = consumo
 
