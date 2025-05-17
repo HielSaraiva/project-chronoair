@@ -220,6 +220,17 @@ body {
 
 /* Páginas de criação/edição */
 
+/* Remove as setas dos campos numéricos em todos os navegadores */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield; /* Compatibilidade padrão */
+}
+
 /* Páginas de deleção */
 
 /* Páginas de ajustes */

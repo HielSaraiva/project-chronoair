@@ -1,35 +1,38 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Pavilhões{% endblock title %}
-
-{% block pavilhoes %}
-<div class="button-pavilhao"> <!-- div do botão de pavilhões -->
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/buildings-20green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-    <div class="nome-botoes-menu">Pavilhões</div>
-</div>
-{% endblock pavilhoes %}
-
+{% block title %}
+    Pavilhões
+{% endblock title %}
 {% block content %}
-  <div class="bloco-central">
-    <div class="lista-pavilhao overflow-auto">
-        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-            <center>
-                <div class="alert alert-danger" role="alert">
-                    Deletar pavilhão "{{pavilhao}}"?
+    <div class="container">
+        <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Deletar Pavilhão</h2>
+        <p class="text-green-medium">
+            Confirme abaixo a exclusão do pavilhão selecionado. Esta ação é irreversível e removerá todas as informações relacionadas a este pavilhão do sistema.
+        </p>
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="text-danger d-flex align-items-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2 fs-4"></i>
+                <div>
+                    Tem certeza que deseja <strong>deletar</strong> o pavilhão <strong>"{{ pavilhao }}"</strong>?
+                    <br>
+                    <small class="text-muted">Esta ação não poderá ser desfeita.</small>
                 </div>
-                <form action="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}" method="POST">
-                    {% csrf_token %}
-                    <a class="btn btn-primary" href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                </form>
-            </center>
+            </div>
+            <form action="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}"
+                  method="POST"
+                  class="d-flex gap-2">
+                {% csrf_token %}
+                <a class="btn btn-outline-secondary"
+                   href="{% url 'website:listar_pavilhoes' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i> Deletar
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
 {% endblock content %}
+{% block alert_script %}
+{% endblock alert_script %}

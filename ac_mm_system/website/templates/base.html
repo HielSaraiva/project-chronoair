@@ -249,19 +249,21 @@
                   </div>
             </footer>
             <!-- Script para esconder mensagens Bootstrap automaticamente -->
-            <script>
-                  document.addEventListener("DOMContentLoaded", function () {
-                        let alertList = document.querySelectorAll(".alert");
-                        alertList.forEach(function (alert) {
-                              setTimeout(function () {
-                              alert.classList.add("fade");
-                              alert.classList.remove("show");
-                              setTimeout(function () {
-                                    alert.remove(); // Remove a mensagem da tela
-                              }, 500);
-                              }, 3000); // Tempo de exibição: 3 segundos
+            {% block alert_script %}
+                  <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                              let alertList = document.querySelectorAll(".alert");
+                              alertList.forEach(function (alert) {
+                                    setTimeout(function () {
+                                    alert.classList.add("fade");
+                                    alert.classList.remove("show");
+                                    setTimeout(function () {
+                                          alert.remove();
+                                    }, 500);
+                                    }, 3000);
+                              });
                         });
-                  });
-            </script>
+                  </script>
+            {% endblock alert_script %}
       </body>
 </html>

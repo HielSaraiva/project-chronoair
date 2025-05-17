@@ -168,7 +168,7 @@ def listar_horarios(request):
 def criar_pavilhao(request):
     # Validação e envio do formulário da sala
     if request.method == 'POST':
-        form = PavilhaoModelForm(request.POST)
+        form = PavilhaoModelForm(request.POST, usuario=request.user)
         if form.is_valid():  # Verifica se os dados inseridos são válidos
             try:
                 novo_pavilhao = form.save(commit=False)
@@ -182,11 +182,8 @@ def criar_pavilhao(request):
             except IntegrityError:
                 messages.error(
                     request, "Você já tem um pavilhão com esse nome.")
-        else:
-            messages.error(request,
-                           'Erro ao criar pavilhão')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
     else:
-        form = PavilhaoModelForm()
+        form = PavilhaoModelForm(usuario=request.user)
     context = {
         'form': form  # Passa o formulário para o contexto do template
     }
