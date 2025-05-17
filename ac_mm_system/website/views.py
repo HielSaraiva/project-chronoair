@@ -1,6 +1,7 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 from django.db.models.functions import Lower
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -18,11 +19,21 @@ from chartjs.views.lines import BaseLineChartView
 
 @login_required
 def listar_pavilhoes(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
+    pavilhoes = Pavilhao.objects.filter(usuario=request.user)
+
+    if query:
+        pavilhoes = pavilhoes.filter(nome__icontains=query)
+
+    pavilhoes = pavilhoes.order_by(Lower('nome'))
+
+    paginator = Paginator(pavilhoes, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'pavilhoes': pavilhoes
+        'page_obj': page_obj,
+        'query': query,
     }
     return render(request, 'listar_pavilhoes.html', context)
 
@@ -342,7 +353,8 @@ def editar_horarios(request, uuid):
     pavilhao_id_get = request.GET.get('pavilhao')
     if pavilhao_id_get:
         try:
-            pavilhao_get = Pavilhao.objects.get(id=pavilhao_id_get, usuario=request.user)
+            pavilhao_get = Pavilhao.objects.get(
+                id=pavilhao_id_get, usuario=request.user)
         except Pavilhao.DoesNotExist:
             pavilhao_get = pavilhao
     else:
@@ -352,14 +364,17 @@ def editar_horarios(request, uuid):
     salas = Sala.objects.filter(pavilhao=pavilhao_get).order_by('nome')
 
     if request.method == 'POST':
-        form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
+        form = HorarioModelForm(
+            request.POST, instance=horario, usuario=request.user)
 
         pavilhao_id_post = request.POST.get('pavilhao')
         if pavilhao_id_post:
             try:
-                pavilhao_post = Pavilhao.objects.get(id=pavilhao_id_post, usuario=request.user)
+                pavilhao_post = Pavilhao.objects.get(
+                    id=pavilhao_id_post, usuario=request.user)
                 # Atualizar a lista de salas de acordo com o pavilhão escolhido
-                form.fields['sala'].queryset = Sala.objects.filter(pavilhao=pavilhao_post).order_by('nome')
+                form.fields['sala'].queryset = Sala.objects.filter(
+                    pavilhao=pavilhao_post).order_by('nome')
             except Pavilhao.DoesNotExist:
                 form.fields['sala'].queryset = Sala.objects.none()
 
@@ -380,7 +395,6 @@ def editar_horarios(request, uuid):
         'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
     }
     return render(request, 'criar_horario.html', context)
-
 
 
 @login_required
