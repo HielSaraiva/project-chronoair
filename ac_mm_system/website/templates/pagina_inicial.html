@@ -80,22 +80,27 @@
                     </div>
                 </div>
             </div>
-        </div>        <div class="row g-3 mb-4">
+        </div>
+        <div class="row g-3 mb-4">
             <!-- Card 1: Pizza - Consumo total de reais por pavilhão em 1 mês -->
-            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                <div class="bg-white shadow-sm border-0 rounded-top-3 h-100 p-3 card-grafico-min">
+            <div class="col-12 col-lg-6">
+                <div class="bg-white shadow-sm border-0 rounded-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-pie-chart-fill me-2"></i>Consumo por Pavilhão (R$)
                     </h5>
-                    <canvas id="graficoPizza"></canvas>
-                </div>
-                <div class="w-100 p-3 bg-white border-0 rounded-bottom-3 border-top-0 mt-n2 text-center shadow-sm">
-                    <span class="fw-semibold text-green-dark">Total:</span>
-                    <span class="fw-bold">{{ total_gasto }}</span>
+                    <div class="d-flex justify-content-center">
+                        <div class="w-75">
+                            <canvas id="graficoPizza"></canvas>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="fw-semibold text-green-dark">Total:</span>
+                        <span class="fw-bold">{{ total_gasto }}</span>
+                    </div>
                 </div>
             </div>
             <!-- Card 2: Barras - Consumo diário em kWh da semana -->
-            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <div class="col-12 col-lg-6">
                 <div class="bg-white shadow-sm border-0 rounded-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-bar-chart-fill me-2"></i>Consumo Diário (kWh/dia)
@@ -104,9 +109,9 @@
                 </div>
             </div>
         </div>
-        <div class="row g-3 mb-4 mt-4 mt-sm-5">
+        <div class="row g-3 mb-4">
             <!-- Card 3: Linha - Consumo por horário do dia -->
-            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <div class="col-12 col-lg-6">
                 <div class="bg-white shadow-sm border-0 rounded-3 h-100 p-3 card-grafico-min">
                     <h5 class="fw-bold text-green-dark mb-3">
                         <i class="bi bi-graph-up-arrow me-2"></i>Consumo por Horário do Dia (kWh/hora)
@@ -130,8 +135,12 @@
             var dadosPizza = JSON.parse('{{ dados_pizza|escapejs }}');
             var labelsPizza = Object.keys(dadosPizza);
             var valoresPizza = Object.values(dadosPizza).map(Number);
-            var totalGasto = valoresPizza.reduce((acc, val) => acc + val, 0);
-            var ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+            var totalGasto = valoresPizza.reduce((acc, val) => acc + val, 0);            var ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+            
+            // Ajustar o tamanho do container do gráfico antes de criá-lo
+            var canvasPizza = ctxPizza.canvas;
+            canvasPizza.parentNode.style.height = '250px'; // Reduzir altura
+            
             new Chart(ctxPizza, {
                 type: 'pie',
                 data: {
