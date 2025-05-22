@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
@@ -10,85 +9,85 @@
 {% block content %}
     <div class="container">
         <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Ajustes da sala</h2>
-         <p class="text-green-medium">
-                Ligue ou desligue os ares-condicionados da sala selecionada.
-         </p>
-            <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                {% bootstrap_messages %}
-                <table class="table table-hover mb-0">
+        <p class="text-green-medium">Ligue ou desligue os ares-condicionados da sala selecionada.</p>
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="table-responsive rounded-1">
+                {% if messages %}
+                    <div class="position-fixed bottom-0 end-0">
+                        {% for message in messages %}
+                            <div class="alert alert-success d-flex align-items-center rounded-0 shadow-sm mb-3"
+                                 role="alert">
+                                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                                <div>{{ message }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <table class="table table-hover mb-2">
                     <thead>
-                    <tr class="table-white">
-                        <th scope="col">Sala</th>
-                        <th scope="col">Pavilhão</th>
-                        <th scope="col">Tópico MQTT</th>
-                        <th scope="col">Ares Cadastrados</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="table-white">
-                        <td>{{ sala.nome }}</td>
-                        <td>{{ sala.pavilhao.nome }}</td>
-                        <td>{{ sala.topico_mqtt }}</td>
-                        <td>{{ ares_quantidade }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                {% if ares_quantidade > 0 %}
-
-                    <table class="table table-hover mb-0">
-                        <thead>
                         <tr class="table-white">
-                            <th scope="col">Ar-Condicionado</th>
                             <th scope="col">Sala</th>
                             <th scope="col">Pavilhão</th>
                             <th scope="col">Tópico MQTT</th>
-                            <th scope="col">Potência</th>
+                            <th scope="col">Ares Cadastrados</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-white">
+                            <td>{{ sala.nome }}</td>
+                            <td>{{ sala.pavilhao.nome }}</td>
+                            <td>{{ sala.topico_mqtt }}</td>
+                            <td>{{ ares_quantidade }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% if ares_quantidade > 0 %}
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr class="table-white">
+                                <th scope="col">Ar-Condicionado</th>
+                                <th scope="col">Sala</th>
+                                <th scope="col">Pavilhão</th>
+                                <th scope="col">Tópico MQTT</th>
+                                <th scope="col">Potência</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {% for ar in ares %}
-                            <tr class="table-white">
-                                <td>{{ ar.nome }}</td>
-                                <td>{{ ar.sala.nome }}</td>
-                                <td>{{ ar.sala.pavilhao.nome }}</td>
-                                <td>{{ ar.sala.topico_mqtt }}</td>
-                                <td>{{ ar.potencia_kw|floatformat:2 }} kW</td>
-                            </tr>
-                        {% endfor %}
+                            {% for ar in ares %}
+                                <tr class="table-white">
+                                    <td>{{ ar.nome }}</td>
+                                    <td>{{ ar.sala.nome }}</td>
+                                    <td>{{ ar.sala.pavilhao.nome }}</td>
+                                    <td>{{ ar.sala.topico_mqtt }}</td>
+                                    <td>{{ ar.potencia_kw|floatformat:2 }} kW</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
-
-                    <form action="{% url 'website:ajustes_salas' sala.uuid %}" method="POST"
-                          class="d-flex justify-content-center">
-                        {% csrf_token %}
-
-                        <div class="p-4 mb-4">
-                            <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
-                                    class="btn btn-outline-success btn" name="comando"
-                                    value="ligar">
-                                Ligar Ares
-                            </button>
-
-
-                            <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
-                                    class="btn btn-outline-danger btn" name="comando"
-                                    value="desligar">
-                                Desligar Ares
-                            </button>
-                        </div>
-
-                    </form>
                 {% endif %}
-
             </div>
-
+            {% if ares_quantidade > 0 %}
+                <form action="{% url 'website:ajustes_salas' sala.uuid %}"
+                      method="POST"
+                      class="d-flex justify-content-center">
+                    {% csrf_token %}
+                    <div class="p-4 mb-4">
+                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
+                                class="btn btn-outline-success btn"
+                                name="comando"
+                                value="ligar">Ligar Ares</button>
+                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
+                                class="btn btn-outline-danger btn"
+                                name="comando"
+                                value="desligar">Desligar Ares</button>
+                    </div>
+                </form>
+            {% endif %}
             <!-- Botão Voltar -->
             <div>
-                <a href="{% url 'website:listar_salas' %}" class="btn btn-outline-secondary btn-sm">
-                    Voltar
-                </a>
+                <a href="{% url 'website:listar_salas' %}"
+                   class="btn btn-outline-secondary btn-sm">Voltar</a>
             </div>
-
+        </div>
     </div>
 {% endblock content %}

@@ -1,14 +1,11 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 {% block title %}
     Salas
 {% endblock title %}
-
 {% block content %}
     <div class="container">
         {% if messages %}
@@ -94,13 +91,14 @@
                                     </li>
                                     <li>
                                         <a id="del-btn"
-                                           class="dropdown-item text-danger d-flex align-items-center gap-2 p-2"
+                                           class="dropdown-item text-danger d-flex align-items-center gap-2 border-bottom border-1 p-2"
                                            href="{% url 'website:deletar_salas' sala.uuid %}">
                                             <i class="bi bi-trash"></i> Deletar
                                         </a>
                                     </li>
                                     <li>
-                                        <a id="ac-btn" class="dropdown-item text-warning d-flex align-items-center gap-2 border-bottom border-1 p-2"
+                                        <a id="ac-btn"
+                                           class="dropdown-item text-warning d-flex align-items-center gap-2 border-bottom border-1 p-2"
                                            href="{% url 'website:ajustar_sala' sala.uuid %}">
                                             <i class="bi bi-wrench-adjustable"></i>Ajustes
                                         </a>

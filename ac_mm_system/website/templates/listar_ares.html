@@ -77,7 +77,7 @@
                         <td>{{ ar.sala.nome }}</td>
                         <td>{{ ar.sala.pavilhao.nome }}</td>
                         <td>{{ ar.sala.topico_mqtt }}</td>
-                        <td>{{ sala.potencia_kw|floatformat:2 }} kW</td>
+                        <td>{{ ar.potencia_kw|floatformat:2 }} kW</td>
                         <td>
                             <div>
                                 <button class="btn btn-sm dropdown-toggle dropdown-toggle-custom"
@@ -95,13 +95,14 @@
                                     </li>
                                     <li>
                                         <a id="del-btn"
-                                           class="dropdown-item text-danger d-flex align-items-center gap-2 p-2"
+                                           class="dropdown-item text-danger d-flex align-items-center gap-2 border-bottom border-1 p-2"
                                            href="{% url 'website:deletar_ares' ar.uuid %}">
                                             <i class="bi bi-trash"></i> Deletar
                                         </a>
                                     </li>
                                     <li>
-                                        <a id="ac-btn" class="dropdown-item text-warning d-flex align-items-center gap-2 border-bottom border-1 p-2"
+                                        <a id="ac-btn"
+                                           class="dropdown-item text-warning d-flex align-items-center gap-2 border-bottom border-1 p-2"
                                            href="{% url 'website:ajustar_ar' ar.uuid %}">
                                             <i class="bi bi-wrench-adjustable"></i>Ajustes
                                         </a>

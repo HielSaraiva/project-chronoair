@@ -11,11 +11,20 @@
 {% block content %}
     <div class="container">
         <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Ajustes do ar</h2>
-         <p class="text-green-medium">
-                Grave os sinais do ar-condicionado selecionado.
-         </p>
-            <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                {% bootstrap_messages %}
+        <p class="text-green-medium">Grave os sinais do ar-condicionado selecionado.</p>
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="table-responsive rounded-1">
+                {% if messages %}
+                    <div class="position-fixed bottom-0 end-0">
+                        {% for message in messages %}
+                            <div class="alert alert-success d-flex align-items-center rounded-0 shadow-sm mb-3"
+                                 role="alert">
+                                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                                <div>{{ message }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr class="table-white">
@@ -40,27 +49,27 @@
                         </tr>
                     </tbody>
                 </table>
-                <form action="{% url 'website:ajustes_ares' ar.uuid %}"
-                      method="POST"
-                      class="d-flex justify-content-center">
-                    {% csrf_token %}
-                    <div class="p-4 mb-4">
-                        <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
-                                class="btn btn-outline-success btn"
-                                name="comando"
-                                value="gravar_ligar">Gravar Sinal de Ligar</button>
-                        <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
-                                class="btn btn-outline-danger btn"
-                                name="comando"
-                                value="gravar_desligar">Gravar Sinal de Desligar</button>
-                    </div>
-                </form>
             </div>
+            <form action="{% url 'website:ajustes_ares' ar.uuid %}"
+                  method="POST"
+                  class="d-flex justify-content-center">
+                {% csrf_token %}
+                <div class="p-4 mb-4">
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
+                            class="btn btn-outline-success btn"
+                            name="comando"
+                            value="gravar_ligar">Gravar Sinal de Ligar</button>
+                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
+                            class="btn btn-outline-danger btn"
+                            name="comando"
+                            value="gravar_desligar">Gravar Sinal de Desligar</button>
+                </div>
+            </form>
             <!-- Botão Voltar -->
             <div class="botao-criarnovo">
-                <a href="{% url 'website:listar_ares' %}" class="btn btn-outline-secondary btn-sm">
-                    Voltar
-                </a>
+                <a href="{% url 'website:listar_ares' %}"
+                   class="btn btn-outline-secondary btn-sm">Voltar</a>
             </div>
         </div>
+    </div>
 {% endblock content %}
