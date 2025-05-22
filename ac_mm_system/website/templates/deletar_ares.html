@@ -6,28 +6,34 @@
 {% block title %}
     Ares
 {% endblock title %}
-{% block ar-condicionados %}
-    <div class="button-arcondicionados">
-        <div class="rectangle-white"></div>
-        <img class="img-botoes-menu"
-             src="{% static 'buttons/snowflake0green.svg' %}" />
-        <button class="img-botoes-menu"
-                onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
-        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
-    </div>
-{% endblock ar-condicionados %}
+
 {% block content %}
-    <div class="bloco-central">
-        <div class="lista-pavilhao overflow-auto">
-            <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-            <center>
-                <div class="alert alert-danger" role="alert">Deletar o ar "{{ ar }}"?</div>
-                <form action="{% url 'website:deletar_ares' ar.uuid %}" method="POST">
-                    {% csrf_token %}
-                    <a class="btn btn-primary" href="{% url 'website:listar_ares' %}">Cancelar</a>
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                </form>
-            </center>
+    <div class="container">
+        <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Deletar Ar-condicionado</h2>
+        <p class="text-green-medium">
+            Confirme abaixo a exclusão do ar-condicionado selecionado. Esta ação é irreversível e removerá todas as informações relacionadas a este ar-condicionado do sistema.
+        </p>
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <div class="text-danger d-flex align-items-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2 fs-4"></i>
+                <div>
+                    Tem certeza que deseja <strong>deletar</strong> o ar-condicionado <strong>"{{ ar }}"</strong>?
+                    <br>
+                    <small class="text-muted">Esta ação não poderá ser desfeita.</small>
+                </div>
+            </div>
+            <form action="{% url 'website:deletar_ares' ar.uuid %}"
+                  method="post"
+                  class="d-flex gap-2">
+                {% csrf_token %}
+                <a class="btn btn-outline-secondary"
+                   href="{% url 'website:listar_ares' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i> Deletar
+                </button>
+            </form>
         </div>
     </div>
 {% endblock content %}
+{% block alert_script %}
+{% endblock alert_script %}

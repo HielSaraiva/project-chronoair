@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -40,71 +41,50 @@ def listar_pavilhoes(request):
 
 @login_required
 def listar_salas(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
+    salas = Sala.objects.filter(pavilhao__usuario=request.user)
 
-    filtrarpavilhao = None
+    if query:
+        salas = salas.filter(
+            Q(nome__icontains=query) |
+            Q(pavilhao__nome__icontains=query)
+        )
 
-    if request.method == 'POST':
-        filtrarpavilhao = request.POST.get('pavilhao')
-        if filtrarpavilhao:
-            salas = Sala.objects.filter(
-                pavilhao__uuid=filtrarpavilhao).order_by(Lower('nome'))
-        else:
-            salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
-                Lower('pavilhao__nome'), Lower('nome'))
-    else:
-        salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
-            Lower('pavilhao__nome'), Lower('nome'))
+    salas = salas.order_by(Lower('nome'))
+
+    paginator = Paginator(salas, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'salas': salas,
-        'pavilhoes': pavilhoes,
-        'filtrarpavilhao': filtrarpavilhao
+        'page_obj': page_obj,
+        'query': query,
     }
     return render(request, 'listar_salas.html', context)
 
 
 @login_required
 def listar_ares(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
-    salas = Sala.objects.filter(
-        pavilhao__usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
     ares = ArCondicionado.objects.filter(sala__pavilhao__usuario=request.user)
 
-    filtrarpavilhao = request.POST.get('pavilhao')
-    filtrarsala = request.POST.get('sala')
+    if query:
+        ares = ares.filter(
+            Q(nome__icontains=query) |
+            Q(sala__nome__icontains=query) |
+            Q(sala__pavilhao__nome__icontains=query)
+        )
 
-    filtros = {}
+    ares = ares.order_by(Lower('nome'))
 
-    # ares = ArCondicionado.objects.none()
-
-    if request.method == 'POST':
-        if filtrarpavilhao:
-            salas = salas.filter(pavilhao__uuid=filtrarpavilhao)
-            ares = ares.filter(sala__pavilhao__uuid=filtrarpavilhao)
-
-        if filtrarsala:
-            filtros['sala__uuid'] = filtrarsala
-            ares = ares.filter(**filtros).order_by("nome")
-        else:
-            ares = ares.order_by("sala__pavilhao__nome", "sala__nome", "nome")
-
-    ares = ares.order_by(
-        Lower('sala__pavilhao__nome'),
-        Lower('sala__nome'),
-        Lower('nome')
-    )
+    paginator = Paginator(ares, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'ares': ares,
-        'pavilhoes': pavilhoes,
-        'salas': salas,
-        'filtrarpavilhao': filtrarpavilhao,
-        'filtrarsala': filtrarsala,
+        'page_obj': page_obj,
+        'query': query,
     }
-
     return render(request, 'listar_ares.html', context)
 
 
@@ -215,22 +195,40 @@ def criar_sala(request):
 
 @login_required
 def criar_ar(request):
-    # Validação e envio do formulário da sala
+    pavilhao_id = request.GET.get('pavilhao')
+
     if request.method == 'POST':
         form = ArCondicionadoModelForm(request.POST, usuario=request.user)
-        if form.is_valid():  # Verifica se os dados inseridos são validos
-            try:
-                form.save()  # Se os dados forem válidos, ele irá salvar
-                messages.success(request,
-                                 'Ar-condicionado criado com sucesso!')
+        if form.is_valid():
+            ar = form.save(commit=False)  # Não salva ainda
+
+            # Verifica se uma sala foi escolhida, se não, adiciona erro
+            sala = form.cleaned_data.get('sala')
+            if not sala:
+                form.add_error('sala', 'Você deve selecionar uma sala.')
+            else:
+                ar.sala = sala
+                ar.save()
+                messages.success(request, 'Ar-condicionado criado com sucesso!')
                 return redirect('website:listar_ares')
-            except IntegrityError:
-                messages.error(
-                    request, "Você já tem um ar-condicionado com esse nome nesta sala.")
+
     else:
         form = ArCondicionadoModelForm(usuario=request.user)
+
+    if pavilhao_id:
+        try:
+            form.fields['sala'].queryset = Sala.objects.filter(
+                pavilhao_id=pavilhao_id).order_by('nome')
+        except ValueError:
+            form.fields['sala'].queryset = Sala.objects.none()
+    else:
+        # Campo sem opções quando pavilhão não é escolhido
+        form.fields['sala'].queryset = Sala.objects.none()
+
     context = {
-        'form': form  # Passa o formulário para o contexto do template
+        'form': form,
+        'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
+        'pavilhao_id': pavilhao_id,
     }
     return render(request, 'criar_ar.html', context)
 
@@ -444,21 +442,51 @@ def editar_ares(request, uuid):
     if pavilhao.usuario != request.user:
         raise Http404
 
+    # Verifica se foi selecionado um pavilhão no GET
+    pavilhao_id_get = request.GET.get('pavilhao')
+    if pavilhao_id_get:
+        try:
+            pavilhao_get = Pavilhao.objects.get(
+                id=pavilhao_id_get, usuario=request.user)
+        except Pavilhao.DoesNotExist:
+            pavilhao_get = pavilhao
+    else:
+        pavilhao_get = pavilhao
+
+    # Filtra as salas de acordo com o pavilhão selecionado
+    salas = Sala.objects.filter(pavilhao=pavilhao_get).order_by('nome')
+
     if request.method == 'POST':
         form = ArCondicionadoModelForm(
             request.POST, instance=ar, usuario=request.user)
-        if form.is_valid():
+
+        pavilhao_id_post = request.POST.get('pavilhao')
+        if pavilhao_id_post:
             try:
-                form.save()
-                messages.success(request,
-                                 'Ar-condicionado editado com sucesso!')
-                return redirect('website:listar_ares')
-            except IntegrityError:
-                messages.error(
-                    request, "Você já tem um ar-condicionado com esse nome nesta sala.")
+                pavilhao_post = Pavilhao.objects.get(
+                    id=pavilhao_id_post, usuario=request.user)
+                # Atualizar a lista de salas de acordo com o pavilhão escolhido
+                form.fields['sala'].queryset = Sala.objects.filter(
+                    pavilhao=pavilhao_post).order_by('nome')
+            except Pavilhao.DoesNotExist:
+                form.fields['sala'].queryset = Sala.objects.none()
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ar-condicionado editado com sucesso!')
+            return redirect('website:listar_ares')
     else:
         form = ArCondicionadoModelForm(instance=ar, usuario=request.user)
-    context = {'form': form, 'ar': ar}
+
+    # Atualiza o queryset do campo de salas com base no pavilhão selecionado
+    form.fields['sala'].queryset = salas
+
+    context = {
+        'form': form,
+        'ar': ar,
+        'pavilhao_id': str(pavilhao_get.id),
+        'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
+    }
     return render(request, 'criar_ar.html', context)
 
 

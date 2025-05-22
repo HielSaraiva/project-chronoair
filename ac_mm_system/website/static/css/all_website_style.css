@@ -229,6 +229,24 @@ body {
    border-bottom-right-radius: 5px;
 }
 
+#ac-btn {
+   color: rgb(255, 193, 7) !important;
+}
+
+#ac-btn:hover {
+   background-color: rgba(255, 193, 7, 0.25) !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#ac-btn:active {
+   background-color: rgba(255, 193, 7, 0.35) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
 /* Remove as setas dos campos numéricos em todos os navegadores */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

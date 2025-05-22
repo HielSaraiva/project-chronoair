@@ -153,8 +153,8 @@ class ArCondicionadoModelForm(forms.ModelForm):
     class Meta:
         model = ArCondicionado
         fields = [
-            'nome',
             'sala',
+            'nome',
             'consumo',
             'consumo_unidade'
         ]
@@ -177,8 +177,8 @@ class ArCondicionadoModelForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        nome = cleaned_data.get('nome')
         sala = cleaned_data.get('sala')
+        nome = cleaned_data.get('nome')
 
         if nome and sala:
             # Exclui a instância atual se estiver sendo editada
