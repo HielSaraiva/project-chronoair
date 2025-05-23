@@ -71,15 +71,21 @@
                       method="POST"
                       class="d-flex justify-content-center">
                     {% csrf_token %}
-                    <div class="p-4 mb-4">
-                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
-                                class="btn btn-outline-success btn"
+                    <div class="p-4 mb-4 d-flex gap-3">
+                        <button type="submit"
+                                class="btn btn-outline-success d-flex align-items-center gap-2"
                                 name="comando"
-                                value="ligar">Ligar Ares</button>
-                        <button onclick="window.location.href='{% url 'website:ajustes_salas' sala.uuid %}'"
-                                class="btn btn-outline-danger btn"
+                                value="ligar">
+                            <i class="bi bi-power"></i>
+                            Ligar Ares
+                        </button>
+                        <button type="submit"
+                                class="btn btn-outline-danger d-flex align-items-center gap-2"
                                 name="comando"
-                                value="desligar">Desligar Ares</button>
+                                value="desligar">
+                            <i class="bi bi-power"></i>
+                            Desligar Ares
+                        </button>
                     </div>
                 </form>
             {% endif %}

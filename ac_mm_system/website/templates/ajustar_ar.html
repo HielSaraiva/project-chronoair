@@ -54,15 +54,21 @@
                   method="POST"
                   class="d-flex justify-content-center">
                 {% csrf_token %}
-                <div class="p-4 mb-4">
-                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
-                            class="btn btn-outline-success btn"
+                <div class="p-4 mb-4 d-flex gap-3">
+                    <button type="submit"
+                            class="btn btn-outline-success d-flex align-items-center gap-2"
                             name="comando"
-                            value="gravar_ligar">Gravar Sinal de Ligar</button>
-                    <button onclick="window.location.href='{% url 'website:ajustes_ares' ar.uuid %}'"
-                            class="btn btn-outline-danger btn"
+                            value="gravar_ligar">
+                        <i class="bi bi-power"></i>
+                        Gravar Sinal de Ligar
+                    </button>
+                    <button type="submit"
+                            class="btn btn-outline-danger d-flex align-items-center gap-2"
                             name="comando"
-                            value="gravar_desligar">Gravar Sinal de Desligar</button>
+                            value="gravar_desligar">
+                        <i class="bi bi-power"></i>
+                        Gravar Sinal de Desligar
+                    </button>
                 </div>
             </form>
             <!-- Botão Voltar -->
