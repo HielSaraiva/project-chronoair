@@ -1,57 +1,141 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Pavilhões{% endblock title %}
-
-{% block pavilhoes %}
-<div class="button-pavilhao"> <!-- div do botão de pavilhões -->
-    <div class="rectangle-white"></div>
-    <img class="img-botoes-menu" src="{% static 'buttons/buildings-20green.svg' %}"/>
-    <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-    <div class="nome-botoes-menu">Pavilhões</div>
-</div>
-{% endblock pavilhoes %}
-
+{% block title %}
+    Pavilhões
+{% endblock title %}
 {% block content %}
-    <div class="bloco-central">
-        <div class="lista-pavilhao overflow-auto">
-            <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-                {% bootstrap_messages %}
-                <table class="table table-bordered border-success">
-                    <!-- div da tabela representando a lista de pavilhões -->
-                    <thead>
-                    <tr class="table-light">
-                        <th scope="col">Pavilhão</th>
-                        <th scope="col">Número de Salas</th>
-                        <th scope="col">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for pavilhao in pavilhoes %}
-                    <tr class="table-light">
-                        <td scope="row">{{ pavilhao.nome }}</td>
-                        <td scope="row">{{ pavilhao.numero_salas }}</td>
+    <div class="container">
+        {% if messages %}
+            <div class="position-fixed bottom-0 end-0">
+                {% for message in messages %}
+                    <div class="alert alert-success d-flex align-items-center rounded-0 shadow-sm mb-3"
+                         role="alert">
+                        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h1 class="h3 mt-3 text-green-dark fw-bold">Pavilhões</h1>
+        <p class="text-green-medium">Gerencie e monitore os pavilhões do sistema</p>
+        <!-- Filtros -->
+        <div class="bg-white shadow-sm rounded-1 ps-3 pt-2 pe-3 pb-3 mb-4">
+            <h2 class="h4 text-green-dark fw-semibold">Filtros</h2>
+            <form method="get" class="mt-2 d-flex flex-wrap gap-2">
+                <div style="display: flex; align-items: center; max-width: 400px;">
+                    <input type="text"
+                           name="q"
+                           class="form-control"
+                           placeholder="Pesquisar pavilhão..."
+                           value="{{ query }}"
+                           style="flex-grow: 1;
+                                  margin-right: 5px">
+                    <button class="btn btn-outline-success d-flex align-items-center gap-1"
+                            type="submit"
+                            style="align-self: stretch">
+                        <i class="bi bi-search"></i>
+                        Buscar
+                    </button>
+                </div>
+                {% if query %}
+                <a href="{% url 'website:listar_pavilhoes' %}"
+                   class="btn btn-outline-secondary d-flex align-items-center gap-1"><i class="bi bi-x-circle"></i>
+            Limpar Filtro</a>
+        {% endif %}
+    </form>
+</div>
+<!-- Resultados -->
+<div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+        <h2 class="h5 text-green-dark fw-bold mb-0">Resultados</h2>
+        <a href="{% url 'website:criar_pavilhao' %}"
+           class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm pe-3 m-1">
+            <i class="bi bi-plus-lg"></i>
+            Pavilhão
+        </a>
+    </div>
+    <!-- Tabela -->
+    <div class="table-responsive rounded-1">
+        <table class="table table-hover mb-0">
+            <thead class="table-white">
+                <tr>
+                    <th scope="col">Pavilhão</th>
+                    <th scope="col">Nº Salas</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pavilhao in page_obj %}
+                    <tr>
+                        <td>{{ pavilhao.nome }}</td>
+                        <td>{{ pavilhao.numero_salas }}</td>
                         <td>
-                            <a class="btn btn-primary btn-sm"
-                               href="{% url 'website:editar_pavilhoes' pavilhao.uuid %}">Editar</a>
-                            <a class="btn btn-danger btn-sm"
-                               href="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}">Deletar</a>
+                            <div>
+                                <button class="btn btn-sm dropdown-toggle dropdown-toggle-custom"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom shadow-sm p-0">
+                                    <li>
+                                        <a class="dropdown-item text-success d-flex align-items-center gap-2 border-bottom border-1 p-2"
+                                           href="{% url 'website:editar_pavilhoes' pavilhao.uuid %}">
+                                            <i class="bi bi-pencil-square"></i> Editar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id="del-btn"
+                                           class="dropdown-item text-danger d-flex align-items-center gap-2 p-2"
+                                           href="{% url 'website:deletar_pavilhoes' pavilhao.uuid %}">
+                                            <i class="bi bi-trash"></i> Deletar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-        </div>
-        <div class="botao-criarnovo"> <!-- div do botão de editar/criar novo -->
-            <button onclick="window.location.href='{% url 'website:criar_pavilhao' %}'" class="btn btn-success btn-sm"
-                    aria-expanded="false">
-                Criar Novo
-            </button>
-        </div>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Nenhum pavilhão encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
+    <!-- Paginação -->
+    <div class="d-flex justify-content-center align-items-center mt-3 gap-2 flex-wrap">
+        {% if page_obj.has_previous %}
+            <a class="btn-custom-active d-flex align-items-center gap-1"
+               href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+               aria-label="Página anterior">
+                <i class="bi bi-arrow-left"></i> Anterior
+            </a>
+        {% else %}
+            <button class="btn-custom-inactive d-flex align-items-center gap-1"
+                    disabled
+                    aria-disabled="true">
+                <i class="bi bi-arrow-left"></i> Anterior
+            </button>
+        {% endif %}
+        <span class="text-muted small mx-3">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a class="btn-custom-active d-flex align-items-center gap-1"
+               href="?q={{ query }}&page={{ page_obj.next_page_number }}"
+               aria-label="Próxima página">
+                Próxima <i class="bi bi-arrow-right"></i>
+            </a>
+        {% else %}
+            <button class="btn-custom-inactive d-flex align-items-center gap-1"
+                    disabled
+                    aria-disabled="true">
+                Próxima <i class="bi bi-arrow-right"></i>
+            </button>
+        {% endif %}
+    </div>
+</div>
+</div>
 {% endblock content %}

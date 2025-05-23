@@ -1,0 +1,261 @@
+/* Geral */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'Work Sans', Arial, sans-serif;
+   background-color: rgb(246, 249, 255);
+}
+
+/* Header */
+.dropdown-toggle-custom {
+    border: none;
+}
+
+.dropdown-toggle-custom:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.dropdown-toggle-custom:hover,
+.dropdown-toggle-custom:focus {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.dropdown-menu-custom {
+   background-color: rgb(255, 255, 255);
+   border: none;
+   min-width: 200px;
+   width: 256px;
+   box-shadow: 2px;
+}
+
+.dropdown-menu-custom .dropdown-item:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.dropdown-item:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.dropdown-item:active {
+   color: rgba(0, 0, 0, 1)
+}
+
+.offcanvas-open-button {
+   border: none;
+}
+
+.offcanvas-open-button:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.offcanvas-open-button:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+#logout-btn {
+   color: rgb(208, 18, 18) !important;
+}
+
+#logout-btn:hover {
+   background-color: rgba(255, 0, 0, 0.1) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#logout-btn:active {
+   background-color: rgba(255, 0, 0, 0.2) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+.text-green-light {
+   color: var(--green-light-color)
+}
+
+.text-green-medium {
+   color: var(--green-medium-color)
+}
+
+.text-green-dark {
+   color: var(--green-dark-color)
+}
+
+.btn-modal-welcome {
+   border: none;
+}
+
+.btn-modal-welcome:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.btn-modal-welcome:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.btn-modal-welcome:focus {
+   color: var(--green-medium-color) !important;
+}
+
+/* Menus */
+.btn-menu-custom {
+   border: none !important;
+   color: var(--green-dark-color) !important;
+}
+
+.btn-menu-custom:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.btn-menu-custom:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.btn-menu-custom.active {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.offcanvas-custom {
+   max-width: 80vw !important;
+}
+
+/* Modal de Bem-vindos */
+.modal-body a {
+   text-decoration: none;
+   color: var(--green-medium-color);
+}
+
+.modal-body a:hover {
+  text-decoration: underline;
+  color: var(--green-light-color)
+}
+
+.modal-body p {
+   text-indent: 30px;
+   text-align: justify;
+}
+
+.modal-content .modal-footer button {
+   border: none !important;
+   color: var(--green-dark-color) !important;
+}
+
+.modal-content .modal-footer button:hover {
+   background-color: rgba(25, 135, 84, 0.1);
+   color: var(--green-light-color) !important;
+}
+
+.modal-content .modal-footer button:active {
+   background-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+/* Página Inicial */
+.card-grafico-min {
+    min-height: 350px;
+    max-height: 400px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.card-grafico-min canvas {
+    flex: 1 1 auto;
+    max-height: 300px;
+}
+
+/* Páginas de listagem */
+.btn-custom-active {
+   background-color: rgb(255, 255, 255);
+   color: var(--green-medium-color);
+   border: none;
+   text-decoration: none;
+   padding-left: 8px;
+   padding-right: 8px;
+   padding-top: 2px;
+   padding-bottom: 2px;
+}
+
+.btn-custom-active:hover {
+   background-color: rgba(25, 135, 84, 0.1) !important;
+   color: var(--green-light-color) !important;
+   border: none;
+   text-decoration: none;
+   border-radius: 5px;
+}
+
+.btn-custom-inactive {
+   background-color: rgb(255, 255, 255);
+   color: rgb(155, 155, 155);
+   border: none;
+   padding-left: 8px;
+   padding-right: 8px;
+   padding-top: 2px;
+   padding-bottom: 2px;
+}
+
+#del-btn {
+   color: rgb(208, 18, 18) !important;
+}
+
+#del-btn:hover {
+   background-color: rgba(255, 0, 0, 0.1) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#del-btn:active {
+   background-color: rgba(255, 0, 0, 0.2) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#ac-btn {
+   color: rgb(255, 193, 7) !important;
+}
+
+#ac-btn:hover {
+   background-color: rgba(255, 193, 7, 0.25) !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+#ac-btn:active {
+   background-color: rgba(255, 193, 7, 0.35) !important;
+   border-top-left-radius: 0 !important;
+   border-top-right-radius: 0 !important;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+/* Remove as setas dos campos numéricos em todos os navegadores */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield; /* Compatibilidade padrão */
+}
+
+/* Páginas de ajustes */

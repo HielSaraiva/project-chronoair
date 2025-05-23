@@ -2,144 +2,268 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="height=device-height, initial-scale=0.2,">
-
-    <title>{% block title %}Título{% endblock title %}</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" type="image/x-icon" href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-    <link rel="stylesheet" href="{% static 'css/all_style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/all_vars.css' %}">
-
-    <style>
-        /* Estilização base */
-        a, button, input, select, h1, h2, h3, h4, h5, * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            border: none;
-            text-decoration: none;
-            background: none;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        menu, ol, ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-</head>
-l
-<body>
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <!-- div principal, última a ser fechada -->
-
-    <div class="rectangle-menu"></div>
-    <div class="menu-buttons">
-        {% block horarios %}
-            <div class="button-horarios">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/calendar-020white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_horarios' %}'"></button>
-                <div class="nome-botoes-menu">Horários</div>
+      <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="description"
+                  content="Sistema de Gerenciamento de Ar Condicionado" />
+            <meta name="keywords"
+                  content="ar condicionado, gerenciamento, página inicial" />
+            <link rel="icon"
+                  href="{% static 'icons/icon-air-conditioner2.png' %}"
+                  sizes="32x32"
+                  type="image/png">
+            <link rel="icon"
+                  href="{% static 'icons/icon-air-conditioner2.svg' %}"
+                  type="image/svg+xml">
+            <link rel="apple-touch-icon"
+                  href="{% static 'icons/icon-air-conditioner2.png' %}">
+            <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap"
+                  rel="stylesheet">
+            <link rel="stylesheet" href="{% static 'css/all_website_style.css' %}">
+            <link rel="stylesheet" href="{% static 'css/all_website_vars.css' %}">
+            <link rel="stylesheet"
+                  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <title>
+                  {% block title %}
+                        Título
+                  {% endblock title %}
+            </title>
+      </head>
+      <body>
+            <!-- Header do Site -->
+            <header class="navbar sticky-top bg-white p-0 shadow-sm border-bottom border-1">
+                  <div class="container-fluid d-flex justify-content-between align-items-center px-3">
+                        <!-- Branding (visível apenas em md ou telas maiores) -->
+                        <div class="d-none d-md-flex align-items-center my-2">
+                              <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                                   alt="Ícone ChronoAir"
+                                   width="30"
+                                   height="30"
+                                   class="me-2" />
+                              <span class="fw-bold text-success fs-5">ChronoAir</span>
+                        </div>
+                        <!-- Botão do menu lateral (visível apenas em telas menores) -->
+                        <div class="d-flex d-md-none my-2">
+                              <button class="btn offcanvas-open-button text-green-medium"
+                                      type="button"
+                                      data-bs-toggle="offcanvas"
+                                      data-bs-target="#sidebarMenu"
+                                      aria-controls="sidebarMenu"
+                                      aria-label="Abrir menu">
+                                    <i class="bi bi-list fs-6"></i>
+                              </button>
+                        </div>
+                        <!-- Boas-vindas + Dropdown do usuário -->
+                        {% if user.is_authenticated %}
+                              <div class="d-flex align-items-center justify-content-end gap-0">
+                                    <div class="dropdown my-2">
+                                          <button class="btn d-flex align-items-center dropdown-toggle dropdown-toggle-custom text-green-medium"
+                                                  type="button"
+                                                  id="userDropdown"
+                                                  data-bs-toggle="dropdown"
+                                                  aria-expanded="false">
+                                                <span class="me-2 text-truncate" style="max-width: 200px;">Olá, {{ user.username }}</span>
+                                                <i class="bi bi-person-circle fs-4"></i>
+                                          </button>
+                                          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom shadow-sm border border-1 p-0"
+                                              aria-labelledby="userDropdown">
+                                                <li>
+                                                      <a class="dropdown-item d-flex align-items-center text-green-medium border-bottom border-1 p-2"
+                                                         href="{% url 'accounts:password_change' %}">
+                                                            <i class="bi bi-shield-lock me-2"></i> Alterar senha
+                                                      </a>
+                                                </li>
+                                                <li>
+                                                      <form method="post" action="{% url 'accounts:logout' %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit"
+                                                                    id="logout-btn"
+                                                                    class="dropdown-item d-flex align-items-center p-2">
+                                                                  <i class="bi bi-box-arrow-left me-2"></i> Sair
+                                                            </button>
+                                                      </form>
+                                                </li>
+                                          </ul>
+                                    </div>
+                                    <button type="button"
+                                            class="btn text-green-medium btn-modal-welcome"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#welcomeModal">
+                                          <i class="bi bi-info-circle"></i>
+                                    </button>
+                              </div>
+                        {% endif %}
+                  </div>
+            </header>
+            <!-- Conteúdo do site -->
+            <div class="container-fluid">
+                  <div class="row">
+                        <!-- Menus do Site -->
+                        <div class="sidebar border-left col-md-3 col-lg-2 p-0 bg-white position-fixed">
+                              <!-- Menu para telas menores (botão sanduíche) -->
+                              <div class="offcanvas offcanvas-start offcanvas-custom pt-5"
+                                   tabindex="-1"
+                                   id="sidebarMenu"
+                                   aria-labelledby="sidebarMenuLabel">
+                                    <div class="offcanvas-header border-bottom p-2 m-1">
+                                          <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                                               alt="Ícone ChronoAir"
+                                               width="30"
+                                               height="30"
+                                               class="me-2" />
+                                          <span class="fw-bold text-success fs-5">ChronoAir</span>
+                                          <button type="button"
+                                                  class="btn-close d-none"
+                                                  data-bs-dismiss="offcanvas"
+                                                  aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="offcanvas-body">
+                                          <ul class="nav flex-column">
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/pagina_inicial/' or request.path == '/editar_grafico/' %}active{% endif %}"
+                                                         href="{% url 'website:pagina_inicial' %}">
+                                                            <i class="bi bi-house-door me-2"></i> Home
+                                                      </a>
+                                                </li>
+                                                <!-- Título do grupo -->
+                                                <li class="nav-item pt-1 px-3 text-uppercase text-muted fw-bold small">Infraestrutura</li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_pavilhoes/' or request.path == '/criar_pavilhao/' or 'editar_pavilhoes' in request.path or 'deletar_pavilhoes' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_pavilhoes' %}">
+                                                            <i class="bi bi-building me-2"></i> Pavilhões
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_salas/' or request.path == '/criar_sala/' or 'editar_salas' in request.path or 'deletar_salas' in request.path or 'ajustar_sala' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_salas' %}">
+                                                            <i class="bi bi-door-open me-2"></i> Salas
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_ares/' or request.path == '/criar_ar/' or 'editar_ares' in request.path or 'deletar_ares' in request.path or 'ajustar_ar' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_ares' %}">
+                                                            <i class="bi bi-wind me-2"></i> Ares
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_horarios/' or request.path == '/criar_horario/' or 'editar_horarios' in request.path or 'deletar_horarios' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_horarios' %}">
+                                                            <i class="bi bi-clock me-2"></i> Horários
+                                                      </a>
+                                                </li>
+                                          </ul>
+                                    </div>
+                              </div>
+                              <!-- Menu lateral fixo -->
+                              <div class="d-none d-md-block pt-3 px-2 min-vh-100">
+                                    <div class="d-none d-md-block">
+                                          <ul class="nav flex-column">
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/pagina_inicial/' or request.path == '/editar_grafico/' %}active{% endif %}"
+                                                         href="{% url 'website:pagina_inicial' %}">
+                                                            <i class="bi bi-house-door me-2"></i> Home
+                                                      </a>
+                                                </li>
+                                                <!-- Título do grupo -->
+                                                <li class="nav-item pt-1 px-3 text-uppercase text-muted fw-bold small">Infraestrutura</li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_pavilhoes/' or request.path == '/criar_pavilhao/' or 'editar_pavilhoes' in request.path or 'deletar_pavilhoes' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_pavilhoes' %}">
+                                                            <i class="bi bi-building me-2"></i> Pavilhões
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_salas/' or request.path == '/criar_sala/' or 'editar_salas' in request.path or 'deletar_salas' in request.path or 'ajustar_sala' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_salas' %}">
+                                                            <i class="bi bi-door-open me-2"></i> Salas
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item mb-2">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_ares/' or request.path == '/criar_ar/' or 'editar_ares' in request.path or 'deletar_ares' in request.path or 'ajustar_ar' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_ares' %}">
+                                                            <i class="bi bi-wind me-2"></i> Ares
+                                                      </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                      <a class="btn w-100 d-flex align-items-center btn-menu-custom {% if request.path == '/listar_horarios/' or request.path == '/criar_horario/' or 'editar_horarios' in request.path or 'deletar_horarios' in request.path %}active{% endif %}"
+                                                         href="{% url 'website:listar_horarios' %}">
+                                                            <i class="bi bi-clock me-2"></i> Horários
+                                                      </a>
+                                                </li>
+                                          </ul>
+                                    </div>
+                              </div>
+                        </div>
+                        <!-- Conteúdo Principal do site -->
+                        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 min-vh-100">
+                              {% block content %}
+                              {% endblock content %}
+                        </main>
+                  </div>
             </div>
-        {% endblock horarios %}
-
-        {% block ar-condicionados %}
-            <div class="button-arcondicionados">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/snowflake0white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
-                <div class="nome-botoes-menu-ar">Ar-condicionados</div>
+            <!-- Modal de Bem-vindos -->
+            <div class="modal fade"
+                 id="welcomeModal"
+                 tabindex="-1"
+                 aria-labelledby="welcomeModalLabel"
+                 aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content shadow-lg rounded-4">
+                              <div class="modal-header">
+                                    <h5 class="modal-title text-green-dark fw-semibold"
+                                        id="welcomeModalLabel">Bem-vindo ao ChronoAir!</h5>
+                              </div>
+                              <div class="modal-body text-green-dark">
+                                    <p>
+                                          Seja bem-vindo ao <strong>ChronoAir</strong>, seu sistema inteligente para controle automatizado de ar-condicionados.
+                                    </p>
+                                    <p>
+                                          Este portal de gestão foi projetado para funcionar em conjunto com o nosso dispositivo físico, o <strong>ChronoAirController</strong> — um protótipo exclusivo desenvolvido para integrar hardware e software com precisão e confiabilidade.
+                                    </p>
+                                    <p>
+                                          Caso ainda não possua o <strong>ChronoAirController</strong>, entre em contato conosco pelo e-mail <a href="mailto:sistema.arcondicionado.mm@gmail.com">sistema.arcondicionado.mm@gmail.com</a> para mais informações sobre aquisição e integração.
+                                    </p>
+                              </div>
+                              <div class="modal-footer">
+                                    <button type="button" class="btn" data-bs-dismiss="modal">Fechar</button>
+                              </div>
+                        </div>
+                  </div>
             </div>
-        {% endblock ar-condicionados %}
-
-        {% block salas %}
-            <div class="button-salas">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/book-040white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_salas' %}'"></button>
-                <div class="nome-botoes-menu">Salas</div>
-            </div>
-        {% endblock salas %}
-
-        {% block pavilhoes %}
-            <div class="button-pavilhao">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/buildings-20white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:listar_pavilhoes' %}'"></button>
-                <div class="nome-botoes-menu">Pavilhões</div>
-            </div>
-        {% endblock pavilhoes %}
-
-        {% block inicio %}
-            <div class="button-home">
-                <div class="rectangle-green"></div>
-                <img class="img-botoes-menu" src="{% static 'buttons/home-050white.svg' %}"/>
-                <button class="img-botoes-menu"
-                        onclick="window.location.href='{% url 'website:pagina_inicial' %}'"></button>
-                <div class="nome-botoes-menu">Início</div>
-            </div>
-        {% endblock inicio %}
-    </div>
-
-    <!-- Barra Superior -->
-    <div class="menu-bar d-flex align-items-center">
-        <div class="rectangle-barra-superior"></div>
-        <img class="img-barra-superior" src="{% static 'buttons/hotel-air-conditioner0.svg' %}">
-        <div class="sistema-de-gestao-de-ar-condicionado">
-            Sistema de Gestão de Ar-Condicionado
-        </div>
-    </div>
-
-    {% if user.is_authenticated %}
-        <div class="d-flex align-items-center justify-content-between p-4"
-             style="width: 400px; margin-left: 80px; position: absolute; top: 80px; left:10px;">
-            <div class="mensagem-usuario-logado text-truncate" style="white-space: nowrap; overflow: visible;">
-                <h5 class="barra-usuario">Bem-vindo, {{ user.username }}.</h5>
-            </div>
-            <div class="mensagem-logout ms-2">
-                <form action="{% url 'accounts:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger barra-usuario">Sair</button>
-                </form>
-            </div>
-            <div class="mensagem-alterar-senha ms-2 text-truncate" style="white-space: nowrap; overflow: visible;">
-                <a href="{% url 'accounts:password_change' %}" class="btn btn-success barra-usuario">Alterar senha</a>
-            </div>
-        </div>
-    {% endif %}
-
-    {% block content %} {% endblock content %}
-
-</div>
-
-<!-- Script para esconder mensagens Bootstrap automaticamente -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let alertList = document.querySelectorAll(".alert");
-        alertList.forEach(function (alert) {
-            setTimeout(function () {
-                alert.classList.add("fade");
-                alert.classList.remove("show");
-                setTimeout(function () {
-                    alert.remove(); // Remove a mensagem da tela
-                }, 500);
-            }, 3000); // Tempo de exibição: 3 segundos
-        });
-    });
-</script>
-
-</body>
+            <!-- Footer do site-->
+            {% now "Y" as current_year %}
+            <footer class="footer mt-auto py-3 col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-light border-top">
+                  <div class="container d-flex align-items-center justify-content-start gap-2">
+                        <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                             alt="Ícone ChronoAir"
+                             width="25"
+                             height="25"
+                             class="me-2" />
+                        <span class="text-muted">© 2025
+                              {% if current_year != '2025' %}–{{ current_year }}{% endif %}
+                        ChronoAir. Todos os direitos reservados.</span>
+                  </div>
+            </footer>
+            <!-- Script para esconder mensagens Bootstrap automaticamente -->
+            {% block alert_script %}
+                  <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                              let alertList = document.querySelectorAll(".alert");
+                              alertList.forEach(function (alert) {
+                                    setTimeout(function () {
+                                    alert.classList.add("fade");
+                                    alert.classList.remove("show");
+                                    setTimeout(function () {
+                                          alert.remove();
+                                    }, 500);
+                                    }, 3000);
+                              });
+                        });
+                  </script>
+            {% endblock alert_script %}
+      </body>
 </html>

@@ -1,59 +1,64 @@
 {% extends "base.html" %}
-
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{% block title %}Ar-Condicionados{% endblock title %}
-
-{% block ar-condicionados %}
-    <div class="button-arcondicionados">
-        <div class="rectangle-white"></div>
-        <img class="img-botoes-menu" src="{% static 'buttons/snowflake0green.svg' %}"/>
-        <button class="img-botoes-menu" onclick="window.location.href='{% url 'website:listar_ares' %}'"></button>
-        <div class="nome-botoes-menu-ar">Ar-condicionados</div>
-    </div>
-{% endblock ar-condicionados %}
-
+{% block title %}
+    Ares
+{% endblock title %}
 {% block content %}
- <div class="bloco-central">
-    <div class="lista-pavilhao overflow-auto">
-        <!-- div que determina o tamanho do bloco central, onde fica o conteúdo -->
-            {% bootstrap_messages %}
-            <form method="get">
-                <label for="id_pavilhao">Pavilhão</label>
-                <select name="pavilhao" id="id_pavilhao" class="form-select" onchange="this.form.submit()">
+    <div class="container">
+        {% if ar %}
+            <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Editar Ar</h2>
+            <p class="text-green-medium">
+                Altere as informações do ar-condicionado selecionado abaixo. Atualize os dados conforme necessário e salve as alterações.
+            </p>
+        {% else %}
+            <h2 class="h5 text-green-dark fw-bold mb-0 mt-3 mb-2">Criar Ar</h2>
+            <p class="text-green-medium">
+                Preencha os campos abaixo para cadastrar um novo ar no sistema. Informe o nome, a sala e a potência que ele possuirá.
+            </p>
+        {% endif %}
+        <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+            <form method="get" class="pb-3">
+                <label for="id_pavilha" class="mb-2">Pavilhão</label>
+                <select name="pavilhao"
+                        id="id_pavilhao"
+                        class="form-select"
+                        onchange="this.form.submit()">
                     <option value="">---------</option>
                     {% for p in pavilhoes %}
-                        <option value="{{ p.id }}" {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
+                        <option value="{{ p.id }}"
+                                {% if p.id|stringformat:"s" == pavilhao_id %}selected{% endif %}>{{ p.nome }}</option>
                     {% endfor %}
                 </select>
             </form>
-
             <!-- Formulário de Horário (POST) -->
             <form action="{% if ar %}{% url 'website:editar_ares' ar.uuid %}{% else %}{% url 'website:criar_ar' %}{% endif %}"
-                  method="post" class="form" autocomplete="off">
+                  method="post"
+                  class="form"
+                  autocomplete="off">
                 {% csrf_token %}
-
-                <input type="hidden" name="pavilhao_id" value="{{ pavilhao_id }}">
-
+                <input type="hidden" name="pavilhao" value="{{ pavilhao_id }}">
                 <!-- Gerando todos os campos menos o de pavilhão -->
                 {% bootstrap_form form exclude="pavilhao" %}
-
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     <!-- Botão de cancelar -->
-                    <a class="btn btn-danger me-2" href="{% url 'website:listar_ares' %}">Cancelar</a>
-
+                    <a class="btn btn-outline-secondary me-2"
+                       href="{% url 'website:listar_ares' %}">Cancelar</a>
                     <!-- Botão de cadastrar/atualizar -->
-                    <button type="submit" class="btn btn-primary">
-                        {% if ar %}Atualizar{% else %}Cadastrar{% endif %}
+                    <button type="submit" class="btn btn-success">
+                        {% if ar %}
+                            Atualizar
+                        {% else %}
+                            Cadastrar
+                        {% endif %}
                     </button>
                 </div>
             </form>
-
-
+        </div>
     </div>
- </div>
 {% endblock content %}
+{% block alert_script %}
+{% endblock alert_script %}

@@ -206,11 +206,10 @@ class ArCondicionadoModelForm(forms.ModelForm):
             self.initial['pavilhao'] = self.instance.sala.pavilhao.id
             self.fields['pavilhao'].initial = self.instance.sala.pavilhao
 
-
     def clean(self):
         cleaned_data = super().clean()
-        nome = cleaned_data.get('nome')
         sala = cleaned_data.get('sala')
+        nome = cleaned_data.get('nome')
 
         if nome and sala:
             # Exclui a instância atual se estiver sendo editada
@@ -234,11 +233,9 @@ class ArCondicionadoModelForm(forms.ModelForm):
                 ares_existentes = ares_existentes.exclude(pk=self.instance.pk)
             if ares_existentes.count() >= 3:
                 raise ValidationError(
-                    "Já existem 3 ar-condicionados registrados para esta sala.")
-        cleaned_data = super().clean()
-        sala = cleaned_data.get('sala')
-        if not sala:
-            self.add_error('sala', 'Você deve selecionar uma sala.')
+
+                    "Já existem 3 ares-condicionados registrados para esta sala.")
+
         return sala
 
 

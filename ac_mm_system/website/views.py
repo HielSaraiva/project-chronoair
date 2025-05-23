@@ -1,6 +1,8 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -18,82 +20,71 @@ from chartjs.views.lines import BaseLineChartView
 
 @login_required
 def listar_pavilhoes(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
+    pavilhoes = Pavilhao.objects.filter(usuario=request.user)
+
+    if query:
+        pavilhoes = pavilhoes.filter(nome__icontains=query)
+
+    pavilhoes = pavilhoes.order_by(Lower('nome'))
+
+    paginator = Paginator(pavilhoes, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'pavilhoes': pavilhoes
+        'page_obj': page_obj,
+        'query': query,
     }
     return render(request, 'listar_pavilhoes.html', context)
 
 
 @login_required
 def listar_salas(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
+    salas = Sala.objects.filter(pavilhao__usuario=request.user)
 
-    filtrarpavilhao = None
+    if query:
+        salas = salas.filter(
+            Q(nome__icontains=query) |
+            Q(pavilhao__nome__icontains=query)
+        )
 
-    if request.method == 'POST':
-        filtrarpavilhao = request.POST.get('pavilhao')
-        if filtrarpavilhao:
-            salas = Sala.objects.filter(
-                pavilhao__uuid=filtrarpavilhao).order_by(Lower('nome'))
-        else:
-            salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
-                Lower('pavilhao__nome'), Lower('nome'))
-    else:
-        salas = Sala.objects.filter(pavilhao__usuario=request.user).order_by(
-            Lower('pavilhao__nome'), Lower('nome'))
+    salas = salas.order_by(Lower('nome'))
+
+    paginator = Paginator(salas, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'salas': salas,
-        'pavilhoes': pavilhoes,
-        'filtrarpavilhao': filtrarpavilhao
+        'page_obj': page_obj,
+        'query': query,
     }
     return render(request, 'listar_salas.html', context)
 
 
 @login_required
 def listar_ares(request):
-    pavilhoes = Pavilhao.objects.filter(
-        usuario=request.user).order_by(Lower('nome'))
-    salas = Sala.objects.filter(
-        pavilhao__usuario=request.user).order_by(Lower('nome'))
+    query = request.GET.get('q', '')
     ares = ArCondicionado.objects.filter(sala__pavilhao__usuario=request.user)
 
-    filtrarpavilhao = request.POST.get('pavilhao')
-    filtrarsala = request.POST.get('sala')
+    if query:
+        ares = ares.filter(
+            Q(nome__icontains=query) |
+            Q(sala__nome__icontains=query) |
+            Q(sala__pavilhao__nome__icontains=query)
+        )
 
-    filtros = {}
+    ares = ares.order_by(Lower('nome'))
 
-    # ares = ArCondicionado.objects.none()
-
-    if request.method == 'POST':
-        if filtrarpavilhao:
-            salas = salas.filter(pavilhao__uuid=filtrarpavilhao)
-            ares = ares.filter(sala__pavilhao__uuid=filtrarpavilhao)
-
-        if filtrarsala:
-            filtros['sala__uuid'] = filtrarsala
-            ares = ares.filter(**filtros).order_by("nome")
-        else:
-            ares = ares.order_by("sala__pavilhao__nome", "sala__nome", "nome")
-
-    ares = ares.order_by(
-        Lower('sala__pavilhao__nome'),
-        Lower('sala__nome'),
-        Lower('nome')
-    )
+    paginator = Paginator(ares, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'ares': ares,
-        'pavilhoes': pavilhoes,
-        'salas': salas,
-        'filtrarpavilhao': filtrarpavilhao,
-        'filtrarsala': filtrarsala,
+        'page_obj': page_obj,
+        'query': query,
     }
-
     return render(request, 'listar_ares.html', context)
 
 
@@ -157,7 +148,7 @@ def listar_horarios(request):
 def criar_pavilhao(request):
     # Validação e envio do formulário da sala
     if request.method == 'POST':
-        form = PavilhaoModelForm(request.POST)
+        form = PavilhaoModelForm(request.POST, usuario=request.user)
         if form.is_valid():  # Verifica se os dados inseridos são válidos
             try:
                 novo_pavilhao = form.save(commit=False)
@@ -171,11 +162,8 @@ def criar_pavilhao(request):
             except IntegrityError:
                 messages.error(
                     request, "Você já tem um pavilhão com esse nome.")
-        else:
-            messages.error(request,
-                           'Erro ao criar pavilhão')  # Exibe uma mensagem de erro, caso os dados não sejam válidos
     else:
-        form = PavilhaoModelForm()
+        form = PavilhaoModelForm(usuario=request.user)
     context = {
         'form': form  # Passa o formulário para o contexto do template
     }
@@ -209,20 +197,22 @@ def criar_sala(request):
 def criar_ar(request):
     pavilhao_id = request.GET.get('pavilhao')
 
-    # Validação e envio do formulário da sala
     if request.method == 'POST':
         form = ArCondicionadoModelForm(request.POST, usuario=request.user)
-        if form.is_valid(): # Verifica se os dados inseridos são validos
-            ar = form.save(commit=False)
+        if form.is_valid():
+            ar = form.save(commit=False)  # Não salva ainda
 
-            sala = form.cleaned_data['sala']
+            # Verifica se uma sala foi escolhida, se não, adiciona erro
+            sala = form.cleaned_data.get('sala')
             if not sala:
                 form.add_error('sala', 'Você deve selecionar uma sala.')
             else:
                 ar.sala = sala
                 ar.save()
-                messages.success(request, 'Ar criado com sucesso!')
+                messages.success(
+                    request, 'Ar-condicionado criado com sucesso!')
                 return redirect('website:listar_ares')
+
     else:
         form = ArCondicionadoModelForm(usuario=request.user)
 
@@ -237,7 +227,7 @@ def criar_ar(request):
         form.fields['sala'].queryset = Sala.objects.none()
 
     context = {
-        'form': form,  # Passa o formulário para o contexto do template
+        'form': form,
         'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
         'pavilhao_id': pavilhao_id,
     }
@@ -359,7 +349,8 @@ def editar_horarios(request, uuid):
     pavilhao_id_get = request.GET.get('pavilhao')
     if pavilhao_id_get:
         try:
-            pavilhao_get = Pavilhao.objects.get(id=pavilhao_id_get, usuario=request.user)
+            pavilhao_get = Pavilhao.objects.get(
+                id=pavilhao_id_get, usuario=request.user)
         except Pavilhao.DoesNotExist:
             pavilhao_get = pavilhao
     else:
@@ -369,14 +360,17 @@ def editar_horarios(request, uuid):
     salas = Sala.objects.filter(pavilhao=pavilhao_get).order_by('nome')
 
     if request.method == 'POST':
-        form = HorarioModelForm(request.POST, instance=horario, usuario=request.user)
+        form = HorarioModelForm(
+            request.POST, instance=horario, usuario=request.user)
 
         pavilhao_id_post = request.POST.get('pavilhao')
         if pavilhao_id_post:
             try:
-                pavilhao_post = Pavilhao.objects.get(id=pavilhao_id_post, usuario=request.user)
+                pavilhao_post = Pavilhao.objects.get(
+                    id=pavilhao_id_post, usuario=request.user)
                 # Atualizar a lista de salas de acordo com o pavilhão escolhido
-                form.fields['sala'].queryset = Sala.objects.filter(pavilhao=pavilhao_post).order_by('nome')
+                form.fields['sala'].queryset = Sala.objects.filter(
+                    pavilhao=pavilhao_post).order_by('nome')
             except Pavilhao.DoesNotExist:
                 form.fields['sala'].queryset = Sala.objects.none()
 
@@ -397,7 +391,6 @@ def editar_horarios(request, uuid):
         'pavilhoes': Pavilhao.objects.filter(usuario=request.user).order_by('nome'),
     }
     return render(request, 'criar_horario.html', context)
-
 
 
 @login_required
@@ -454,7 +447,8 @@ def editar_ares(request, uuid):
     pavilhao_id_get = request.GET.get('pavilhao')
     if pavilhao_id_get:
         try:
-            pavilhao_get = Pavilhao.objects.get(id=pavilhao_id_get, usuario=request.user)
+            pavilhao_get = Pavilhao.objects.get(
+                id=pavilhao_id_get, usuario=request.user)
         except Pavilhao.DoesNotExist:
             pavilhao_get = pavilhao
     else:
@@ -464,20 +458,23 @@ def editar_ares(request, uuid):
     salas = Sala.objects.filter(pavilhao=pavilhao_get).order_by('nome')
 
     if request.method == 'POST':
-        form = ArCondicionadoModelForm(request.POST, instance=ar, usuario=request.user)
+        form = ArCondicionadoModelForm(
+            request.POST, instance=ar, usuario=request.user)
 
-        pavilhao_id_post = request.POST.get('pavilhao_id')
+        pavilhao_id_post = request.POST.get('pavilhao')
         if pavilhao_id_post:
             try:
-                pavilhao_post = Pavilhao.objects.get(id=pavilhao_id_post, usuario=request.user)
+                pavilhao_post = Pavilhao.objects.get(
+                    id=pavilhao_id_post, usuario=request.user)
                 # Atualizar a lista de salas de acordo com o pavilhão escolhido
-                form.fields['sala'].queryset = Sala.objects.filter(pavilhao=pavilhao_post).order_by('nome')
+                form.fields['sala'].queryset = Sala.objects.filter(
+                    pavilhao=pavilhao_post).order_by('nome')
             except Pavilhao.DoesNotExist:
                 form.fields['sala'].queryset = Sala.objects.none()
 
         if form.is_valid():
             form.save()
-            messages.success(request, 'Ar editado com sucesso!')
+            messages.success(request, 'Ar-condicionado editado com sucesso!')
             return redirect('website:listar_ares')
     else:
         form = ArCondicionadoModelForm(instance=ar, usuario=request.user)
@@ -606,6 +603,17 @@ def pagina_inicial(request):
 
     # Obter pavilhões do usuário
     pavilhoes = list(Pavilhao.objects.filter(usuario=usuario))
+    qtd_pavilhoes = len(pavilhoes)
+    salas = Sala.objects.filter(pavilhao__usuario=usuario)
+    qtd_salas = salas.count()
+    ares = ArCondicionado.objects.filter(sala__pavilhao__usuario=usuario)
+    qtd_ares = ares.count()
+
+    # Calcular horas totais ligadas dos ares-condicionados
+    horas_ares = 0
+    for ar in ares:
+        horas_ares += ar.horas_diarias() * 30  # Aproximação mensal
+    horas_ares = f"{horas_ares:.1f}h/mês"
 
     # Criar dicionário de gastos por pavilhão
     gasto_pav = {pav.nome: pav.consumo_total(
@@ -618,44 +626,83 @@ def pagina_inicial(request):
     # Dados para gráfico de pizza
     dados_pizza = {pav.nome: gasto_pav.get(pav.nome, 0) for pav in pavilhoes}
 
-    # Consumo por dia da semana
+    # Consumo por dia da semana (kWh)
     dias_semana = ["Segunda", "Terça", "Quarta",
                    "Quinta", "Sexta", "Sábado", "Domingo"]
     consumo_diario = {dia: 0 for dia in dias_semana}
-
     for pav in pavilhoes:
         for sala in pav.salas.all():
             for horario in sala.horarios.all():
                 dias = [d.strip(" []'")
                         for d in horario.dias_da_semana.split(",")]
-
                 inicio = horario.horario_inicio.hour + \
                     (horario.horario_inicio.minute / 60)
                 fim = horario.horario_fim.hour + \
                     (horario.horario_fim.minute / 60)
-
                 if fim < inicio:
                     horas_uso = (24 - inicio) + fim
                 else:
                     horas_uso = fim - inicio
-
                 for ac in sala.ares_condicionados.all():
                     consumo_kWh = ac.potencia_kw * horas_uso
                     for dia in dias:
                         if dia in consumo_diario:
                             consumo_diario[dia] += consumo_kWh
-
     total_kWh_semana = sum(consumo_diario.values())
-
     dados_barras = OrderedDict(
         (dia, consumo_diario[dia]) for dia in dias_semana)
+
+    # Consumo por horário do dia (linha)
+    horarios_labels = [f"{h:02d}:00" for h in range(24)]
+    consumo_por_hora = {label: 0 for label in horarios_labels}
+    for pav in pavilhoes:
+        for sala in pav.salas.all():
+            for ac in sala.ares_condicionados.all():
+                for horario in sala.horarios.all():
+                    inicio = horario.horario_inicio.hour + \
+                        (horario.horario_inicio.minute / 60)
+                    fim = horario.horario_fim.hour + \
+                        (horario.horario_fim.minute / 60)
+                    if fim <= inicio:
+                        fim += 24
+                    h = int(inicio)
+                    while h < int(fim) or (h == int(fim) and fim % 1 != 0):
+                        hora_real = h % 24
+                        label = f"{hora_real:02d}:00"
+                        # Calcular início e fim reais dentro da hora
+                        start = max(inicio, h)
+                        end = min(fim, h+1)
+                        tempo_ativo = max(0, end - start)
+                        if tempo_ativo > 0:
+                            consumo_por_hora[label] += ac.potencia_kw * \
+                                tempo_ativo
+                        # Consumo de energia por sala (barras horizontais)
+                        h += 1
+    dados_linha = consumo_por_hora
+    dados_salas = OrderedDict()
+    lista_consumo_salas = [(sala.nome, sala.consumo_total()) for sala in salas]
+    # Filtra apenas salas com consumo > 0
+    lista_consumo_salas = [item for item in lista_consumo_salas if item[1] > 0]
+    # Ordena por consumo decrescente
+    lista_consumo_salas.sort(key=lambda x: x[1], reverse=True)
+    # Limita para no máximo 5 salas
+    lista_consumo_salas = lista_consumo_salas[:5]
+    # A ordenação será feita pelo JavaScript no frontend
+    for nome, consumo in lista_consumo_salas:
+        dados_salas[nome] = consumo
 
     context = {
         "dados_pizza": json.dumps(dados_pizza),
         "dados_barras": json.dumps(dados_barras),
+        "dados_linha": json.dumps(dados_linha),
+        "dados_salas": json.dumps(dados_salas),
         "total_gasto": f'R$ {gasto_total_geral:,.2f}'.replace(',', '.'),
         "total_kWh_semana": f'{total_kWh_semana:.2f} kWh',
-        "grafico": grafico
+        "grafico": grafico,
+        "qtd_pavilhoes": qtd_pavilhoes,
+        "qtd_salas": qtd_salas,
+        "qtd_ares": qtd_ares,
+        "horas_ares": horas_ares,
     }
 
     return render(request, 'pagina_inicial.html', context)
@@ -672,6 +719,8 @@ def editar_grafico(request):
             novo_grafico = form.save(commit=False)
             novo_grafico.usuario = usuario
             novo_grafico.save()
+            messages.success(request,
+                             'Valor kWh editado com sucesso!')
             return redirect('website:pagina_inicial')
     else:
         form = GraficoModelForm(instance=grafico)

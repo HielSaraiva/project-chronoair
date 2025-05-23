@@ -1,28 +1,219 @@
-body{
-     background-color: var(--var-sds-color-background-default-secondary-hover, #e6e6e6);
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
 }
 
-.divteste{
-    position: absolute;
-    width: 400px;
-    height: 550px;
-    max-height: 700px;
-    overflow: hidden;
-    border: 3px solid #116b16;
+body {
+    background: url('../backgrounds/background.svg') no-repeat center center fixed;
+    background-size: cover; 
+    background-position: center center;
+    background-color: #2AE1A1;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Work Sans', Arial, sans-serif;
+}
+
+button {
+    font-size: 20px !important; 
+}
+
+.btn-danger {
+    background-color: white; 
+    border: 1px solid gray; 
+    color: black; 
+    transition: all 0.3s ease; 
+}
+
+.btn-danger:hover {
+    background-color: gray; 
+    border-color: gray; 
+    color: white; 
+}
+
+.btn-danger:active {
+    background-color: black !important;
+    border-color: black !important; 
+    color: white !important; 
+}
+
+.btn-success {
+    background-color: #31D843; 
+    border-color: #31D843;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #38A700; 
+    border-color: #38A700;
+}
+
+.custom-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
     border-radius: 10px;
-    padding:10px;
-    text-align: center;
-    background: rgba(181, 233, 179, 1);
-    align-content: center;
+    background: rgba(255, 255, 255, 0.95); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #293F14;
 }
 
-.imglogin{
-    width:150px;
-    height:150px;
+.img-logo {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
 }
 
-.texto-mensagem {
-    color: rgba(25, 135, 84, 1);
-    text-shadow: 1px 1px 2px beige, 0 0 25px darkseagreen, 0 0 5px beige;
-    font-weight: bolder;
+.login-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95); 
+    max-width: 1000px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.login-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 50%, rgba(62, 255, 139, 0.2) 100%);
+    padding: 20px;
+    color: #293F14;
+}
+
+.login-card {
+    max-width: 500px;
+    width: 100%;
+    border: none;
+    padding: 20px;
+    color: #293F14;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-description {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    max-width: 500px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(62, 255, 139, 0.2) 50%, rgba(62, 255, 139, 0.2) 100%);
+    padding: 20px;
+    color: #293F14;
+}
+
+.register-description-card {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    margin-bottom: 20px;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.text-decoration-none {
+    transition: color 0.3s ease;
+}
+
+.text-decoration-none:hover {
+    color: #31D843;
+}
+
+.text-success {
+    color: #38A700;
+}
+
+.text-dark-green {
+    color: #386C0B;
+}
+
+.text-neon {
+    color: #000000; 
+    transition: color 0.3s ease;
+}
+
+.text-neon:hover {
+    color: #38A700; 
+}
+
+@media (max-width: 767px) {
+    button {
+        height: 50px; 
+        font-size: 20px; 
+    }
+
+    h4 {
+        font-size: 24px; 
+    }
+
+    h5 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 18px; 
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+
+    .custom-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .login-block {
+        max-width: 500px;
+    }
+
+    .login-description, .register-description {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    h4 {
+        font-size: 18px;
+    }
+
+    h5 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+    .custom-card {
+        width: 90%;
+        padding: 15px;
+    }
 }

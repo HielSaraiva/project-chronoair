@@ -1,4 +1,4 @@
-{% extends 'registration/base.html' %}
+{% extends "registration/base.html" %}
 {% load django_bootstrap5 %}
 {% load static %}
 {% bootstrap_css %}
@@ -7,35 +7,84 @@
     Login
 {% endblock title %}
 {% block content %}
-    <img class="imglogin" src="{% static 'icons/icone-login.svg' %}" />
-    <h3 class="texto-mensagem">Login</h3>
-    <form action="{% url 'accounts:login' %}" method="post">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger p-2">
-                {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
+    <div class="login-block shadow-lg">
+        <div class="login-description p-4 gap-4">
+            <div>
+                <img src="{% static 'icons/project-timeline.svg' %}"
+                     alt="Login Icon"
+                     width="160"
+                     height="160" />
             </div>
-        {% endif %}
-        <div class="form-floating mb-3">
-            <input type="text"
-                   name="username"
-                   class="form-control"
-                   id="floatingUsername"
-                   placeholder="Usuário"
-                   required />
-            <label for="floatingUsername">Usuário</label>
+            <div class="d-flex align-items-center">
+                <div class="mx-auto text-center">
+                    <h3>
+                        Bem-vindo ao
+                        <span class="fw-bold text-success">ChronoAir</span>
+                    </h3>
+                    <p>
+                        Transforme a maneira como você gerencia ambientes com o ChronoAir, o sistema inteligente de automação de ar-condicionados.
+                    </p>
+                    <p>
+                        Pensado para escolas, empresas e residências modernas, o ChronoAir conecta automação e inovação para ambientes mais inteligentes.
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="form-floating mb-3">
-            <input type="password"
-                   name="password"
-                   class="form-control"
-                   id="floatingPassword"
-                   placeholder="Senha"
-                   required />
-            <label for="floatingPassword">Senha</label>
+        <div class="login-card p-4">
+            <div class="img-logo mb-4 gap-2">
+                <img src="{% static 'icons/icon-air-conditioner2.svg' %}"
+                     alt="Login Icon"
+                     width="50"
+                     height="50" />
+                <h3 class="fw-bold text-success d-flex align-items-center">ChronoAir</h3>
+            </div>
+            <div class="text-left mb-4">
+                <h3 class="fw-bold text-success">Faça seu login</h3>
+            </div>
+            <form action="{% url 'accounts:login' %}" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger p-2">
+                        {% for error in form.non_field_errors %}<small>{{ error }}</small>{% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           name="username"
+                           class="form-control"
+                           id="floatingUsername"
+                           placeholder="Usuário"
+                           required />
+                    <label for="floatingUsername">Usuário</label>
+                    {% if form.username.errors %}
+                        <div class="text-danger">
+                            {% for error in form.username.errors %}<small>{{ error }}</small>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           id="floatingPassword"
+                           placeholder="Senha"
+                           required />
+                    <label for="floatingPassword">Senha</label>
+                    {% if form.password.errors %}
+                        <div class="text-danger">
+                            {% for error in form.password.errors %}<small>{{ error }}</small>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button name="submit" class="btn btn-success w-100">Entrar</button>
+            </form>
+            <div class="text-center mt-4">
+                <a href="{% url 'accounts:register' %}"
+                   class="text-decoration-none text-neon">Criar conta</a>
+                <br>
+                <a href="{% url 'accounts:password_reset' %}"
+                   class="text-decoration-none text-neon">Esqueceu a senha?</a>
+            </div>
         </div>
-        <button name="submit" class="btn btn-success">Entrar</button>
-    </form>
-    <a href="{% url 'accounts:register' %}">Criar conta</a>
-    <a href="{% url 'accounts:password_reset' %}">Esqueci a senha</a>
+    </div>
 {% endblock content %}

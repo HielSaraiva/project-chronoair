@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from datetime import timedelta
 import sys
 import os
 import json
@@ -146,8 +147,7 @@ LOGIN_REDIRECT_URL = 'website:pagina_inicial'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 LOGIN_URL = 'accounts:login'
 
-# Recuperação de senha via email
-
+# Configuração do Email
 # Email via Web
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -155,6 +155,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = secrets['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = f"ChronoAir <{EMAIL_HOST_USER}>"
 
 # Email via Terminal
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -166,7 +167,6 @@ EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
 # EMAIL_HOST_PASSWORD = ''  # Não necessário
 
 # MQTT Broker
-
 # Configurações do broker MQTT (HiveMQ com autenticação)
 MQTT_BROKER = secrets['MQTT_BROKER_HOST']
 MQTT_PORT = secrets['MQTT_PORT_TLS']
@@ -178,8 +178,6 @@ MQTT_PASSWORD = secrets['MQTT_PASSWORD_HIVE_MQ']
 MQTT_KEEPALIVE = 60
 
 # Celery
-
-# Localhost
 CELERY_BROKER_URL = 'pyamqp://guest@localhost//'  # URL do broker RabbitMQ
 CELERY_TIMEZONE = 'America/Sao_Paulo'
 CELERY_ACCEPT_CONTENT = ['json']
@@ -205,3 +203,17 @@ CELERY_TASK_ACKS_LATE = True  # Para garantir que a tarefa seja re-executada se 
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
 CELERY_TASK_DEFAULT_RETRY_DELAY = 5  # Tempo de espera antes de tentar novamente
 CELERY_TASK_MAX_RETRIES = 3  # Número máximo de tentativas
+
+# Segurança
+# # Só envia cookies de sessão por HTTPS (usar apenas em produção)
+# SESSION_COOKIE_SECURE = True
+# # Só envia CSRF cookie por HTTPS (usar apenas em produção)
+# CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True    # Bloqueia acesso ao cookie via JavaScript
+CSRF_COOKIE_HTTPONLY = True       # Protege o cookie CSRF também
+# Timeout de sessão
+SESSION_COOKIE_AGE = 600         # Sessão expira depois desse tempo (segundos)
+# Renova o tempo da sessão após alguma requisição
+SESSION_SAVE_EVERY_REQUEST = True
+# Timeout redefinição de senha
+PASSWORD_RESET_TIMEOUT = 1800  # Token expira depois desse tempo(em segundos)

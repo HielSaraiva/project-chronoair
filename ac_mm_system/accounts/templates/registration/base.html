@@ -7,9 +7,23 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=0.8" />
+        <meta name="description"
+              content="Sistema de Gerenciamento de Ar Condicionado - Login e Registro" />
+        <meta name="keywords"
+              content="ar condicionado, gerenciamento, login, registro" />
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link rel="icon"
-              type="image/x-icon"
-              href="{% static 'buttons/hotel-air-conditioner0.svg' %}">
+              href="{% static 'icons/icon-air-conditioner2.png' %}"
+              sizes="32x32"
+              type="image/png">
+        <link rel="icon"
+              href="{% static 'icons/icon-air-conditioner2.svg' %}"
+              type="image/svg+xml">
+        <link rel="apple-touch-icon"
+              href="{% static 'icons/icon-air-conditioner2.png' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap"
+              rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/all_accounts_style.css' %}" />
         <title>
             {% block title %}
@@ -18,12 +32,9 @@
         </title>
     </head>
     <body>
-        <div class="d-flex justify-content-center align-items-center"
-             style="height: 100vh">
-            <div class="divteste overflow-auto">
-                {% block content %}
-                {% endblock content %}
-            </div>
+        <div class="main-content">
+            {% block content %}
+            {% endblock content %}
         </div>
     </body>
 </html>
