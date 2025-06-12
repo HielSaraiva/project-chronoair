@@ -10,14 +10,16 @@
 4. [Features & Functionalities](#features--functionalities)
    1. [Web Interface](#web-interface)
    2. [ESP32 Control](#esp32-control)
-5. [Architectural Decisions](#architectural-decisions) 
-6. [Running the Applications](#running-the-applications)
+5. [System Architecture](#system-architecture)
+   1. [Architecture Overview](#architecture-overview)
+6. [Architectural Decisions](#architectural-decisions)
+7. [Running the Applications](#running-the-applications)
    1. [Django Project](#django-project)
       - [Requirements](#requirements)
       - [macOS](#macos)
       - [Windows](#windows)
    2. [ESP32 Firmware](#esp32-firmware)
-7. [Final Considerations](#final-considerations)
+8. [Final Considerations](#final-considerations)
 
 ---
 
@@ -110,11 +112,51 @@ The project is organized into a **main directory** containing two primary folder
 
 - **Infrared Signal Copying:** The ESP32 copies the air conditioner's remote signals and relays commands based on the web configuration.
 
-- **MQTT Communication:** The ESP32 subscribes to topics to receive commands and publish status updates via MQTT.
+- **MQTT Communication:** The ESP32 subscribes to topics to receive commands via MQTT and executes the corresponding infrared signals.
 
 - **Manual Configuration:** Users can configure the system using physical buttons on the ESP32 device.
 
 ---
+
+## System Architecture
+
+The following diagram illustrates the complete architecture of the Air Conditioning Management System, showing the communication flow between all components:
+
+![System Architecture Diagram](imgs/ChronoAir-SystemDesign.png)
+
+### Architecture Overview
+
+The system architecture is composed of several interconnected components that work together to provide automated air conditioning management:
+
+#### **1. Django Backend (Left Side)**
+- **Monolithic Producer**: The Django application acts as the central control unit that generates tasks and schedules
+- **Celery Beat**: Runs periodically (every 1 minute and 30 minutes) to execute scheduled tasks and monitor system status
+- **Database Integration**: Connected to SQLite database for storing user configurations, schedules, and historical data
+
+#### **2. Message Broker Layer (Center)**
+- **RabbitMQ**: Serves as the message broker for task distribution between Django and Celery workers
+- **Task Queue**: Manages the execution of background tasks including MQTT communication and scheduling operations
+- **Consumer Workers**: Multiple Celery workers process tasks from the queue, enabling scalable task execution
+
+#### **3. MQTT Communication Layer**
+- **HiveMQ Broker**: Cloud-based MQTT broker that facilitates real-time communication between the web application and ESP32 devices
+- **Publish/Subscribe Pattern**: Django publishes commands to specific topics, while ESP32 devices subscribe to receive instructions
+- **Unidirectional Communication**: ESP32 devices only listen to commands from the Django application via MQTT topics
+
+#### **4. ESP32 Devices (Right Side)**
+- **Multiple ESP32 Controllers**: Each device manages one or more air conditioning units
+- **MQTT Subscriber**: Each ESP32 subscribes to its specific topic to receive commands from the Django application
+- **Infrared Control**: ESP32 devices use IR communication to send commands directly to air conditioners
+
+#### **5. Data Flow**
+1. **User Interaction**: Users configure schedules and send commands through the Django web interface
+2. **Task Generation**: Django creates tasks that are queued in RabbitMQ
+3. **Task Processing**: Celery workers pick up tasks and execute MQTT publish operations
+4. **Command Transmission**: Commands are sent via HiveMQ to the appropriate ESP32 devices
+5. **Device Response**: ESP32 devices receive commands via MQTT subscription and execute IR commands to control air conditioners
+6. **Data Storage**: System logs and command history are stored in the SQLite database for monitoring and analytics
+
+This architecture ensures **scalability**, **reliability**, and **real-time communication** between the web application and the distributed ESP32 devices, enabling efficient management of multiple air conditioning units across different locations.
 
 ## Architectural Decisions
 
