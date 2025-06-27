@@ -13,13 +13,14 @@
 5. [System Architecture](#system-architecture)
    1. [Architecture Overview](#architecture-overview)
 6. [Architectural Decisions](#architectural-decisions)
-7. [Running the Applications](#running-the-applications)
+7. [System Demo](#system-demo)
+8. [Running the Applications](#running-the-applications)
    1. [Django Project](#django-project)
       - [Requirements](#requirements)
       - [macOS](#macos)
       - [Windows](#windows)
    2. [ESP32 Firmware](#esp32-firmware)
-8. [Final Considerations](#final-considerations)
+9. [Final Considerations](#final-considerations)
 
 ---
 
@@ -108,6 +109,8 @@ The project is organized into a **main directory** containing two primary folder
 
 - **Visual Feedback:** Provides real-time status updates on the air conditioners.
 
+- **Responsive Design:** Optimized interface that adapts seamlessly to small screen devices.
+
 ### ESP32 Control:
 
 - **Infrared Signal Copying:** The ESP32 copies the air conditioner's remote signals and relays commands based on the web configuration.
@@ -165,6 +168,23 @@ This architecture ensures **scalability**, **reliability**, and **real-time comm
 - **ESP32:** The choice of ESP32 allows for an efficient and flexible solution due to its low cost, Wi-Fi capabilities, and compatibility with the infrared modules needed for remote control.
 
 - **Django Framework:** Django was chosen for its robustness, ease of development, and excellent support for handling tasks such as scheduling, database management, and MQTT integration.
+
+---
+
+## System Demo
+
+Watch a complete demonstration of the Air Conditioning Management System in action:
+
+[![Air Conditioning Management System Demo](https://img.youtube.com/vi/PDNEwkL1ijo/0.jpg)](https://www.youtube.com/watch?v=PDNEwkL1ijo)
+
+The video showcases the system's main features, including:
+- The web interface for controlling air conditioners
+- Schedule management functionality
+- Real-time control through MQTT
+- ESP32 device responding to commands
+- Energy consumption monitoring
+
+This demonstration provides a practical view of how all components work together to create an effective air conditioning management solution.
 
 ---
 
@@ -468,10 +488,12 @@ This project demonstrates a practical application of embedded systems and web te
 
 Future improvements may include:
 
-🔹 Adding machine learning-based energy optimization.
+🔹 **Data Persistence:** Implement monthly consumption data storage to allow comparative analysis between different time periods.
 
-🔹 Implementing a mobile-friendly interface for better accessibility.
+🔹 **Mobile Configuration App:** Develop a mobile application for initial ESP32 setup via Bluetooth connection, facilitating Wi-Fi network registration and MQTT topic configuration.
 
-🔹 Creating a mobile app to configure the initial settings of the esp32 via bluetooth.
+🔹 **System Expansion:** Extend the system to include other infrared-controllable electronic devices such as televisions and projectors.
+
+🔹 **Production Deployment:** Deploy the web system in a production environment, enabling remote and continuous access to the platform, making the system even more efficient and adaptable.
 
 This project is an excellent example of IoT (Internet of Things) applied to smart automation using Django and embedded systems. 🚀💡
