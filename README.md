@@ -1,4 +1,4 @@
-# Air Conditioning Management System
+# ChronoAir: Smart Air Conditioning Management System
 
 ## Table of Contents
 
@@ -24,9 +24,18 @@
 
 ---
 
+
 ## Project Overview
 
-The Air Conditioner Management System aims to develop an embedded device that automates the control of air conditioners using an ESP32 microcontroller. By copying infrared signals from the air conditioner’s remote control, the ESP32 can remotely manage the air conditioner’s operation, reducing energy waste and optimizing usage in shared environments such as schools, offices, and universities.
+ChronoAir is an intelligent air conditioning management system designed to automate, optimize, and monitor the use of air conditioners in shared environments such as schools, offices, and universities. The solution integrates a robust web platform (Django) with ESP32 microcontrollers, enabling remote and scheduled control of air conditioners through infrared signal replication.
+
+With ChronoAir, users can:
+- Configure and automate on/off schedules for multiple air conditioners.
+- Remotely control devices via an intuitive web interface, accessible from any device.
+- Monitor energy consumption and visualize usage data through interactive charts.
+- Reduce energy waste and promote sustainability by ensuring air conditioners operate only when needed.
+
+The ESP32 devices receive commands securely via MQTT, replicating the original remote control signals to the air conditioners. All system operations are centralized, scalable, and designed for easy expansion to other IR-controlled devices. ChronoAir brings together IoT, automation, and data analytics to deliver a modern, efficient, and user-friendly solution for climate management in collective spaces.
 
 ---
 
@@ -261,7 +270,7 @@ Before running the Django project, ensure you have all the required dependencies
 1. Clone the repository and navigate to your project folder:
 
    ```bash
-   git clone https://github.com/HielSaraiva/project-air-conditioning-management-system.git
+   git clone https://github.com/HielSaraiva/project-chronoair.git
    ```
    ```bash
    cd air_conditioning_management_system/ac_mm_system
@@ -370,7 +379,7 @@ Before running the Django project, ensure you have all the required dependencies
 1. Clone the repository and navigate to your project folder:
 
    ```bash
-   git clone https://github.com/HielSaraiva/project-air-conditioning-management-system.git
+   git clone https://github.com/HielSaraiva/project-chronoair.git
    ```
    ```bash
    cd air_conditioning_management_system/ac_mm_system
