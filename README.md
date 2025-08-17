@@ -21,6 +21,7 @@
       - [Windows](#windows)
    2. [ESP32 Firmware](#esp32-firmware)
 9. [Final Considerations](#final-considerations)
+10. [License](#license)
 
 ---
 
@@ -94,8 +95,8 @@ The project is organized into a **main directory** containing two primary folder
 
 - **Web Platform:**
    - **Frontend:** HTML, CSS, Chart.js
-   - **Backend:** Django 
-   - **CSS Framework:** Bootstrap
+   - **Backend:** Django 5 
+   - **CSS Framework:** Bootstrap 5
 - **Database:** SQLite
 - **Communication Protocol:** 
    - MQTT (Paho-mqtt with HiveMQ)
@@ -115,8 +116,6 @@ The project is organized into a **main directory** containing two primary folder
 - **Remote Control:** Provides direct control of air conditioners via the web interface.
 
 - **Energy Consumption Graphs:** Displays energy usage data in a visually appealing format using Chart.js.
-
-- **Visual Feedback:** Provides real-time status updates on the air conditioners.
 
 - **Responsive Design:** Optimized interface that adapts seamlessly to small screen devices.
 
@@ -166,7 +165,6 @@ The system architecture is composed of several interconnected components that wo
 3. **Task Processing**: Celery workers pick up tasks and execute MQTT publish operations
 4. **Command Transmission**: Commands are sent via HiveMQ to the appropriate ESP32 devices
 5. **Device Response**: ESP32 devices receive commands via MQTT subscription and execute IR commands to control air conditioners
-6. **Data Storage**: System logs and command history are stored in the SQLite database for monitoring and analytics
 
 This architecture ensures **scalability**, **reliability**, and **real-time communication** between the web application and the distributed ESP32 devices, enabling efficient management of multiple air conditioning units across different locations.
 
@@ -205,7 +203,7 @@ This demonstration provides a practical view of how all components work together
 
 Before running the Django project, ensure you have all the required dependencies installed:
 
-1. Install Python 3.8+
+1. Python 3.8+
 
 2. VSCode or PyCharm
 
@@ -338,7 +336,7 @@ Before running the Django project, ensure you have all the required dependencies
       }
       ```
 
-   3. ```db.sqlite3:``` The database is created automatically when you ```run python manage.py migrate```.
+   3. ```db.sqlite3:``` The database is created automatically when you run ```python manage.py migrate```.
 
 5. Set up the database and run migrations:
 
@@ -447,7 +445,7 @@ Before running the Django project, ensure you have all the required dependencies
       }
       ```
 
-   3. ```db.sqlite3:``` The database is created automatically when you ```run python manage.py migrate```.
+   3. ```db.sqlite3:``` The database is created automatically when you run ```python manage.py migrate```.
 
 5. Set up the database and run migrations:
 
@@ -506,3 +504,9 @@ Future improvements may include:
 🔹 **Production Deployment:** Deploy the web system in a production environment, enabling remote and continuous access to the platform, making the system even more efficient and adaptable.
 
 This project is an excellent example of IoT (Internet of Things) applied to smart automation using Django and embedded systems. 🚀💡
+
+---
+
+## License
+
+This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
